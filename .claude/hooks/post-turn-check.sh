@@ -33,15 +33,21 @@ FAILURES=""
 NL=$'\n'
 
 # --- Python (the only stack this project uses — see .claude/rules/python.md) ---
+# Tools run via `uv run`, never invoked bare — Python is uv-only on this machine (see
+# .claude/rules/python.md and the 2026-08-31 DECISION-LOG.md entry).
 if [ -f "pyproject.toml" ] || [ -f "setup.py" ] || compgen -G "*.py" > /dev/null 2>&1; then
-  if command -v ruff >/dev/null 2>&1; then
-    RUFF_OUT="$(ruff check . 2>&1)" || FAILURES="${FAILURES}${NL}--- ruff check ---${NL}${RUFF_OUT}"
-  fi
-  if command -v mypy >/dev/null 2>&1 && { [ -f "pyproject.toml" ] || [ -f "mypy.ini" ]; }; then
-    MYPY_OUT="$(mypy . 2>&1)" || FAILURES="${FAILURES}${NL}--- mypy ---${NL}${MYPY_OUT}"
-  fi
-  if command -v pytest >/dev/null 2>&1 && [ -d "tests" ] && [ -n "$(find tests -name 'test_*.py' -print -quit 2>/dev/null)" ]; then
-    PYTEST_OUT="$(pytest -q 2>&1)" || FAILURES="${FAILURES}${NL}--- pytest ---${NL}${PYTEST_OUT}"
+  if command -v uv >/dev/null 2>&1; then
+    RUFF_OUT="$(uv run ruff check . 2>&1)" || FAILURES="${FAILURES}${NL}--- ruff check ---${NL}${RUFF_OUT}"
+    if [ -f "pyproject.toml" ] || [ -f "mypy.ini" ]; then
+      MYPY_OUT="$(uv run mypy . 2>&1)" || FAILURES="${FAILURES}${NL}--- mypy ---${NL}${MYPY_OUT}"
+    fi
+    if [ -d "tests" ] && [ -n "$(find tests -name 'test_*.py' -print -quit 2>/dev/null)" ]; then
+      PYTEST_OUT="$(uv run pytest -q 2>&1)" || FAILURES="${FAILURES}${NL}--- pytest ---${NL}${PYTEST_OUT}"
+    fi
+  else
+    # Don't let a missing toolchain manager silently skip every check — that's
+    # indistinguishable from everything passing. Fail loud instead.
+    FAILURES="${FAILURES}${NL}--- uv ---${NL}Python files present but 'uv' is not on PATH; install uv to run ruff/mypy/pytest (see DEVELOPMENT.md)."
   fi
 fi
 
