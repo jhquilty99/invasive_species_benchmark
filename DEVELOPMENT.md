@@ -12,14 +12,21 @@ plausible.
 
 ## Getting set up
 
-There's no code yet beyond this scaffolding — `SCRATCHPAD.md` has the current open tasks. Once a
-`pyproject.toml` exists (this project's stack is Python), the usual flow will be:
+There's no code yet beyond this scaffolding — `SCRATCHPAD.md` has the current open tasks. Python is
+installed and run exclusively through [`uv`](https://docs.astral.sh/uv/) — never bare `pip`, `venv`,
+or `conda` (see `.claude/rules/python.md`). If `uv` isn't already on your machine:
 
 ```
-pip install -e ".[dev]"   # or your preferred env manager
-pytest                     # run the test suite
-ruff check .               # lint
-mypy .                     # typecheck
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+Once a `pyproject.toml` exists (this project's stack is Python), the usual flow will be:
+
+```
+uv sync                    # install deps (creates .venv automatically)
+uv run pytest              # run the test suite
+uv run ruff check .        # lint
+uv run mypy .              # typecheck
 ```
 
 ## How the project stays legible

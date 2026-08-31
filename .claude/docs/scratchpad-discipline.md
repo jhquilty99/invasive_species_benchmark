@@ -32,3 +32,13 @@ batching — a bulk cleanup of 15+ stale entries is the exact symptom this syste
 
 Keep `SCRATCHPAD.md`'s open task list ranked by priority, not by creation order. Re-rank when priorities
 change instead of leaving a stale order.
+
+## Scoped trackers outside SCRATCHPAD.md
+
+`outreach/EMAIL-TRACKER.md` is a deliberate, narrow exception to "the tracker is `SCRATCHPAD.md`": it
+logs per-contact send/reply state for external correspondence, which is a different shape of data (a row
+per recipient, not a row per task) than the ranked task list is built for. It is **not** covered by
+`.claude/hooks/scratchpad-audit.sh`, which only cross-references `git log` against `SCRATCHPAD.md` — so
+its rows won't be flagged if they go stale. Keep `SCRATCHPAD.md` holding the pointer to it (one line: send
+the email, log status there) rather than restating candidate/deadline detail in both places. Don't add a
+third tracker like this without either teaching the audit hook about it or accepting the same blind spot.

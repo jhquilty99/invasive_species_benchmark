@@ -105,3 +105,43 @@ if a third instance shows up, it's worth a rule about single-sourcing cross-file
 2. *Pre-authorize cuts at named dates.* "4 species on Sep 4, 3 models on Sep 14" converts two likely crises into scheduled decisions. Generalize to any deadline-bound work.
 
 **Status:** Active
+
+## 2026-08-31 — Standardize on uv for all Python installs/runs
+
+**Decision:** Python interpreter installs and all Python execution (scripts, tools, tests) go
+exclusively through astral's `uv` — never bare `pip`, `venv`, or `conda`.
+**Rationale:** Closes the dependency-manager decision that `SCRATCHPAD.md` (open task #2) and this
+log had both flagged as pending. `uv` manages its own pinned interpreter, which sidesteps this
+machine's broken `python`/`python3` Windows Store stub aliases (documented in `.claude/hooks/lib.sh`).
+It also produces a lockfile (`uv.lock`), consistent with the existing "`pyproject.toml`, not loose
+`requirements.txt`" rule.
+**Trade-offs:** Does NOT decide the `src/` stack layout or add the first `pyproject.toml` — that
+stays open as `SCRATCHPAD.md` task #2. Does NOT rule out conda-only scientific/geo packages if one is
+ever needed — revisit only if a hard conda-only dependency shows up.
+**Rule Updated:** Y — `.claude/rules/python.md` now mandates `uv` for install/run.
+**Status:** Active
+
+## 2026-08-31 — Day 1 tasks: SCOPE.md, deadline confirmed, expert-outreach docs added
+
+**Decision:** Committed `SCOPE.md` (PRD §2 locked scope), confirmed the earliest graduate application
+deadline (UC Berkeley MIDS, Oct 23, 2026 — well past the Sep 20 ship date, no replanning needed), and
+added `outreach/expert-validation-email.md` plus `outreach/EMAIL-TRACKER.md` as a separate, narrowly
+scoped tracker for the three expert-validation contacts. `SCRATCHPAD.md` was re-ranked around the PRD's
+dated Week 1 schedule and both closed tasks were archived.
+**Rationale:** These were PRD §4/§10 Day 1 tasks. The email/tracker got their own files rather than
+living inline in `SCRATCHPAD.md` because per-contact send/reply state is a different shape of data (one
+row per recipient) than a ranked task list, and keeping the email template separate from its status log
+means editing the pitch doesn't touch the tracking rows.
+**Trade-offs:** The parallel reviewers over this diff also caught and fixed three issues in the same
+commit: (1) `.claude/hooks/post-turn-check.sh`'s `uv` requirement silently skipped *all* checks when
+`uv` was missing instead of failing loud — added an `else` branch so a missing toolchain manager reports
+as a failure, not a silent pass; (2) `outreach/EMAIL-TRACKER.md` is invisible to
+`.claude/hooks/scratchpad-audit.sh` (which only watches `SCRATCHPAD.md`) — documented this as a
+deliberate, scoped exception in `.claude/docs/scratchpad-discipline.md` rather than silently accepting
+the blind spot; (3) candidate/deadline detail was duplicated across `SCRATCHPAD.md` and both outreach
+files — trimmed `SCRATCHPAD.md` task 1 down to a pointer. Did NOT teach `scratchpad-audit.sh` to also
+read `outreach/EMAIL-TRACKER.md` — three rows don't justify the hook complexity; revisit if more
+per-contact trackers like this get added.
+**Rule Updated:** Y — `.claude/docs/scratchpad-discipline.md` now documents the `EMAIL-TRACKER.md`
+exception and the rule that any future tracker like it needs the same explicit call-out.
+**Status:** Active
