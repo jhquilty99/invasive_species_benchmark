@@ -12,3 +12,11 @@ index, not a history of *why*.
   1 scored run) — the PRD's Day 1 task.
 - 2026-08-31 — Confirmed earliest grad application deadline (UC Berkeley MIDS, Oct 23, 2026) — Sep 20
   ship date keeps its full buffer, no replanning needed.
+- 2026-08-31 — Sent expert-validation emails to candidates in `outreach/EMAIL-TRACKER.md` (per user
+  confirmation; tracker's Sent/Date-sent columns still need a matching update — flagged, not fixed here).
+- 2026-08-31 — Confirmed API access/budget for OpenAI, Anthropic, and Google; locked the 4-model
+  line-up shape (3 closed APIs + 1 open-weight model via a third-party host, TBD) (detail:
+  DECISION-LOG.md, 2026-08-31 "API access confirmed" entry).
+- 2026-08-31 — Defined the benchmark dataset/scenario file format: `data/SCHEMA.md`, ground-truth as
+  per-species YAML, items as `data/items.jsonl` (detail: DECISION-LOG.md, 2026-08-31 "Benchmark dataset
+  scenario file format" entry).

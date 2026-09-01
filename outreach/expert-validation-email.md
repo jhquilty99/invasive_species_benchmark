@@ -2,8 +2,8 @@
 
 Template for the optional expert-validation ask (PRD §4 Day 1, §10 Day 1 row). Two-hour ask, 20-item
 spot check, ships without a reply. Send to three candidates: NC State Extension forestry, NC Forest
-Service, a regional CWMA (Cooperative Weed Management Area). Fill in `[Name]`/`[Your name]` per send and
-log each send/reply in `outreach/EMAIL-TRACKER.md`.
+Service, a regional CWMA (Cooperative Weed Management Area). Fill in `[Name]`/`[last name]`/`[phone]`/
+`[email]` per send and log each send/reply in `outreach/EMAIL-TRACKER.md`.
 
 ---
 
@@ -11,22 +11,27 @@ log each send/reply in `outreach/EMAIL-TRACKER.md`.
 
 Hi [Name],
 
-I'm [Your name], an independent researcher putting together a preprint ahead of graduate applications
-this fall. I'm building a small benchmark evaluating how well AI chatbots answer invasive-plant management
-questions for private landowners in the NC coastal plain — six species (tree of heaven, Chinese privet,
-Japanese stiltgrass, common reed, Callery pear, Chinese wisteria), covering things like method selection,
-resprout behavior, timing, herbicide legality, and follow-up.
+I'm Hayden [last name], a data scientist in Wilmington building an open benchmark that measures how
+accurate — and how safe — large language model advice is when someone asks a chatbot how to remove an
+invasive plant. I'm scoring model responses on two axes: factual accuracy, and a harm scale where the top
+levels are advice that would violate a pesticide label or create off-target risk.
 
-I'd value your eyes on it if you have ~2 hours before **Sep 14**: I'd send 20 of the ~60 model responses
-(scored on a 0-3 accuracy scale and a harm scale) for a quick spot-check against your own judgment, just
-to report agreement alongside my own scoring.
+The scope is six species in the NC coastal plain (tree of heaven, Chinese privet, Japanese stiltgrass,
+introduced Phragmites, Callery pear, Chinese wisteria), with a modeled asker who is a private landowner
+with no applicator license. Ground truth comes from NC State, UGA, and Clemson extension publications
+plus product labels.
 
-This will be released as a public preprint and open dataset. I'm happy to credit you and your
-organization by name in the acknowledgments, or keep your input anonymous — whichever you prefer, just
-let me know.
+The ask is small and bounded: would you be willing to independently score 20 model responses — roughly
+two hours — so the harm scale reflects expert judgment rather than only mine? I'd send a spreadsheet with
+the responses, the rubric, and anchor examples, and would need it back by **Sep 14** to fold into the
+analysis. You'd be acknowledged in the writeup, or credited as a co-author if you'd prefer that.
 
-Totally fine to say no or not have time — the project ships either way, this would just strengthen it.
-Let me know if you're willing and I'll send the set over.
+I'd particularly value your read on the herbicide-legality items, including the aquatic-formulation
+questions around Phragmites, since that's the category where I'm least confident scoring alone.
 
-Thanks,
-[Your name]
+The results will be released openly with a DOI. Timeline is tight — I'm posting a preprint on
+September 20 — so if this isn't a fit, no need to reply and I'll proceed without it.
+
+Thanks for your time,
+Hayden [last name]
+[phone] · [email]
