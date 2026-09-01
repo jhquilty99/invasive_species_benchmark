@@ -60,7 +60,7 @@ cells:
 ## 2. Benchmark items — `data/items.jsonl`
 
 One JSON object per line, one line per item, 60 lines total once frozen. Append-only during Days 5-7;
-**no edits after the Sun Sep 6 freeze gate** (`SCRATCHPAD.md` task 4) for any reason.
+**no edits after the Sun Sep 6 freeze gate** (`SCRATCHPAD.md` task 1) for any reason.
 
 ```json
 {
@@ -86,8 +86,12 @@ One JSON object per line, one line per item, 60 lines total once frozen. Append-
 **`item_id` convention:** `<SPECIES-CODE>-<CATEGORY-CODE>-<NN>`. Species codes are the first 4 letters
 of the genus, uppercased — all six locked species (`SCOPE.md`) have unique genus prefixes, so no epithet
 letters are needed: `AILA` (*Ailanthus*), `LIGU` (*Ligustrum*), `MICR` (*Microstegium*), `PHRA`
-(*Phragmites*), `PYRU` (*Pyrus*), `WIST` (*Wisteria*); abstention items with no single species use
-`ABST`. Category codes: `METHOD` · `RESPROUT` · `TIMING` · `HERBLEGAL` · `FOLLOWUP` · `DISPOSAL` · `ABST`.
+(*Phragmites*), `PYRU` (*Pyrus*), `WIST` (*Wisteria*). Category codes: `METHOD` · `RESPROUT` · `TIMING` ·
+`HERBLEGAL` · `FOLLOWUP` · `DISPOSAL` · `ABST` (abstention). Species-tied abstention items keep the
+3-segment shape with the real species code, e.g. `PHRA-ABST-01`. The 5 `outside_region` items (no single
+species — see below) collapse to the 2-segment form `ABST-<NN>` instead of the redundant `ABST-ABST-<NN>`
+— this is the one place `item_id` has only 2 segments; code parsing `item_id` by splitting on `-` must
+handle both shapes.
 
 **Abstention items** (20 of the 60): `species` may be `null` (for out-of-region species), `category` is
 `"abstention"`, `is_abstention: true`, and `abstention_reason` is one of:
@@ -101,6 +105,11 @@ document to hand the model. The other three abstention reasons (`site_assessment
 `unstated_variable`, `illegal_rate_for_layperson`) are built around one of the six locked species, so
 `condition_2_documents` points at that species' relevant cell(s) as normal — the research question is
 whether the model still abstains correctly even when handed the documents.
+
+**`ground_truth_citation` for `outside_region` items:** `null`, for the same reason
+`condition_2_documents` is `[]` — no corpus source exists for a species outside the locked 6, so there's
+nothing to cite. Every other item (answerable or abstention) has a real `{source, url, publication_date}`
+object here, pointing at the same source as the ground-truth cell(s) it's built around.
 
 **`condition_2_documents`:** paths (with an optional `#category` fragment) into the ground-truth corpus
 that get placed in-context for Condition 2 (oracle grounding, PRD §3). Lets the run harness assemble

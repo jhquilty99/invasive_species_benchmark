@@ -244,3 +244,64 @@ of thumb for future edits to these files rather than a one-off recovery.
 **Rule Updated:** N — the "always re-validate generated YAML after any batch edit" habit is now demonstrated
 twice in this session (see process note in the prior entry); flag for `/retro`.
 **Status:** Active
+
+## 2026-08-31 — 60 benchmark items written to `data/items.jsonl`
+
+**Decision:** Wrote all 60 items directly (not delegated to subagents, unlike the ground-truth corpus)
+against the six ground-truth files already read in full this session. Allocated the 40 answerable items
+across species and category as: Ailanthus 7 (2 method, 2 resprout), Phragmites 7 (2 method, 2 herblegal),
+Pyrus 7 (2 resprout), Microstegium 7 (2 herblegal), Ligustrum 6, Wisteria 6 — every species gets 1 item per
+category as a base, with the extra items going to whichever species/category combo is richest or most
+central to that species' named failure archetype, and `disposal_nontarget_risk` (only 4 of 40 slots)
+dropped for Ailanthus and Phragmites to keep per-species totals balanced (6-7 each) after they picked up
+two extras elsewhere. Split the 20 abstention items 5 per `abstention_reason`: the 15 tied to a locked
+species (site_assessment_required, unstated_variable, illegal_rate_for_layperson) spread across all 6
+species (3, 3, 2, 2, 2, 3), item_id using the real species code; the 5 `outside_region` items use real
+invasives that are genuinely not a documented NC coastal-plain problem (Scotch broom, giant hogweed, yellow
+starthistle, saltcedar, leafy spurge) rather than species picked arbitrarily, `species: null` and
+`condition_2_documents: []` per `SCHEMA.md`.
+**Rationale:** Writing directly (not via forks) avoided the concurrent-shared-file-write hazard forking
+would have introduced (all 60 items live in one file, unlike the corpus's one-file-per-species split) and
+needed no new research — every fact used is already verified in the ground-truth cells read into context
+this session. Balancing per-species item totals (rather than letting the 8/8/6/8/6/4 category skew produce
+an uneven species distribution) avoids the benchmark looking like it's testing some species more than
+others by accident of category arithmetic. `outside_region` species were chosen for genuine regional
+mismatch (not just "any 6th species") so the abstention criterion is actually testing something real: a
+model confidently giving NC-specific rate/legality guidance for one of these would be inventing region-
+specific facts no source in the corpus supports.
+**Trade-offs:** Did NOT run the formal Sun Sep 6 freeze-gate review as part of this task — ran a lighter
+schema-conformance check (all 60 lines parse, no duplicate `item_id`s, category/reason counts match,
+`is_abstention`/`abstention_reason` consistency, every `condition_2_documents` path resolves to a real
+ground-truth cell) plus a spot-check of 2 items against their cited cells for drift, but that's not the
+same review PRD §4's freeze gate calls for — left as `SCRATCHPAD.md` task 1, unstarted. Did NOT include a
+`ground_truth_citation` for the 5 `outside_region` abstention items (set to `null`) since no corpus source
+exists for a species outside the locked 6 — consistent with their empty `condition_2_documents`.
+**Rule Updated:** N — not clearly a recurring pattern yet.
+**Status:** Active
+
+## 2026-08-31 — Fixes from `/commit` review of the 60 benchmark items
+
+**Decision:** Acting on the architecture and copy reviewers' findings over the `items.jsonl` diff:
+documented in `data/SCHEMA.md` that the 5 `outside_region` item_ids intentionally collapse to the
+2-segment `ABST-<NN>` form rather than the schema-literal 3-segment `<SPECIES-CODE>-<CATEGORY-CODE>-<NN>`
+(was previously undocumented — the schema only said species-less items "use `ABST`" without specifying
+whether that replaces one segment or two); documented that `ground_truth_citation` is `null` for those
+same 5 items, for the same reason `condition_2_documents` is `[]` (no corpus source exists outside the
+locked 6 species); fixed a stale `SCRATCHPAD.md` task-number cross-reference in `SCHEMA.md` (said "task
+4," should say "task 1" after this session's earlier renumbering); and scrubbed second-person "you/your"
+phrasing from 11 of the 40 answerable items' `ground_truth_answer` strings, which had drifted from the
+third-person convention every ground-truth corpus file and all 20 abstention items already follow — the
+same issue class already caught and fixed once this session in the ground-truth corpus itself.
+**Rationale:** All four were concrete findings, not judgment calls — two were undocumented but intentional
+data shapes that just needed the schema to say so explicitly (SCHEMA.md is meant to be the self-contained
+spec per its own description), one was a cross-reference left stale by this session's own SCRATCHPAD.md
+edit, and the voice drift was a straightforward reapplication of a convention this project already chose.
+**Trade-offs:** Did not standardize on 3-segment `ABST-ABST-<NN>` for `outside_region` items instead of
+documenting the 2-segment exception — `ABST-ABST-01` reads as more redundant than clarifying, and nothing
+downstream parses `item_id` yet, so there's no compatibility cost either way; can revisit if a future
+run-harness's `item_id` parser finds the 2-segment shape awkward.
+**Rule Updated:** N — the "voice-convention drift recurs across independently-written files" pattern has
+now shown up twice in one session (ground-truth corpus, then items.jsonl); if it recurs a third time,
+worth stating the third-person convention explicitly in `data/SCHEMA.md` itself rather than relying on
+reviewers to catch it each time. Flag for `/retro`.
+**Status:** Active

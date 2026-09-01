@@ -24,3 +24,6 @@ index, not a history of *why*.
   0 jurisdiction-range flags (detail: DECISION-LOG.md, 2026-08-31 "Ground-truth corpus built" entry).
 - 2026-08-31 — Closed the Fri Sep 4 "grid-complete gate" task as moot: the corpus finished 4 days ahead
   of that gate, so the pre-authorized cut-to-4-species contingency never triggered.
+- 2026-08-31 — Wrote all 60 benchmark items to `data/items.jsonl`: 40 answerable (8/8/6/8/6/4 across the
+  6 categories) + 20 abstention (5 per reason), schema-checked (detail: DECISION-LOG.md, 2026-08-31 "60
+  benchmark items written" entry). Freeze-gate review (SCRATCHPAD.md task 1) still open.
