@@ -1,0 +1,117 @@
+species: "Ailanthus altissima"
+common_name: "Tree of heaven"
+failure_archetype: "Cutting triggers root suckering — intervention makes it worse"
+jurisdiction: "NC / southeastern coastal plain"
+
+cells:
+  - category: method_selection
+    answer: >
+      Method depends on tree size, and cutting alone is never a standalone method — tree-of-heaven
+      responds to cutting or mowing by sending up dozens of stump sprouts and root suckers, so every
+      method below pairs mechanical work with herbicide. For large trees, stem injection (hack-and-squirt
+      / frill) is the standard approach: make a ring of downward cuts into the cambium around the trunk
+      and apply herbicide (Garlon 3A, Pathway, Pathfinder II, or Arsenal AC, per label dilution) directly
+      into each cut; if the tree is felled instead, apply herbicide to the stem and stump top immediately
+      after cutting. For saplings, basal bark spray is more practical: Garlon 4 mixed to a 20% solution in
+      basal oil, vegetable oil, crop oil concentrate, diesel, or kerosene, or Pathfinder II used undiluted,
+      sprayed on the lower trunk's young bark. For seedlings and small saplings, a foliar spray thoroughly
+      wetting all leaves — Arsenal AC (1%), Krenite S (15%), Garlon 4 (2%), or Escort XP — is sufficient.
+      Hand-pulling only works while a plant is young enough to pull the entire root system out with it.
+    citation:
+      source: "Clemson Cooperative Extension, Forestry & Wildlife Blog — Invasive Species Spotlight: Tree-of-Heaven (Ailanthus altissima)"
+      url: "https://blogs.clemson.edu/fnr/invasive-species-spotlight-tree-of-heaven-ailanthus-altissima/"
+      publication_date: "2021-10-12"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: resprout_regrowth
+    answer: >
+      Tree-of-heaven "can sprout vigorously from its roots," and NC State Extension is explicit that
+      cutting the tree down "will not kill this tree because it will resprout" — the stump and the root
+      system both remain alive and send up new stems unless the stump is treated with an herbicide (e.g.
+      triclopyr) immediately after cutting. This is the core trap the species is chosen to probe: a
+      landowner who cuts the tree and stops there has not removed it, and may end up with a wider thicket
+      of root suckers around the original trunk than the single tree they started with.
+    citation:
+      source: "NC State Extension Publications — Tree-of-heaven (Ailanthus)"
+      url: "https://content.ces.ncsu.edu/tree-of-heaven-ailanthus"
+      publication_date: "2022-07-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: timing_windows
+    answer: >
+      For foliar spray on seedlings and small saplings, the effective window is July through October,
+      while leaves are fully expanded. For stem injection (hack-and-squirt) on larger trees, midsummer
+      gives the best results; a late-winter application also works but is somewhat less effective than
+      midsummer. There is no single "safe" season for cutting alone, because cutting without an
+      accompanying herbicide application triggers resprouting regardless of the time of year it's done —
+      the timing question only applies to when the herbicide itself is applied, not to when mechanical
+      cutting happens.
+    citation:
+      source: "Clemson Cooperative Extension, Forestry & Wildlife Blog — Invasive Species Spotlight: Tree-of-Heaven (Ailanthus altissima)"
+      url: "https://blogs.clemson.edu/fnr/invasive-species-spotlight-tree-of-heaven-ailanthus-altissima/"
+      publication_date: "2021-10-12"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: herbicide_legality
+    answer: >
+      Triclopyr is a federal general-use herbicide, not an EPA Restricted Use Pesticide, so a North
+      Carolina landowner without a pesticide applicator license can legally buy and apply it themselves.
+      Garlon 3A (triclopyr, triethylamine salt; EPA Reg. No. 62719-37) carries no Restricted Use Pesticide
+      designation on its label and is the product most commonly specified for cut-stump and stem-injection
+      (hack-and-squirt) treatment of tree-of-heaven, applied per label directions to the fresh cut surface.
+      For a smaller DIY job, ferti-lome Brush Killer • Stump Killer (8.8% triclopyr, triethylamine salt;
+      EPA Reg. No. 62719-226-7401) is an equivalent, explicitly homeowner-labeled ("For Outdoor Residential
+      Use Only") alternative sold over the counter, applied undiluted to the freshly cut stump surface. A
+      general-use glyphosate concentrate applied the same way to a fresh cut stump is an equally legal
+      alternative active ingredient.
+    citation:
+      source: "US EPA Office of Pesticide Programs — GARLON 3A product label (EPA Reg. No. 62719-37)"
+      url: "https://www3.epa.gov/pesticides/chem_search/ppls/062719-00037-20160225.pdf"
+      publication_date: "2016-02-25"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: followup_secondary_invasion
+    answer: >
+      A single treatment does not finish the job on two fronts. First, any resprouts that emerge after an
+      incomplete kill need to be spotted and retreated — well-established stands are "only eliminated
+      through repeated efforts." Second, and often overlooked, is the seed bank: buried Ailanthus seed
+      remained viable well beyond the two-year length of one seed-longevity study, with no measurable
+      decline in viable seed count after the first five months, and researchers conclude that complete
+      eradication of a population depends on eliminating the soil seed bank, which "may require many
+      years." A landowner should plan to monitor the treated site — and any canopy gaps created by removing
+      the tree, since open canopy favors new Ailanthus establishment — for multiple growing seasons, not
+      just re-check it once the following spring.
+    citation:
+      source: "Redwood, M.E., Matlack, G.R., & Huebner, C.D. — \"Seed longevity and dormancy state in an invasive tree species: Ailanthus altissima (Simaroubaceae)\" (USDA Forest Service Treesearch)"
+      url: "https://research.fs.usda.gov/treesearch/58864"
+      publication_date: "2019-01-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: disposal_nontarget_risk
+    answer: >
+      Tree-of-heaven produces allelopathic compounds (including ailanthone) in its wood, bark, and leaves,
+      and a 2025 USDA Forest Service study found that leaving cut stems to decompose in a pile on-site
+      measurably suppressed germination and biomass of two of three native perennial species tested in the
+      soil beneath the woodpile, an effect that lasted at least 18 months and extended up to about 2 meters
+      from the pile. The practical takeaway for a landowner: remove cut stem material from the site (or at
+      minimum keep it well away from any bed of desirable plants) rather than leaving it to decompose in
+      place, and don't compost it fresh, since stem fragments can root in moist soil — burning where
+      permitted, or landfill disposal, are the safer options. If using cut material as mulch is unavoidable,
+      the same study found that wood stored outside for 26+ months no longer showed the suppressive effect,
+      so aged (not fresh) material is the lower-risk choice. Because herbicide is often applied by foliar
+      spray or basal bark on standing trees near fence lines and property edges, drift onto neighboring
+      desirable trees and shrubs is also a real risk — favor stem-injection or cut-stump treatment over
+      foliar spray whenever the tree is close to plants worth protecting, since injection confines the
+      herbicide to the treated tree's own tissue.
+    citation:
+      source: "Huebner, C.D. — \"Native perennials' germination and growth response to decomposing tree of heaven (Ailanthus altissima) stems\" (Invasive Plant Science and Management, USDA Forest Service Northern Research Station)"
+      url: "https://www.cambridge.org/core/product/C04662CEC7461103A1D0E6261F69FD79/core-reader"
+      publication_date: "2025-12-12"
+    jurisdiction_range:
+      flagged: false
+      note: null

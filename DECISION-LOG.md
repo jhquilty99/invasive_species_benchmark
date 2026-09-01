@@ -187,3 +187,60 @@ ground-truth cells get written per species.
 **Rule Updated:** N — flag for retro if a second data-format decision comes up before code exists (would
 suggest a `.claude/rules/data-format.md` is worth creating instead of one-off decisions).
 **Status:** Active
+
+## 2026-08-31 — Ground-truth corpus built; closes the 6-vs-8-category open question
+
+**Decision:** Wrote all six `data/ground_truth/<species-slug>.yaml` files (Ailanthus altissima, Ligustrum
+sinense, Microstegium vimineum, Pyrus calleryana, Phragmites australis ssp. australis, Wisteria sinensis),
+each with exactly 6 cells, closing `data/SCHEMA.md`'s open question in favor of **6 categories per species**
+(matching the item-writing table's per-category counts, not the PRD's "6×8" prose). Every cell's citation
+was WebFetch-verified against the actual source (not a search snippet) before being written; homeowner-
+legal herbicide products were independently confirmed against EPA labels or EPA's product database.
+**Rationale:** The 6-category reading is the only one the frozen item table (40 answerable items across
+6 named categories) actually sums against; treating "6×8" as a typo in the PRD prose rather than a real
+8th category avoids inventing a category with no corresponding items downstream.
+**Trade-offs:** Zero `jurisdiction_range.flagged: true` cells across all 36 — every category where multiple
+states were checked (NC/SC/GA/AL sources) showed consistent guidance, so PRD §4's "record and flag
+cross-state disagreement" mechanism exists but wasn't triggered this pass. Did NOT attempt a second-source
+cross-check on every cell (would have doubled research time for marginal benefit); relied on picking the
+single best-fit source per PRD's priority order and fetching it directly instead.
+**Process note (flag for `/retro`):** Building this surfaced two subagent-tooling issues worth a pattern
+check if they recur: (1) launching a `fork`-type subagent from inside a `fork` subagent is rejected
+("Fork is not available inside a forked worker") — not obvious from the tool description, and the first
+symptom was the *fork itself* behaving as if it were the parent coordinator (spawning further agents,
+reviewing other agents' output) rather than doing its own assigned research, which took an explicit
+coordinator interjection to catch and correct; (2) this cost real rework — the fork's assigned species pair
+(Ailanthus, Ligustrum) went undone until caught. If a second incident like this shows up, worth a rule
+about verifying a forked/subagent's actual file output rather than trusting its self-report before
+considering that portion of a delegated task done.
+**Rule Updated:** N — flag for retro (see process note above).
+**Status:** Active
+
+## 2026-08-31 — Fixes from `/commit` review of the ground-truth corpus
+
+**Decision:** Acting on the architecture and copy reviewers' findings over the corpus diff: normalized
+`phragmites-australis.yaml` and `wisteria-sinensis.yaml` (the two files that diverged stylistically from
+the other four, per the copy reviewer) from second-person ("you," "your own property") to the same
+third-person "a North Carolina landowner... themselves" construction used throughout the other four
+files, in both `herbicide_legality` cells and one `method_selection` opening line; removed the blank
+lines between `cells:` entries in those same two files to match the other four's formatting; updated
+`data/SCHEMA.md` to actually resolve its own "6 vs 8 categories" open question (it previously still read
+as unresolved even though this session's earlier decision-log entry claimed to close it) rather than
+leaving a stale note in the file that's supposed to be the self-contained spec; fixed a broken
+`DECISION-LOG.md#<anchor>` link in `SCRATCHPAD.md`/`SCRATCHPAD-ARCHIVE.md` that didn't match how markdown
+actually slugifies the heading, switching both to the plain-text reference style every prior archive entry
+already uses; and added a `SCRATCHPAD-ARCHIVE.md` line for the Fri Sep 4 "grid-complete gate" task, which
+this session's edits had silently dropped from `SCRATCHPAD.md`'s task list with no archive trail — it's
+now recorded as closed-moot (the corpus finished 4 days early, so the cut-to-4-species contingency never
+triggered).
+**Rationale:** All were concrete, verifiable findings, not judgment calls requiring new design — the kind
+of thing this repo's own `.claude/docs/scratchpad-discipline.md` exists to prevent recurring.
+**Trade-offs:** The reformatting script used to strip the blank lines had a bug that also deleted the
+`cells:` key from both files (an `awk` one-liner that discarded a non-matching lookahead line instead of
+printing it) — caught immediately by re-running the schema-conformance check that had passed before the
+edit, not by manual inspection. Did NOT skip re-validating after every edit in this pass as a result; every
+YAML edit in this corpus is now followed by the same conformance check, which is worth keeping as a rule
+of thumb for future edits to these files rather than a one-off recovery.
+**Rule Updated:** N — the "always re-validate generated YAML after any batch edit" habit is now demonstrated
+twice in this session (see process note in the prior entry); flag for `/retro`.
+**Status:** Active

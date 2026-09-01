@@ -1,0 +1,131 @@
+species: "Phragmites australis ssp. australis"
+common_name: "Common reed (introduced lineage)"
+failure_archetype: "Subspecies matters; aquatic-adjacent → formulation legality"
+jurisdiction: "NC / southeastern coastal plain"
+
+cells:
+  - category: method_selection
+    answer: >
+      Confirm the stand is the introduced (exotic) lineage before treating anything. Phragmites
+      australis ssp. australis — the aggressive, non-native haplotype of Eurasian origin — is the form
+      documented as invasive in North Carolina; the genetically distinct native lineage, P. australis ssp.
+      americanus, is not the invasive plant this benchmark (or most NC guidance) is targeting, and stands
+      should not be assumed non-native without checking morphology (ligule width, leaf-sheath adherence,
+      stem color/spots — the most reliable of these are ligule width and leaf-sheath adherence). Once the
+      introduced subspecies is confirmed, herbicide is the reliable control method: mechanical cutting,
+      mowing, or fire alone rarely kill an established stand because none of them reach the extensive
+      rhizome network, and are useful mainly as follow-up steps after a herbicide application, not as a
+      standalone fix. For a landowner without a pesticide applicator license, effective control means a
+      foliar or cut-stem/stem-injection herbicide application using a glyphosate- or imazapyr-based
+      product on actively growing, flowering stands, with the specific product choice driven entirely by
+      how close the stand is to standing or flowing water (see herbicide_legality).
+    citation:
+      source: "NC Invasive Plant Council (hosting Plant Conservation Alliance Alien Plant Working Group) — Fact Sheet: Common Reed / Giant Reed (Phragmites australis)"
+      url: "https://nc-ipc.weebly.com/uploads/6/8/4/6/6846349/phragmites.pdf"
+      publication_date: "2005-05-20"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: resprout_regrowth
+    answer: >
+      Introduced Phragmites regenerates from an extensive, deep rhizome network, and the non-native
+      lineage is markedly more aggressive at this than the native one: field comparisons found the
+      introduced haplotype pushing up roughly 97.5 shoots/m² in early spring versus about 7.5 shoots/m²
+      for native stands, and it activates dormant rhizome buds far faster after a stem is cut, mowed, or
+      burned, and produces two to four times more above- and below-ground biomass. Practically, this
+      means a single herbicide application — or mechanical control alone — will not eliminate a stand;
+      any rhizome fragments that survive treatment will resprout the same or the following season, and
+      cutting or mowing without herbicide can stimulate more vigorous regrowth rather than suppress it.
+      Plan on retreating the same site for multiple growing seasons before rhizome reserves are
+      exhausted.
+    citation:
+      source: "USFS Fire Effects Information System (FEIS) — Phragmites australis species review (Gucker, C.L. 2008)"
+      url: "https://www.fs.usda.gov/database/feis/plants/graminoid/phraus/all.html"
+      publication_date: "2008-01-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: timing_windows
+    answer: >
+      Apply herbicide in late summer through fall (roughly August into October, after the plant has
+      flowered and while it is still green and actively moving carbohydrates down into the rhizomes) for
+      the best kill — this is when herbicide is drawn into the root system rather than staying in the
+      upper stem and leaves. AquaMaster's own use directions for "Reed; common, giant" specifically call
+      for making the application in late-summer or fall for enhanced results, at a broadcast rate of 3 to
+      3.75 quarts of product per acre or a 2% solution with a handheld sprayer; a stem-injection option
+      (5 mL of concentrated product per stem, injected into the second or third internode) is also
+      labeled and can extend the treatment window outside of foliar spraying conditions. Spring or
+      early-summer applications, before the plant has fully leafed out and flowered, are less effective
+      and are not the labeled recommendation.
+    citation:
+      source: "Greenbook (Bayer CropScience) — AquaMaster Herbicide Complete Directions for Use label (EPA Reg. No. 524-343)"
+      url: "https://assets.greenbook.net/15-15-32-28-09-2022-AquaMaster_-_label.pdf"
+      publication_date: "2020-10-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: herbicide_legality
+    answer: >
+      Glyphosate and imazapyr are both federal general-use herbicides, not EPA Restricted Use Pesticides,
+      and North Carolina's own restricted-use definition (02 NCAC 09L .0502/.0503) tracks the EPA RUP
+      designation plus a short state add-on list that does not include either active ingredient — so a
+      North Carolina landowner without a pesticide applicator license can legally buy and apply
+      glyphosate- or imazapyr-based products on their own land themselves. The trap here is formulation,
+      not licensing: because Phragmites grows in and along standing
+      or flowing water, only a product specifically labeled for aquatic sites — such as AquaMaster (EPA
+      Reg. No. 524-343; a standard terrestrial glyphosate product like ordinary Roundup is NOT labeled for
+      this) or an equivalent aquatic-labeled imazapyr product (e.g., Habitat) — may legally be applied to
+      it. AquaMaster's label explicitly lists aquatic sites (lakes, rivers, streams, ponds, marshes,
+      ditches, canals) under its Directions for Use and requires a surfactant that is itself approved for
+      aquatic use. Even with an aquatic-labeled product, the label directs the applicator to consult the
+      state agency with primary responsibility for regulating pesticides before applying to public
+      waters, since a permit may be required, and caps treatment to no more than 3.75 quarts/acre if
+      covering more than 20% of a waterbody's surface, to avoid fish-killing oxygen depletion from
+      decaying vegetation.
+    citation:
+      source: "Greenbook (Bayer CropScience) — AquaMaster Herbicide Complete Directions for Use label (EPA Reg. No. 524-343)"
+      url: "https://assets.greenbook.net/15-15-32-28-09-2022-AquaMaster_-_label.pdf"
+      publication_date: "2020-10-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: followup_secondary_invasion
+    answer: >
+      Introduced Phragmites reestablishes readily from rhizome fragments left in disturbed soil or
+      sediment, and even a successful herbicide knockdown typically needs repeated treatments across
+      several growing seasons before surviving rhizomes stop resprouting — plan to reinspect and
+      spot-treat the site annually for at least two to three years rather than treating one application
+      as complete control. Because Phragmites forms a dense monoculture that suppresses the native seed
+      bank while it dominates a site, a cleared or thinned stand does not automatically recover to native
+      marsh vegetation on its own. Standing dead biomass should be managed (mowed or, where feasible,
+      burned after herbicide treatment, once regrowth has stopped) to let light back onto the site and
+      encourage native germination the following growing season, and the treated area should be
+      monitored both for Phragmites resprouts and for other opportunistic wetland weeds moving into the
+      newly opened ground.
+    citation:
+      source: "NC Invasive Plant Council (hosting Plant Conservation Alliance Alien Plant Working Group) — Fact Sheet: Common Reed / Giant Reed (Phragmites australis)"
+      url: "https://nc-ipc.weebly.com/uploads/6/8/4/6/6846349/phragmites.pdf"
+      publication_date: "2005-05-20"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: disposal_nontarget_risk
+    answer: >
+      Two separate non-target risks apply. First, aquatic oxygen depletion from the die-off itself:
+      killing a large stand of emergent Phragmites can deplete dissolved oxygen in the water as the dead
+      vegetation decomposes, which can suffocate fish — the AquaMaster label directs applicators treating
+      more than 20% of a waterbody's surface to spray in strips rather than the whole stand at once, and
+      not to apply where there is no realistic way to prevent overspray onto open water within 0.5 mile
+      of an active potable water intake. Second, physical disposal of cut plant material: because rhizome
+      and stem fragments can resprout or drift to new sites, cut Phragmites should not be left piled on
+      wet soil or pushed into the water or marsh edge — remove cut material from the site (to a landfill
+      or an area with no soil/water contact) rather than composting it or leaving it where it can root or
+      float away. Clean mowing or cutting equipment before leaving the site, since rhizome fragments
+      carried on tires, boots, or blades are a documented spread vector to new locations.
+    citation:
+      source: "Greenbook (Bayer CropScience) — AquaMaster Herbicide Complete Directions for Use label (EPA Reg. No. 524-343)"
+      url: "https://assets.greenbook.net/15-15-32-28-09-2022-AquaMaster_-_label.pdf"
+      publication_date: "2020-10-01"
+    jurisdiction_range:
+      flagged: false
+      note: null

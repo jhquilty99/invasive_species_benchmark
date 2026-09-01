@@ -1,0 +1,128 @@
+species: "Wisteria sinensis"
+common_name: "Chinese wisteria"
+failure_archetype: "Native lookalike (W. frutescens, American wisteria) — wrong ID, wrong action"
+jurisdiction: "NC / southeastern coastal plain"
+
+cells:
+  - category: method_selection
+    answer: >
+      Before cutting or spraying anything, confirm this is Chinese wisteria and not the native
+      look-alike, American wisteria (Wisteria frutescens) — treating the native species by mistake is
+      exactly the harm this check exists to prevent. The two most reliable field marks are seed pod
+      texture and bloom timing relative to leaf-out: Chinese wisteria has persistent, velvety/fuzzy,
+      bean-like seed pods 4-8 inches long, while American wisteria's pods are narrow, flattened, and
+      smooth; Chinese wisteria blooms in mid-to-late spring (April-May), with flower clusters opening
+      almost simultaneously before or as the leaves emerge, while American wisteria flowers after its
+      leaves have emerged (though before they're fully developed) and can produce limited additional
+      summer bloom. Twining direction is NOT a reliable way to separate these two — both Chinese and
+      American wisteria twine counterclockwise; only Japanese wisteria (W. floribunda) twines clockwise,
+      so twining direction rules out the Japanese species but does nothing to distinguish Chinese from
+      American. If pod texture and bloom timing can't both be checked (e.g., an unbloomed vine with no
+      pods present), do not treat it — get a positive ID from a county Extension office first. Once
+      positively identified as Chinese wisteria, established colonies require chemical control (foliar
+      spray on climbing/spreading vines, or cut-stump/basal bark on vines climbing into a tree canopy);
+      hand-pulling and simple cutting alone only work on small, newly establishing plants, since any root
+      or runner fragments left in the soil can resprout.
+    citation:
+      source: "NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant Species: Chinese Wisteria"
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: resprout_regrowth
+    answer: >
+      Chinese wisteria spreads and regenerates aggressively from underground runners (specialized stems)
+      that put down new root systems away from the parent plant, not primarily from seed, so cutting the
+      visible vine at ground level does not kill the plant — the root system and any runners left in the
+      ground will resprout, and a colony that was "cut back" for a season routinely returns the following
+      year. Plan to monitor and re-treat new sprouts the growing season after any cut-stump or foliar
+      treatment. If going the mechanical-only route on a small, newly establishing patch, repeated
+      cutting close to the root collar on a schedule through the growing season (rather than a single
+      cut) is what actually depletes the plant's stored root reserves over time; a single herbicide pass
+      on a large, established colony should be treated as the first of at least two site visits, not a
+      one-and-done job.
+    citation:
+      source: "NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant Species: Chinese Wisteria"
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: timing_windows
+    answer: >
+      For identification, note bloom timing: Chinese wisteria flowers March-May, essentially
+      simultaneously across the whole raceme before or as the leaves emerge, with seed pods maturing
+      July-November. For herbicide timing, foliar spray is most effective from late summer into early
+      fall, when the plant is actively moving sugars back down to the roots and carries the herbicide
+      down with it. Cut-stump and basal-bark treatments should be applied immediately after cutting, any
+      time growth is active and sap is flowing normally — avoid cutting during spring sap flow (when the
+      plant can wall off the fresh cut and reduce herbicide uptake into the root system) and avoid any
+      treatment during drought stress, when uptake and translocation are both reduced.
+    citation:
+      source: "Alabama Cooperative Extension System — Control of Invasive Wisteria (ANR-3257)"
+      url: "https://www.aces.edu/blog/topics/forestry-wildlife/control-of-invasive-wisteria/"
+      publication_date: "2026-06-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: herbicide_legality
+    answer: >
+      General-use, non-restricted herbicides are legal for a North Carolina landowner without a pesticide
+      applicator license to buy and apply themselves on their own property. For foliar treatment of
+      climbing or spreading Chinese wisteria, a 2% v/v solution of glyphosate (a standard 41%-a.i.
+      consumer glyphosate concentrate) with a 0.5% nonionic surfactant, applied to actively growing
+      foliage, is a standard residential-use rate. For cut-stump treatment, apply a 50-100% v/v glyphosate
+      solution to the freshly cut surface immediately after cutting, or use a ready-to-use triclopyr ester
+      basal-bark oil product (e.g., Pathfinder II, EPA Reg. No. 62719-176) undiluted on the lower stem or
+      cut surface — Pathfinder II is sold pre-mixed in oil specifically so a homeowner doesn't need to
+      prepare an oil-based tank mix. Both glyphosate and triclopyr ester are federal general-use
+      pesticides, not EPA Restricted Use Pesticides — confirmed on the comparable Garlon 4 Ultra
+      triclopyr-ester label (EPA Reg. No. 62719-527), which carries the signal word "CAUTION" and no
+      restricted-use designation. Avoid the higher-hazard alternatives sometimes recommended for
+      non-residential/forestry sites — picloram + 2,4-D (Tordon 101) and clopyralid (Transline) — since
+      those are formulated and marketed for restricted or professional forestry use, not homeowner
+      treatment.
+    citation:
+      source: "Alabama Cooperative Extension System — Control of Invasive Wisteria (ANR-3257)"
+      url: "https://www.aces.edu/blog/topics/forestry-wildlife/control-of-invasive-wisteria/"
+      publication_date: "2026-06-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: followup_secondary_invasion
+    answer: >
+      Because Chinese wisteria spreads laterally through underground runners that can travel a
+      substantial distance from the parent plant before surfacing as a new vine, a site that looks
+      "cleared" at the main colony can still be actively expanding at its margins — check well beyond the
+      visible vine mass, not just the obvious stems, and plan to monitor and treat new sprouts for at
+      least the following growing season. Left unmanaged even briefly, surviving vines will climb back
+      into shrubs and tree canopies and resume girdling and shading out whatever is growing there, so
+      cutting vines free of tree trunks and canopies promptly — not leaving cut vine hanging in place to
+      die back slowly — is part of preventing the colony from re-establishing its old footprint.
+    citation:
+      source: "NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant Species: Chinese Wisteria"
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: disposal_nontarget_risk
+    answer: >
+      All plant parts of Chinese wisteria (seeds, pods, foliage) are toxic if ingested by humans, dogs,
+      cats, horses, and livestock, causing vomiting, diarrhea, and depression — do not leave cut material
+      where pets, livestock, or children have access to it, and never use it as fodder or mulch near
+      grazing animals. For disposal, remove cut vines, runners, and any excavated root material from the
+      site rather than leaving them on bare soil, since stem and root fragments in contact with soil can
+      re-root; bag and landfill this material rather than home composting it, since a home compost pile
+      rarely sustains the heat needed to kill wisteria's woody root and stem tissue. When applying foliar
+      herbicide, spray on a calm day and avoid drift onto desirable plants — the residential glyphosate
+      and triclopyr-ester rates above are not aquatic-labeled, so keep spray off ponds, ditches, or
+      wetland edges if wisteria is growing near water.
+    citation:
+      source: "NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant Species: Chinese Wisteria"
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null

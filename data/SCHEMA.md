@@ -9,13 +9,13 @@ Per `.claude/rules/domain-legal.md`: every cell/item below is legally load-beari
 scenario's legal framing without a `DECISION-LOG.md` entry, and always note the date a cited rule was
 current as of.
 
-**Open question — flag for whoever builds the Days 2-4 corpus:** PRD §4 describes "a 6 × 8 grid: species
-× question category," but the item-writing table (PRD §4 Days 5-7) only names 6 answerable categories
-(method selection, resprout/regrowth, timing windows, herbicide legality, follow-up/secondary invasion,
+**Resolved — 6 categories per species, not 8:** PRD §4 describes "a 6 × 8 grid: species × question
+category," but the item-writing table (PRD §4 Days 5-7) only names 6 answerable categories (method
+selection, resprout/regrowth, timing windows, herbicide legality, follow-up/secondary invasion,
 disposal/non-target risk) plus abstention — 7, not 8, and abstention isn't species-specific. This schema
-assumes **6 categories per species** (matching the itemized table, which is what the 40 answerable items'
-counts actually sum against). If an 8th category was intended, resolve that against the PRD before Day 2
-starts, since it changes how many ground-truth cells get written per species.
+uses **6 categories per species**, matching the itemized table (the 40 answerable items' counts only sum
+against 6). See `DECISION-LOG.md`, 2026-08-31 "Ground-truth corpus built; closes the 6-vs-8-category open
+question" entry — the corpus at `data/ground_truth/*.yaml` is built on this basis.
 
 ---
 

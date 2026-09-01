@@ -20,3 +20,7 @@ index, not a history of *why*.
 - 2026-08-31 — Defined the benchmark dataset/scenario file format: `data/SCHEMA.md`, ground-truth as
   per-species YAML, items as `data/items.jsonl` (detail: DECISION-LOG.md, 2026-08-31 "Benchmark dataset
   scenario file format" entry).
+- 2026-08-31 — Built the ground-truth corpus: 6 species × 6 categories, `data/ground_truth/*.yaml`,
+  0 jurisdiction-range flags (detail: DECISION-LOG.md, 2026-08-31 "Ground-truth corpus built" entry).
+- 2026-08-31 — Closed the Fri Sep 4 "grid-complete gate" task as moot: the corpus finished 4 days ahead
+  of that gate, so the pre-authorized cut-to-4-species contingency never triggered.
