@@ -145,3 +145,45 @@ per-contact trackers like this get added.
 **Rule Updated:** Y — `.claude/docs/scratchpad-discipline.md` now documents the `EMAIL-TRACKER.md`
 exception and the rule that any future tracker like it needs the same explicit call-out.
 **Status:** Active
+
+## 2026-08-31 — API access confirmed; 4-model line-up locks OpenAI + Anthropic + Google + one open-weight model
+
+**Decision:** Confirmed active API access (keys + billing) for OpenAI, Anthropic (Claude), and Google
+(Gemini). The 4th model slot required by PRD §4 ("4 models spanning capability tiers and providers;
+include one small open-weight model") will be a small open-weight model served through a third-party
+inference host (e.g. Together.ai, Groq, Fireworks) or run locally — exact host and model deferred to the
+Day 10-11 model-selection step in PRD §4/§10, where exact version strings get logged per the PRD's
+"non-negotiable" rule.
+**Rationale:** Confirming provider-level access answers PRD §4 Day 1's "Confirm API budget" task now,
+without forcing a premature pick of the specific open-weight model before the run harness exists. Total
+call volume (~960 calls across 4 models × 2 conditions × 60 items × 2 runs) is small enough that
+per-token cost across any of these hosts is not a budget risk regardless of which one gets picked.
+**Trade-offs:** Did NOT lock the specific open-weight model or host today — that stays open, but is
+covered by PRD's existing Day 10-11 schedule rather than a new `SCRATCHPAD.md` item. Did NOT drop the
+open-weight requirement (one option considered and rejected): PRD §2/§4 locks it explicitly, and "no
+scope growth" (PRD §6 rule 2) cuts both ways — dropping a locked requirement isn't an authorized cut.
+**Rule Updated:** N — not a recurring pattern yet.
+**Status:** Active
+
+## 2026-08-31 — Benchmark dataset/scenario file format
+
+**Decision:** Two separate file formats: (1) the ground-truth corpus as one YAML file per species under
+`data/ground_truth/`, each holding every category cell for that species (answer + citation + publication
+date + jurisdiction range flag); (2) benchmark items as a single JSON Lines file `data/items.jsonl`, one
+JSON object per item, referencing the relevant ground-truth cell(s) for Condition 2 (oracle) grounding.
+See `data/SCHEMA.md` for the full field definitions and worked examples.
+**Rationale:** YAML per species keeps ground-truth cells human-readable and easy to hand-write/edit
+during Days 2-4 corpus construction — long-form prose answers with citations read better than JSON. JSONL
+for items keeps the frozen 60-item set append-only and diff-friendly, and is a natural input format for a
+scripted run harness later (Week 2) without committing to a database or ORM prematurely.
+**Trade-offs:** Did NOT design the run-harness or scoring-sheet format yet — that's Week 2 work
+(`SCRATCHPAD.md`: stack layout, rubric). Did NOT unify ground-truth and items into one file — kept
+separate because the ground-truth grid is the source of truth items get checked against, and collapsing
+them would make "did an item's ground truth change after freeze" harder to audit. Did NOT resolve PRD
+§4's "6 × 8 grid" language against its own 6-category item table before writing this schema — `SCHEMA.md`
+assumes 6 categories per species (matching the item table's counts) and flags the discrepancy inline for
+whoever starts the Days 2-4 corpus, rather than silently picking a number that changes how many
+ground-truth cells get written per species.
+**Rule Updated:** N — flag for retro if a second data-format decision comes up before code exists (would
+suggest a `.claude/rules/data-format.md` is worth creating instead of one-off decisions).
+**Status:** Active
