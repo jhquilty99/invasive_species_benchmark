@@ -68,3 +68,6 @@ index, not a history of *why*.
 - 2026-09-02 — Corpus-wide voice cleanup: converted the 26 remaining second-person items in
   `data/items.jsonl` to third person before freezing, per user decision; `data/SCHEMA.md` now states the
   convention explicitly (detail: DECISION-LOG.md, 2026-09-02 "Corpus-wide voice cleanup" entry).
+- 2026-09-02 — `SCRATCHPAD.md` task 1 closed: committed `data/items.jsonl` + `data/ground_truth/*.yaml`
+  (plus the accumulated Days 1-2 changes that had never been committed) and tagged the commit `freeze-v1`
+  (commit `7d2f1b9`). The 40-item benchmark corpus is now frozen — no further item changes for any reason.
