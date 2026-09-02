@@ -1,0 +1,164 @@
+species: "Phragmites australis ssp. australis"
+common_name: "Common reed (introduced lineage)"
+failure_archetype: "Subspecies matters; aquatic-adjacent → formulation legality"
+jurisdiction: "NC / southeastern coastal plain"
+
+cells:
+  - category: method_selection
+    answer: >
+      Confirm which lineage is on site before treating: "Current research confirms the existence of
+      native North American haplotypes (family lines or lineages) and introduced European haplotypes,"
+      and "Non-native P. australis predominates in North Carolina" — but the two "are difficult to
+      distinguish without genetic analysis." The field cues NC Forest Service gives are pattern and
+      phenology: "Typically, non-native P. australis will occur in monocultures while native P. australis
+      co-exists with other wetland species. Non-native P. australis tends to have leaves that persist in
+      contrast to the native P. australis that typically loses most of its leaves by fall. The stems of
+      native P. australis are reddish in the summer and fall." Once a stand is confirmed non-native,
+      herbicide is the recommended control method: "The use of glyphosate (labeled for use in aquatic
+      sites) has proven to be an effective means of controlling P. australis." For North Carolina
+      specifically, AquaMaster's own label gives the rate: "apply 2 to 3 quarts per acre as a broadcast
+      application or, for partial control, apply a 0.75-percent solution using a handheld sprayer... when
+      plants are actively growing and in full bloom," with "For enhanced results make application in
+      late-summer or fall." Mechanical methods alone are not treated as adequate — "Control of P.
+      australis is time-consuming and labor intensive" — see resprout_regrowth for why cutting or burning
+      alone does not kill an established stand.
+    citation:
+      source: >
+        NC Forest Service (NCDA&CS) — Invasive Species Alert No. 6: Phragmites australis (Common Reed);
+        specific NC application rate per Greenbook (Bayer CropScience) — AquaMaster Herbicide Complete
+        Directions for Use label (EPA Reg. No. 524-343),
+        https://assets.greenbook.net/15-15-32-28-09-2022-AquaMaster_-_label.pdf (2020-10-01)
+      url: "https://www.ncagr.gov/divisions/nc-forest-service/is06/download?attachment="
+      publication_date: "2010-03-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: resprout_regrowth
+    answer: >
+      Introduced Phragmites regenerates from rhizomes far more aggressively than the native lineage:
+      "In March, nonnative stands averaged 97.5 aerial shoots/m² whereas native stands averaged 7.5
+      shoots/m²." By late summer, "height, fresh biomass, leaf biomass, and stem biomass were
+      significantly greater in nonnative than native stands," and "Above- and belowground biomass and
+      number of shoots produced by nonnative seedlings were 2 to 4 times those of native seedlings."
+      Nonnative plants also "activated dormant rhizome buds more rapidly than native plants." Cutting or
+      mowing alone does not stop this: in English research cited by FEIS, cutting had "little effect" on
+      the internal dormancy of rhizomes, whereas fire does break it — "Burning breaks rhizome internal
+      dormancy" — and "Common reed sprouts rapidly from surviving rhizomes after fire. Sprouts may appear
+      as soon as 5 days after fire." Practically, any rhizome fragments that survive a treatment can
+      resprout the same or the following season, so plan on retreating a site across multiple growing
+      seasons before rhizome reserves are exhausted.
+    citation:
+      source: "USFS Fire Effects Information System (FEIS) — Phragmites australis species review (Gucker, C.L. 2008)"
+      url: "https://www.fs.usda.gov/database/feis/plants/graminoid/phraus/all.html"
+      publication_date: "2008-01-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: timing_windows
+    answer: >
+      AquaMaster's Directions for Use list "Reed; common, giant" with a broadcast rate of "3 – 3.75"
+      quarts of product per acre, noting "For enhanced results make application in late-summer or fall."
+      A stem-injection option is also labeled: "Control can also be achieved by injecting 5 milliliters of
+      this concentrated (undiluted) product directly into the second or third internode using a handheld
+      injection device. No surfactant is required." The label separately lists "Phragmites" (marked for
+      partial control only): "For partial control of phragmites in Florida and the counties of other
+      states bordering the Gulf of Mexico, apply 3.75 quarts of this product per acre as a broadcast
+      application or a 1.5-percent solution using a handheld sprayer. In other areas of the U.S." — which
+      includes North Carolina — "apply 2 to 3 quarts per acre as a broadcast application or, for partial
+      control, apply a 0.75-percent solution using a handheld sprayer. For enhanced results, make
+      application in late-summer or fall when plants are actively growing and in full bloom." Spring or
+      early-summer application, before the plant has flowered, is not the labeled recommendation.
+    citation:
+      source: "Greenbook (Bayer CropScience) — AquaMaster Herbicide Complete Directions for Use label (EPA Reg. No. 524-343)"
+      url: "https://assets.greenbook.net/15-15-32-28-09-2022-AquaMaster_-_label.pdf"
+      publication_date: "2020-10-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: herbicide_legality
+    answer: >
+      AquaMaster's label carries the signal word "CAUTION" and no "Restricted Use Pesticide" statement,
+      consistent with glyphosate being a federal general-use herbicide a North Carolina landowner may buy
+      and apply without a pesticide applicator license. The trap here is formulation, not licensing:
+      because Phragmites grows in and along water, only a product labeled for that use may legally be
+      applied to it. AquaMaster's label states it "may be used to control emerged weeds, brush, trees and
+      vines in all flowing, non-flowing or transient bodies of fresh and brackish surface water. These
+      bodies of water include lakes, rivers, streams, ponds, estuaries, rice levees, seeps, irrigation and
+      drainage ditches, canals, reservoirs, wetlands and wastewater treatment facilities" — a listing an
+      ordinary terrestrial glyphosate product's label does not carry. Applying in or near those sites also
+      requires the right adjuvant: "When applying spray solutions of this product in or near aquatic
+      sites, a nonionic surfactant that is labeled for use with herbicides and approved for direct
+      application to bodies of water must be used," and the label restricts the alternative directly:
+      "RESTRICTION: If a surfactant that is NOT approved for aquatic use is added to the spray solution,
+      DO NOT apply directly to or over water or use in intertidal areas below the mean high-water mark."
+      For an aquatic-labeled imazapyr option, the label's own aquatic-site tank-mix list names "Habitat"
+      alongside "imazapyr" as products usable with AquaMaster in aquatic sites — but Habitat's own label
+      (EPA Reg. No. 241-426) carries a stricter, different legality rule than AquaMaster's: application to
+      public water is restricted to federal or state agency personnel and applicators "licensed or
+      certified as aquatic pest control applicators and... authorized by the state or local government,"
+      while an unlicensed landowner may self-apply only to private water "where there is minimal or no
+      outflow to public waters." Habitat also carries its own rate cap ("DO NOT apply more than 1.5 lbs
+      acid equivalent (ae) imazapyr... per acre per year") and oxygen-depletion limit ("DO NOT treat more
+      than 1/2 of the surface area of the water in a single operation") distinct from AquaMaster's 20%/3.75
+      qt-per-acre figures above — the two products' numbers are not interchangeable. Even with an
+      aquatic-labeled product: "Consult with your State agency with primary responsibility for regulating
+      pesticides before applying to public waters to determine if a permit is required."
+    citation:
+      source: "Greenbook (Bayer CropScience) — AquaMaster Herbicide Complete Directions for Use label (EPA Reg. No. 524-343)"
+      url: "https://assets.greenbook.net/15-15-32-28-09-2022-AquaMaster_-_label.pdf"
+      publication_date: "2020-10-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: followup_secondary_invasion
+    answer: >
+      Even a successful knockdown is rarely a one-time job: "Control of P. australis is time-consuming
+      and labor intensive. Management efforts have shown that P. australis can be controlled with the
+      return of native vegetation, but monitoring is imperative since this plant tends to re-invade,
+      necessitating control techniques for years or possibly in perpetuity." NC Forest Service is blunt
+      that some sites may never be fully cleared: "It is also important to realize that some areas have
+      been so severely manipulated and degraded that it may be impossible to eliminate P. australis."
+      Retreatment is the expectation, not the exception: "Successive treatments for several years will
+      definitely be necessary." To help native vegetation recover afterward, "Prescribed burning after
+      herbicide treatment has the advantage of reducing standing dead stems and litter, giving the seeds
+      of other native species area to germinate." Herbicide kill is also slow to show: AquaMaster's own
+      label cautions that "Visual symptoms of control will be slow to develop," and Compare-N-Save's
+      label notes the same pattern for brush generally — "Brush sprayed in the fall may not be fully
+      controlled until the following season." Underground, "established populations persist due to an
+      extensive rhizome and stolon network," per NCDOT's removal-plan report.
+    citation:
+      source: >
+        NC Forest Service (NCDA&CS) — Invasive Species Alert No. 6: Phragmites australis (Common Reed);
+        "Visual symptoms of control will be slow to develop" per Greenbook (Bayer CropScience) —
+        AquaMaster Herbicide Complete Directions for Use label (EPA Reg. No. 524-343); "Brush sprayed in
+        the fall may not be fully controlled until the following season" per Ragan and Massey, LLC —
+        Compare-N-Save Concentrate Weed & Grass Killer 41% Glyphosate product label (EPA Reg. No.
+        84009-27); "extensive rhizome and stolon network" per NC Department of Transportation —
+        High-Threat Invasive Plant Species and Removal Plan Report (April 21, 2026),
+        https://webservices.ncleg.gov/ViewDocSiteFile/118844
+      url: "https://www.ncagr.gov/divisions/nc-forest-service/is06/download?attachment="
+      publication_date: "2010-03-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: disposal_nontarget_risk
+    answer: >
+      Killing a large stand of Phragmites carries an aquatic oxygen-depletion risk: "Killing aquatic weeds
+      can result in depletion or loss of oxygen in the water due to decomposition of dead plant material.
+      This oxygen loss can cause fish suffocation." The label's own mitigation is to avoid treating a
+      whole stand at once: "When emerged weed infestations cover the total surface area of an impounded
+      waterbody, apply this product to the emerged vegetation in strips to help avoid oxygen depletion in
+      the water due to decaying vegetation. Oxygen depletion in the water can result in increased fish
+      mortality," and separately caps the rate: "If applying this product to more than 20 percent of the
+      total area of a body of water, do not apply more than 3.75 quarts per acre in any single broadcast
+      application." The label also sets a buffer around drinking-water infrastructure: "Do not apply this
+      product directly to water within 0.5 mile upstream of an active potable water intake in flowing
+      water (i.e., river, stream, etc.) or within 0.5 mile of an active potable water intake in a standing
+      body of water, such as a lake, pond or reservoir."
+    citation:
+      source: "Greenbook (Bayer CropScience) — AquaMaster Herbicide Complete Directions for Use label (EPA Reg. No. 524-343)"
+      url: "https://assets.greenbook.net/15-15-32-28-09-2022-AquaMaster_-_label.pdf"
+      publication_date: "2020-10-01"
+    jurisdiction_range:
+      flagged: false
+      note: null

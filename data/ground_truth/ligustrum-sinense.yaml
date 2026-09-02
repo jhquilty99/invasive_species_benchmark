@@ -1,0 +1,150 @@
+species: "Ligustrum sinense"
+common_name: "Chinese privet"
+failure_archetype: "Secondary invasion after removal — the \"now what\" gap"
+jurisdiction: "NC / southeastern coastal plain"
+
+cells:
+  - category: method_selection
+    answer: >
+      Method depends on stem size. "Young seedlings of Chinese privet can be successfully
+      hand-pulled from the environment as long as they are under half an inch in diameter, while
+      specialized tools can be found to help remove stems from this plant that are up to 2 inches
+      in diameter." Beyond that, "cutting or pulling larger sizes of this invasive species are not
+      generally considered effective, and can even further the spread through the disturbing of
+      the soil" — so larger plants need herbicide. Two options: a foliar spray, "spraying a 2
+      percent solution of triclopyr (a selective herbicide targeting woody plants) mixed with a
+      0.5 percent non-ionic surfactant over the foliage of the Chinese privet until it is well
+      soaked"; or, for a cut plant, the cut-stump method — "a solution of 50 percent triclopyr,
+      and spraying it directly on the freshly cut stump, cut off within 6 inches of the ground" of
+      the plant, and "Soak the entire surface of the stump in the herbicide solution until the
+      stump is no longer actively absorbing the solution, which may begin to happen within 3 to 5
+      minutes of cutting the stump."
+    citation:
+      source: "NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant Species: Chinese Privet"
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-privet/"
+      publication_date: "2026-04-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: resprout_regrowth
+    answer: >
+      Cutting or pulling a larger plant without treating the stump leaves the root system alive —
+      which is also why "cutting or pulling larger sizes of this invasive species are not
+      generally considered effective, and can even further the spread through the disturbing of
+      the soil" in the first place. Chinese privet also spreads vegetatively: "it can move through
+      suckers that push through disturbed soils." Whichever method is used, "Any treatments
+      conducted to control Chinese privet should be closely monitored for regrowth throughout the
+      year and through the next season of growth to ensure that the infestation is caught early
+      and treated before it begins to come back" — a colony that looks dead after one treatment
+      can still push up new sprouts from surviving root tissue.
+    citation:
+      source: "NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant Species: Chinese Privet"
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-privet/"
+      publication_date: "2026-04-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: timing_windows
+    answer: >
+      Timing matters far more than herbicide rate for privet control. A controlled study of
+      glyphosate and triclopyr foliar applications found: "For spring (April) and fall (October
+      and December) applications, percentage control of privet cover averaged 93 to 100% and 49
+      to 70% for glyphosate and triclopyr treatments, respectively, whereas for summer (June and
+      August) applications, control averaged 67 to 69% and 14 to 26%, respectively." Rate barely
+      mattered: "privet control was not influenced by variation in herbicide rates of 1.7, 3.4,
+      5.0, or 6.7 kg ae/ha compared with each of the five application timings." This matches NC
+      Cooperative Extension's foliar guidance that sprays are "most effective during the late fall
+      and early spring as long as the temperature is regularly maintained at 65 degrees Fahrenheit
+      or higher." Cut-stump treatment is far less season-restricted: "This method can be used
+      throughout the year, and can be an effective method of control as long as the ground is not
+      frozen." Where foliar spray isn't practical, cut-stump and basal bark are alternatives: "cut-stump
+      (50% v/v) or basal bark (25% v/v) applications of triclopyr plus appropriate carrier can be
+      effective."
+    citation:
+      source: >
+        Harrington, T.B. & Miller, J.H. — "Effects of Application Rate, Timing, and Formulation of
+        Glyphosate and Triclopyr on Control of Chinese Privet (Ligustrum sinense)" (USDA Forest Service
+        Treesearch), for the percentage-control-by-season figures; "65 degrees Fahrenheit"/"ground is
+        not frozen" per NC Forest Service (NCDA&CS) — Invasive Species Alert No. 2: Ligustrum sinense
+        (Chinese Privet), https://www.ncagr.gov/divisions/nc-forest-service/is02/open (March 2010);
+        "cut-stump (50% v/v) or basal bark (25% v/v)...plus appropriate carrier" per NC Department of
+        Transportation — High-Threat Invasive Plant Species and Removal Plan Report (April 21, 2026),
+        https://webservices.ncleg.gov/ViewDocSiteFile/118844
+      url: "https://research.fs.usda.gov/treesearch/20695"
+      publication_date: "2005-01-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: herbicide_legality
+    answer: >
+      Compare-N-Save Concentrate Weed & Grass Killer 41% Glyphosate (EPA Reg. No. 84009-27) lists
+      its active ingredient as "Glyphosate, isopropylamine salt ... 41.0%," carries no Restricted
+      Use Pesticide classification, and its alternate-brand-name listing confirms the product:
+      "Compare-N-Save® Concentrate Weed & Grass Killer 41% Glyphosate." A North Carolina landowner
+      without a pesticide applicator license can legally buy and apply it. For stump treatment,
+      the label instructs: "Stumps can be treated to prevent regrowth. For best results, treat
+      when the vegetation is actively growing and within 5 minutes of being cut down," directing
+      users to "Cut the stump close to the soil surface," "Drive 4-5 nail holes into the stump,"
+      and "Flood the stump with undiluted product." The label also warns generally to "Apply only
+      when air is calm to prevent drift to desirable plants." Triclopyr is likewise general-use:
+      the ferti-lome Brush Killer•Stump Killer label (EPA Reg. No. 62719-226-7401) — "This Product
+      Is For Outdoor Residential Use Only" — lists "Triclopyr (3,5,6-trichloro-2-Pyridinyloxyacetic
+      acid), as the Triethylamine salt ... 8.8%" and, for stump treatment, instructs users to
+      "apply the undiluted product with a paint brush or backpack sprayer to completely cover the
+      freshly cut surface." Because triclopyr targets woody plants selectively while glyphosate
+      kills any green plant it contacts, triclopyr is the better choice near desirable turf or
+      herbaceous groundcover. No professional license is needed for a homeowner applying either
+      product to their own property; NCDA&CS's licensing page reserves that requirement for
+      "commercial applicators applying any type of pesticide for compensation."
+    citation:
+      source: >
+        Ragan and Massey, LLC — Compare-N-Save Concentrate Weed & Grass Killer 41% Glyphosate product
+        label (EPA Reg. No. 84009-27); licensing quote per North Carolina Department of Agriculture &
+        Consumer Services (NCDA&CS) — Pesticides Licenses,
+        https://www.ncagr.gov/divisions/structural-pest-control-and-pesticides/pesticide/licensing-and-certification/licenses
+        (verified current 2026-09-02, page carries no publication date)
+      url: "https://www3.epa.gov/pesticides/chem_search/ppls/084009-00027-20191007.pdf"
+      publication_date: "2019-10-07"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: followup_secondary_invasion
+    answer: >
+      Monitoring the treated footprint alone is not enough: "Chinese privet also spreads over a
+      wide area when seeds are dropped by birds after eating the fruits from this invasive
+      plant," so new seedlings can originate from a bird-carried seed from a neighboring property
+      or hedgerow, well outside the treated patch — the follow-up check needs to extend to field
+      margins, fence lines, and disturbed ground nearby, not just the treated patch itself. Within
+      the treated footprint, "Any treatments conducted to control Chinese privet should be closely
+      monitored for regrowth throughout the year and through the next season of growth to ensure
+      that the infestation is caught early and treated before it begins to come back."
+    citation:
+      source: "NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant Species: Chinese Privet"
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-privet/"
+      publication_date: "2026-04-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: disposal_nontarget_risk
+    answer: >
+      Chinese privet's fruit and foliage carry a direct human-health risk: "This plant is toxic to
+      humans as well, both the fruits and leaves, and can cause symptoms like abdominal pain,
+      nausea, vomiting, diarrhea, low blood pressure, headaches, and weakness and clammy skin that
+      can last up to two or three days" — cut material carrying berries should not be left where
+      pets, livestock, or children can reach it. On the herbicide side, the foliar-spray method
+      "must be used with caution, as it can cause injury to more beneficial woody plants in the
+      area if they are near the targeted invasive species," since triclopyr (used at "a 2 percent
+      solution ... mixed with a 0.5 percent non-ionic surfactant") is selective for woody plants —
+      making it the lower-risk choice near desirable turf or herbaceous groundcover, whereas a
+      non-selective glyphosate foliar spray will kill any green plant it contacts, including
+      grass, so it needs careful, drift-free application. Because "cutting or pulling larger sizes
+      of this invasive species ... can even further the spread through the disturbing of the
+      soil," avoid leaving a cleared area bare and unstabilized afterward, since bare disturbed
+      ground is exactly what privet colonizes.
+    citation:
+      source: "NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant Species: Chinese Privet"
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-privet/"
+      publication_date: "2026-04-29"
+    jurisdiction_range:
+      flagged: false
+      note: null

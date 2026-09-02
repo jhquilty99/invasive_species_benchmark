@@ -1,0 +1,169 @@
+species: "Wisteria sinensis"
+common_name: "Chinese wisteria"
+failure_archetype: "Native lookalike (W. frutescens, American wisteria) — wrong ID, wrong action"
+jurisdiction: "NC / southeastern coastal plain"
+
+cells:
+  - category: method_selection
+    answer: >
+      Before cutting or spraying anything, confirm this is Chinese wisteria and not the native
+      look-alike, American wisteria (Wisteria frutescens) — treating the native by mistake is exactly
+      the harm this check exists to prevent. Per NC Cooperative Extension (Madison County): "The seed
+      pods of the native wisteria are smooth compared to the velvety texture of the invasive species."
+      Chinese wisteria itself is "fragrant during blooming through the mid to late spring months (April
+      and May)" and "climbs in a counterclockwise motion up the infrastructure or natural environments
+      where it has taken hold." If pod texture can't be checked (e.g. no pods present yet), don't treat
+      it based on the vine alone — get a positive ID first. Once confirmed as Chinese wisteria: "Mechanical methods of control such as cutting or hand-pulling are
+      not effective with Chinese wisteria in most forms. Hand pulling is only effective when
+      infestations are first beginning, before the plants begin to develop runners. After these runners
+      have been developed and the infestation has fully established, chemical control is necessary...
+      it will require two different methods - cut stump, and foliar applications." NCDOT's own
+      removal-plan report adds a scale detail worth knowing before attempting removal: the vine can grow
+      "up to 70 feet long and 10 inches in stem diameter," and where it has climbed into a tree canopy
+      recommends cutting near ground level and performing a "window cut" — removing a second, higher
+      section of vine so the severed upper portion has no way to reattach to the ground.
+    citation:
+      source: >
+        NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant
+        Species: Chinese Wisteria; vine size and "window cut" technique per NC Department of
+        Transportation — High-Threat Invasive Plant Species and Removal Plan Report (April 21, 2026),
+        https://webservices.ncleg.gov/ViewDocSiteFile/118844
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: resprout_regrowth
+    answer: >
+      Chinese wisteria spreads and regenerates from underground runners, not primarily from seed: "this
+      invasive wisteria uses runners, specialized stems that spread from the crown of the plant and
+      crawl along the ground, and create new root systems that allow for a new shoot of wisteria to
+      grow up from the runner, effectively creating a new wisteria plant." So cutting the visible vine
+      alone does not kill it. For cut-stump treatment: "cut the vine as close to the ground as
+      possible, and then immediately spray the newly formed stump with a solution of 50% triclopyr...
+      Once this stump has been fully saturated with the herbicide solution, cut the vine again as high
+      up as you can reach to ensure that there is no way the vine will be able to sprout runners and
+      reattach to the ground." This method "is effective as long as the ground is not frozen, so it may
+      be best to avoid using this method of control during the winter months." Regardless of method:
+      "be sure to follow up the next year to monitor and control any new sprouts and seedlings that
+      have begun to make themselves known."
+    citation:
+      source: "NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant Species: Chinese Wisteria"
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: timing_windows
+    answer: >
+      For identification: invasive wisteria (Chinese/Japanese) "bloom[s] March through May, before or
+      as leaves emerge," with "Fruit/seeds: July to November; flat legume pod, pubescent, up to 6
+      inches long." For herbicide timing, per Alabama Extension: "Foliar sprays are applied to the
+      leaves but not allowed to run off, generally noted as 'spray to wet.' This is most efficient from
+      late summer to early fall." For cut-stump and basal-bark treatment: "Cut stump and basal bark
+      methods work anytime of the year, except during spring sap flow." For hack-and-squirt/frill
+      methods on larger nonresidential infestations: "All these methods can be used throughout the year
+      except during spring sap flow or in drought conditions." Madison County Extension's cut-stump
+      procedure adds a same-region caveat: "immediately spray the newly formed stump," and the method
+      "is effective as long as the ground is not frozen." Because glyphosate "will kill almost all
+      plants contacted," and a terrestrial label's own drift warning is explicit that contact with
+      "foliage, green stems, exposed non-woody roots or fruit of crops, desirable plants and trees"
+      risks "severe plant injury or destruction," foliar spray on a climbing vine should only be done
+      when air is calm and the target tree's own foliage can be avoided.
+    citation:
+      source: >
+        Alabama Cooperative Extension System — Control of Invasive Wisteria (ANR-3257); cut-stump
+        procedure per NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native
+        Invasive Plant Species: Chinese Wisteria; drift-warning quotes per Ragan and Massey, LLC —
+        Compare-N-Save Concentrate Weed & Grass Killer 41% Glyphosate product label (EPA Reg. No.
+        84009-27) and Greenbook (Bayer CropScience) — AquaMaster Herbicide Complete Directions for Use
+        label (EPA Reg. No. 524-343)
+      url: "https://www.aces.edu/blog/topics/forestry-wildlife/control-of-invasive-wisteria/"
+      publication_date: "2026-06-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: herbicide_legality
+    answer: >
+      General-use, non-restricted herbicides are legal for a North Carolina landowner without a
+      pesticide applicator license to buy and apply on their own property. Alabama Extension's
+      residential-landscaping rate table lists, for glyphosate ("Roundup or generics (41% active
+      ingredient)"): cut stump at "50%–100% v/v, spray to wet," and foliar spray at "2% v/v (2.5
+      fl oz/gal), spray to wet." For triclopyr ester ("Pathfinder II or generics (13.6% active
+      ingredient)"), both basal bark and cut stump call for "Spray to wet with undiluted solution."
+      None of these residential-table products carry a restricted-use designation. By contrast, the
+      same source's nonresidential/forestry table lists picloram + 2,4-D ("Tordon 101") explicitly
+      footnoted "Restricted Use Pesticide" — that product, along with clopyralid (Transline), is
+      formulated and marketed for forest and non-cropland sites (fencerows, roadsides, rights-of-way),
+      not homeowner treatment, and should be avoided by an unlicensed landowner.
+
+      No professional license is needed for a homeowner applying either product to their own property;
+      NCDA&CS's licensing page reserves that requirement for "commercial applicators applying any type
+      of pesticide for compensation." Whichever product is used, follow its label exactly: "THE LABEL IS
+      THE LAW," and federal regulations dictate that "it is a violation of Federal law to use this
+      product in a manner inconsistent with its labeling."
+    citation:
+      source: >
+        Alabama Cooperative Extension System — Control of Invasive Wisteria (ANR-3257), for the herbicide
+        rate tables and Tordon Restricted Use Pesticide designation; licensing quote per North Carolina
+        Department of Agriculture & Consumer Services (NCDA&CS) — Pesticides Licenses,
+        https://www.ncagr.gov/divisions/structural-pest-control-and-pesticides/pesticide/licensing-and-certification/licenses
+        (verified current 2026-09-02, page carries no publication date); "THE LABEL IS THE LAW" quote per
+        Ragan and Massey, LLC — Compare-N-Save Concentrate Weed & Grass Killer 41% Glyphosate product label
+        (EPA Reg. No. 84009-27), https://www3.epa.gov/pesticides/chem_search/ppls/084009-00027-20191007.pdf
+        (2019-10-07)
+      url: "https://www.aces.edu/blog/topics/forestry-wildlife/control-of-invasive-wisteria/"
+      publication_date: "2026-06-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: followup_secondary_invasion
+    answer: >
+      Because Chinese wisteria spreads laterally through underground runners rather than easily-carried
+      seed — "The seeds of this invasive plant are large in size, making it difficult for animals like
+      birds and small rodents to disperse these seeds from area to area. Rather, this invasive wisteria
+      uses runners... that allow for a new shoot of wisteria to grow up" — a site that looks cleared at
+      the main colony can still be expanding at its margins. Left unmanaged, "These vines, once spread
+      into the forest, are extremely dangerous to the native or more beneficial vegetation in the area.
+      They can strangle and girdle mature trees, causing deterioration of the forest canopy." Regardless
+      of method chosen: "be sure to follow up the next year to monitor and control any new sprouts and
+      seedlings." Full eradication of every vine from a tree canopy in one pass is unlikely: "It is
+      unlikely that removal of all vines from desired trees and shrubs will be possible, but it will
+      kill the vines that are present and stop them from spreading further." NCDOT's own removal-plan
+      report is blunt about the scale of the job: "Effective control of wisteria spp. requires a
+      multi-year, integrated approach, as extensive runners and root systems make established
+      infestations difficult to eradicate."
+    citation:
+      source: >
+        NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant
+        Species: Chinese Wisteria; "multi-year, integrated approach...difficult to eradicate" per NC
+        Department of Transportation — High-Threat Invasive Plant Species and Removal Plan Report
+        (April 21, 2026), https://webservices.ncleg.gov/ViewDocSiteFile/118844
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: disposal_nontarget_risk
+    answer: >
+      All plant parts of Chinese wisteria are toxic: "Chinese wisteria is toxic if consumed by humans,
+      cats, dogs, horses, and livestock. Consuming parts of this plant, including the sap, leaves,
+      bark, roots, seeds, and stems, can cause symptoms such as vomiting (in some cases will have blood
+      visible), diarrhea, and depression." Do not leave cut material where pets, livestock, or children
+      have access to it. For cut-stump disposal, the source's own procedure is to clear cut material
+      from the site rather than leave it in contact with soil: "Remove any cut pieces from the area."
+      Whatever herbicide product is used, follow its label exactly: "If you choose to use pesticides,
+      please be sure to use them according to the label. The label is the law!" A retail triclopyr
+      product's own label claim of being "Pet safe: Yes, if used as directed on Label" is conditional on
+      following the label exactly, not a blanket guarantee — keep pets off treated ground until it dries.
+    citation:
+      source: >
+        NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant
+        Species: Chinese Wisteria; "Pet safe: Yes, if used as directed on Label" per ferti-lome / VPG —
+        Brush Killer • Stump Killer product label (EPA Reg. No. 62719-226-7401), as reproduced by Do My
+        Own, https://www.domyown.com/fertilome-brush-killer-and-stump-killer-p-1545.html (2024-03-12)
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null

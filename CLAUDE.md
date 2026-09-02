@@ -18,6 +18,10 @@ its condition matches — don't preload everything.
   `DECISION-LOG.md`. Open work (something that needs doing, then stops mattering) goes in
   `SCRATCHPAD.md`. Don't put open work in memory, and don't let closed work linger in the active
   scratchpad — see `.claude/docs/scratchpad-discipline.md`.
+- When cutting scope, defer rather than discard: keep the cut content in a form that's cheap to
+  reintroduce later (a same-schema file, an unbuilt-but-documented component, a row in a "what was cut"
+  table) instead of deleting it outright. Established practice — see the visual-reviewer omission, Study
+  B, and the abstention-items removal in `DECISION-LOG.md`.
 
 ## Conditional triggers
 
