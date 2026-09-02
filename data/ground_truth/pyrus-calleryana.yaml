@@ -6,17 +6,25 @@ jurisdiction: "NC / southeastern coastal plain"
 cells:
   - category: method_selection
     answer: >
-      Method should match tree size and site. For an individual mature Callery/Bradford pear a
-      landowner can safely fell, NC State recommends cutting the tree at the base and immediately
-      applying a concentrated systemic herbicide (glyphosate or triclopyr) to the freshly cut stump —
-      since only the vascular tissue near the stump's outer edge needs to be reached, treatment can be
-      limited to the stump's circumference rather than flooding the whole cut face. Where felling
-      isn't practical (a tree left standing, or a thicket of resprouts/seedlings too numerous to fell
-      individually), the alternatives are foliar spraying of the leaves in mid-to-late summer,
-      basal-bark application of an oil-soluble herbicide to the lower 12-18 inches of trunk during the
-      dormant season, or hack-and-squirt (downward cuts spaced around the trunk, one per 3 inches of
-      diameter, each filled with herbicide) — hack-and-squirt in particular limits herbicide contact to
-      the treated tree, reducing risk to nearby desirable plants.
+      NC State Extension: "It is strongly recommended to treat stumps with an appropriate herbicide
+      (for example, glyphosate or triclopyr) after cutting to prevent resprouting." "The cut-stump
+      method is highly preferred for larger specimens, as it removes the tree entirely; cut the tree
+      at its base and immediately apply concentrated glyphosate or triclopyr directly to the freshly
+      cut stump. For large trees, herbicide application can be limited to the stump's circumference,
+      as it only needs to penetrate the vascular tissues to be effective." Where felling isn't
+      practical, the alternatives are: foliar spray, where "glyphosate (for example, Roundup) and
+      imazapyr consistently provide control"; basal bark, where "Triclopyr (for example, Forestry
+      Garlon XRT) and triclopyr + aminopyralid (for example, Milestone) are effective as basal bark
+      applications, when mixed with a basal oil"; or hack-and-squirt, which "involves making incisions
+      (hacks) through the bark and then applying a measured dose of herbicide into each cut. Typically,
+      one hack per 3 inches of trunk diameter is sufficient" — this method "minimizes off-target
+      impacts because there is limited contact by herbicides with nearby plants."
+
+      In residential settings, "removal typically involves cutting down the tree and grinding the stump
+      to prevent regrowth," but because Callery pear "can resprout from the roots, applying a targeted
+      herbicide to the freshly cut stump is often necessary for complete eradication." Because managing
+      a mature, established tree can be hazardous, "in urban areas, landowners are encouraged to contact
+      a Certified Tree Arborist to ensure safe and effective removal."
     citation:
       source: "NC State Extension Publications — Callery Pear: 'Bradford' and Other Varieties and Their Invasive Offspring"
       url: "https://content.ces.ncsu.edu/callery-pear-bradford-pear-other-varieties-and-their-invasive-offspring"
@@ -27,16 +35,31 @@ cells:
   - category: resprout_regrowth
     answer: >
       Cut, storm-damaged, or otherwise injured Callery/Bradford pear reliably resprouts, and the
-      reason is specific to how the ornamental cultivars are propagated: "Bradford" and the other
-      named cultivars are clones, propagated by grafting cuttings onto wild-type Pyrus calleryana
-      seedling rootstock. Per UGA Extension, damage to that grafted crown — including cutting the tree
-      down — "can cause [the wild-type rootstock] to sprout and go on to produce fertile fruit." In
-      practice, this means a landowner who simply cuts down a Bradford pear without treating the stump
-      has not removed the invasive risk — they have traded a largely sterile ornamental tree for
-      vigorous resprouts of the thorny, fertile, fully invasive wild-type form growing from the same
-      rootstock.
+      reason is specific to how the ornamental cultivars are propagated. Per UGA Extension: "It
+      continues to be propagated to this day by grafting cuttings onto the wild-type Pyrus calleryana
+      rootstock, meaning all Bradford pears are clones. These clones were thought to be sterile but
+      have earned an invasive status after spreading rapidly." Critically, "Damage to the wild-type
+      rootstock can cause it to sprout and go on to produce fertile fruit." In practice, this means a
+      landowner who simply cuts down a Bradford pear without treating the stump has not removed the
+      invasive risk: "These hybridized wild Callery pear trees are thorny and create dense thickets
+      that rapidly spread. They limit the amount of wildlife food, out-compete native plants, damage
+      equipment and can injure animals and humans."
+
+      NC State Extension's description of the tree adds the mechanical trigger behind that resprouting
+      response: the tree's "weak branching structure and brittle wood result in frequent breakage," and
+      "Mild or moderate storms cause excessive branch and main stem breakage, leaving a mess and, in the
+      worst cases, property damage or personal injury." That same stress response drives new growth from
+      below: Callery pear "can sprout new growth from its base; because these trees were developed by
+      combining different rootstock, the sprouts can also cross-pollinate with the flowers on the upper
+      branches" to produce viable seed. Those basal sprouts also carry "thorns that can grow up to 4
+      inches long."
     citation:
-      source: "UGA Cooperative Extension — Dig Into DeKalb County: \"Bradford Pears – How Did They Get Here?\""
+      source: >
+        UGA Cooperative Extension — Dig Into DeKalb County: "Bradford Pears – How Did They Get Here?", for
+        the clonal-rootstock/grafting origin; storm-damage, sprout-from-base, and thorn-length quotes per
+        NC State Extension Publications — Callery Pear: 'Bradford' and Other Varieties and Their Invasive
+        Offspring, https://content.ces.ncsu.edu/callery-pear-bradford-pear-other-varieties-and-their-invasive-offspring
+        (2025-07-10)
       url: "https://site.extension.uga.edu/dekalb/2024/03/bradford-pears-how-did-they-get-here/"
       publication_date: "2024-03-08"
     jurisdiction_range:
@@ -44,13 +67,13 @@ cells:
       note: null
   - category: timing_windows
     answer: >
-      Cut-stump treatment is the least seasonally restricted method, but it is the most time-sensitive
-      within a single treatment: herbicide must be applied to the freshly cut stump within 5 to 10
-      minutes of cutting, or the cut surface loses its ability to take up herbicide effectively.
-      Foliar spraying works best mid-to-late summer, while the tree is actively growing and fully
-      leafed out. Basal-bark treatment (painting an oil-soluble herbicide on the lower trunk) is best
-      done during the dormant season, when there's no leaf canopy to interfere with penetration.
-      Hack-and-squirt gives its best results in fall.
+      Cut-stump treatment carries a hard within-treatment deadline: per NC State Extension, "If
+      herbicide is not applied within 5 to 10 minutes, it may not be able to penetrate, and the stump
+      must be recut for the herbicide to be effective" — but the method itself is otherwise "suitable
+      for year-round application," so long as "herbicide application should occur immediately after
+      cutting for maximum effectiveness." Foliar spray is "best applied in mid- to late summer."
+      Basal-bark treatment is "effective during dormant seasons; be sure to completely cover the
+      trunk's circumference." Hack-and-squirt gives its "best results... when conducted in the fall."
     citation:
       source: "NC State Extension Publications — Callery Pear: 'Bradford' and Other Varieties and Their Invasive Offspring"
       url: "https://content.ces.ncsu.edu/callery-pear-bradford-pear-other-varieties-and-their-invasive-offspring"
@@ -61,36 +84,56 @@ cells:
   - category: herbicide_legality
     answer: >
       For cut-stump treatment on Callery pear, a North Carolina landowner without a pesticide
-      applicator license can legally buy and apply ferti-lome Brush Killer • Stump Killer (8.8%
-      triclopyr, as the triethylamine salt; EPA Reg. No. 62719-226-7401) — the label states "This
-      Product Is For Outdoor Residential Use Only" and carries no Restricted Use Pesticide
-      designation. Directions for stump treatment call for applying the product undiluted, straight
-      from the container, with a paintbrush or backpack sprayer to completely cover the freshly cut
-      stump surface. The same product doubles as a foliar spray for standing brush or resprouts at 8
-      to 16 Tbsp (4 to 8 fl oz) per gallon of water — the label recommends the higher end of that range
-      for mature or hard-to-control plants, since using too low a rate risks resprouting the following
-      year. An unrestricted glyphosate concentrate (e.g., a 41% general-use lawn-and-garden product)
-      applied the same way to a freshly cut stump is an equally legal alternative active ingredient.
+      applicator license can legally buy and apply ferti-lome Brush Killer • Stump Killer (EPA Reg.
+      No. 62719-226-7401; active ingredient "Triclopyr, triethylamine salt 8.8%"), labeled "For the
+      control of unwanted woody plants, vines and broadleaf weeds around homes, cabins, fences,
+      walkways, and other non-crop areas" — consumer retail language, not a restricted-use label. The
+      stump-treatment directions: "To kill Stumps and prevent sprouting, apply the undiluted product
+      with a paint brush or backpack sprayer to completely cover the freshly cut surface" — apply it
+      promptly while the cut is still fresh, since a stump left to dry before treatment absorbs herbicide
+      poorly. The same product doubles as a foliar spray
+      for standing brush or resprouts: "mix 8 to 16 tablespoons (4 to 8 fl. oz.) in enough water to
+      make one gallon mixed spray... Apply at the rate of one gallon mixed spray to approximately 500
+      sq. ft. of area." A general-use glyphosate concentrate is a legal alternative active ingredient —
+      Compare-N-Save's label directs users to "Cut the stump close to the soil surface," "Drive 4-5
+      nail holes into the stump," and "Flood the stump with undiluted product." Neither product requires
+      a license for a homeowner treating their own property; NCDA&CS's licensing page reserves that
+      requirement for "commercial applicators applying any type of pesticide for compensation."
     citation:
-      source: "VPG / ferti-lome — Brush Killer • Stump Killer product label (EPA Reg. No. 62719-226-7401)"
-      url: "https://www.fertilome.com/ProductFiles/2024/03/12/11485%20Brush%20Stump%20Killer%2032oz%20PO%20672_1123.pdf_FINAL%20copy%202%20label.pdf"
+      source: >
+        ferti-lome / VPG — Brush Killer • Stump Killer product label (EPA Reg. No. 62719-226-7401), as
+        reproduced by Do My Own; glyphosate nail-hole/flood method per Ragan and Massey, LLC —
+        Compare-N-Save Concentrate Weed & Grass Killer 41% Glyphosate product label (EPA Reg. No.
+        84009-27); licensing quote per North Carolina Department of Agriculture & Consumer Services
+        (NCDA&CS) — Pesticides Licenses,
+        https://www.ncagr.gov/divisions/structural-pest-control-and-pesticides/pesticide/licensing-and-certification/licenses
+        (verified current 2026-09-02, page carries no publication date)
+      url: "https://www.domyown.com/fertilome-brush-killer-and-stump-killer-p-1545.html"
       publication_date: "2024-03-12"
     jurisdiction_range:
       flagged: false
       note: null
   - category: followup_secondary_invasion
     answer: >
-      Cutting or herbiciding the parent tree is not the end of the job: Callery pear is "notorious for
-      resprouting," and unless the root system is completely killed, follow-up herbicide treatment of
-      any regrowth is required for complete eradication — so the treated site needs to be monitored
-      regularly and re-treated if sprouts appear. Because open, disturbed ground (which removing a
-      tree creates) is exactly the kind of site Callery pear colonizes from bird-dispersed seed, NC
-      State recommends actively replacing a removed pear with a native flowering tree — flowering
-      dogwood, eastern redbud, serviceberry, black cherry, or Chickasaw plum are the alternatives it
-      names — rather than leaving the site open to reinvasion by rootstock resprouts or wind/bird-
-      carried pear seed from elsewhere on the property or surrounding landscape.
+      Cutting or herbiciding the parent tree is not the end of the job: per NC State Extension,
+      "Callery pear trees are notorious for resprouting; therefore, monitor treated areas regularly
+      for signs of regrowth and reapply treatments if necessary." Reinvasion by seed is also a live
+      risk on a newly opened site: "All varieties of Callery pear can produce viable seed. When birds
+      and other animals eat the fruit and spread the seeds through their droppings, new invasive trees
+      can grow elsewhere." NC State's stated response is active replacement: "Landowners with Callery
+      pears on their property are encouraged to remove them and replace them with native trees to
+      reduce continued spread and negative impacts... Examples include flowering dogwood (Benthamidia
+      florida), eastern redbud (Cercis canadensis), serviceberry (Amelanchier spp.), black cherry
+      (Prunus serotina), or Chickasaw plum (Prunus angustifolia)." NC State's own Bradford Pear Bounty
+      Program news coverage adds the practical case for acting early: forestry specialist Kelly Oten
+      notes "seedlings may emerge for several years, so continued monitoring and removal is key," and
+      "It is much easier to pull up a seedling now than to cut down a large tree in a decade."
     citation:
-      source: "NC State Extension Publications — Callery Pear: 'Bradford' and Other Varieties and Their Invasive Offspring"
+      source: >
+        NC State Extension Publications — Callery Pear: 'Bradford' and Other Varieties and Their
+        Invasive Offspring; Kelly Oten quotes per NC State College of Natural Resources News —
+        Bradford Pear Bounty Program, https://cnr.ncsu.edu/news/2026/04/bradford-pear-bounty-program/
+        (2026-04)
       url: "https://content.ces.ncsu.edu/callery-pear-bradford-pear-other-varieties-and-their-invasive-offspring"
       publication_date: "2025-07-10"
     jurisdiction_range:
@@ -98,16 +141,16 @@ cells:
       note: null
   - category: disposal_nontarget_risk
     answer: >
-      Every herbicide-based removal method for Callery pear ends with a standing dead tree, which NC
-      State flags as a hazard to plan for — limbs or the trunk eventually failing and falling — rather
-      than something to address only after the fact; for a tree near a structure, driveway, or fence
-      line, that argues for felling the tree as part of treatment rather than herbiciding it and
-      leaving it standing. Non-target risk is highest with foliar spraying, since a nonselective
-      herbicide applied to leaves can damage surrounding desirable vegetation through drift or direct
-      contact; cut-stump and hack-and-squirt methods limit herbicide contact to the treated tree's own
-      tissue and so carry substantially lower non-target risk. Whichever method and product is used,
-      NC State is explicit that pesticide label instructions are "legally binding and enforceable by
-      law," not merely advisory.
+      Every herbicide-based removal method ends with a standing dead tree, which NC State flags as a
+      hazard to plan for, not just address after the fact: "Note that all of the previous methods will
+      ultimately leave a standing dead tree, which could be a hazard that may require removal." Cut
+      material itself is also hazardous to handle: wild Callery pear's "thorns that can grow up to 4
+      inches long... can injure livestock and wildlife," and are "even capable of popping tractor
+      tires, posing a hazard to equipment and operators." On herbicide non-target risk, foliar spray
+      carries the most: "nonselective herbicides may damage surrounding vegetation," whereas
+      hack-and-squirt and cut-stump "minimize off-target impacts because there is limited contact by
+      herbicides with nearby plants." Whichever method and product is used, "It is essential to follow
+      all pesticide label instructions, as they are legally binding and enforceable by law."
     citation:
       source: "NC State Extension Publications — Callery Pear: 'Bradford' and Other Varieties and Their Invasive Offspring"
       url: "https://content.ces.ncsu.edu/callery-pear-bradford-pear-other-varieties-and-their-invasive-offspring"

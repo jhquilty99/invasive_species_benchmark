@@ -6,19 +6,32 @@ jurisdiction: "NC / southeastern coastal plain"
 cells:
   - category: method_selection
     answer: >
-      Method depends on tree size, and cutting alone is never a standalone method — tree-of-heaven
-      responds to cutting or mowing by sending up dozens of stump sprouts and root suckers, so every
-      method below pairs mechanical work with herbicide. For large trees, stem injection (hack-and-squirt
-      / frill) is the standard approach: make a ring of downward cuts into the cambium around the trunk
-      and apply herbicide (Garlon 3A, Pathway, Pathfinder II, or Arsenal AC, per label dilution) directly
-      into each cut; if the tree is felled instead, apply herbicide to the stem and stump top immediately
-      after cutting. For saplings, basal bark spray is more practical: Garlon 4 mixed to a 20% solution in
-      basal oil, vegetable oil, crop oil concentrate, diesel, or kerosene, or Pathfinder II used undiluted,
-      sprayed on the lower trunk's young bark. For seedlings and small saplings, a foliar spray thoroughly
-      wetting all leaves — Arsenal AC (1%), Krenite S (15%), Garlon 4 (2%), or Escort XP — is sufficient.
-      Hand-pulling only works while a plant is young enough to pull the entire root system out with it.
+      Clemson Cooperative Extension's control procedures differ by tree size. For large trees:
+      "Make stem injections and then apply Garlon 3A, Pathway*, Pathfinder II, or Arsenal AC* in
+      dilutions and cut spacings specified on the herbicide label (midsummer best, late winter
+      somewhat less effective). For felled trees, apply these herbicides to stem and stump tops
+      immediately after cutting." For saplings: "Apply Garlon 4 as a 20-percent solution in basal
+      oil, vegetable oil, crop oil concentrate, diesel fuel, or kerosene (2.5 quarts per 3-gallon
+      mix) or apply undiluted Pathfinder II to young bark as a basal spray." For seedlings and
+      saplings: "Thoroughly wet all leaves with one of the following herbicides in water with a
+      surfactant (July to October): Arsenal AC* as a 1-percent solution (4 ounces per 3-gallon
+      mix), Krenite S as a 15-percent solution (3 pints per 3-gallon mix), Garlon 4 as a 2-percent
+      solution (8 ounces per 3-gallon mix), or Escort XP* at 1 ounce per acre." The label flags the
+      starred products: "*Nontarget plants may be killed by root uptake." NC State Extension notes
+      hand-pulling is an option only at the earliest stage — "Seedlings can be removed manually if
+      the entire root system is removed" — beyond that, cutting alone does not work (see
+      resprout/regrowth). For cut-stump work specifically, NCDOT's own removal-plan report adds a
+      timing detail Clemson doesn't: treat "from mid-summer to early fall to maximize translocation to
+      roots," and expect that "treatments will likely require a follow-up in subsequent years to ensure
+      control of root suckers and any resprouts."
     citation:
-      source: "Clemson Cooperative Extension, Forestry & Wildlife Blog — Invasive Species Spotlight: Tree-of-Heaven (Ailanthus altissima)"
+      source: >
+        Clemson Cooperative Extension, Forestry & Wildlife Blog — Invasive Species Spotlight:
+        Tree-of-Heaven (Ailanthus altissima), for the herbicide rates; hand-pulling claim per NC State
+        Extension Publications — Tree-of-heaven (Ailanthus), https://content.ces.ncsu.edu/tree-of-heaven-ailanthus
+        (2022-07-29); cut-stump timing and multi-year follow-up need per NC Department of
+        Transportation — High-Threat Invasive Plant Species and Removal Plan Report (April 21, 2026),
+        https://webservices.ncleg.gov/ViewDocSiteFile/118844
       url: "https://blogs.clemson.edu/fnr/invasive-species-spotlight-tree-of-heaven-ailanthus-altissima/"
       publication_date: "2021-10-12"
     jurisdiction_range:
@@ -26,12 +39,13 @@ cells:
       note: null
   - category: resprout_regrowth
     answer: >
-      Tree-of-heaven "can sprout vigorously from its roots," and NC State Extension is explicit that
-      cutting the tree down "will not kill this tree because it will resprout" — the stump and the root
-      system both remain alive and send up new stems unless the stump is treated with an herbicide (e.g.
-      triclopyr) immediately after cutting. This is the core trap the species is chosen to probe: a
-      landowner who cuts the tree and stops there has not removed it, and may end up with a wider thicket
-      of root suckers around the original trunk than the single tree they started with.
+      Tree-of-heaven "can sprout vigorously from its roots," and NC State Extension is explicit
+      that "Simply cutting down tree-of-heaven will not kill this tree because it will resprout."
+      The fix is stated directly in the same sentence: "If a tree is removed, the stump must be
+      treated with an herbicide (e.g. triclopyr) to prevent this." This is the core trap the
+      species is chosen to probe — a landowner who cuts the tree and stops there has not removed
+      it, and may end up with a wider thicket of root suckers around the original trunk than the
+      single tree they started with.
     citation:
       source: "NC State Extension Publications — Tree-of-heaven (Ailanthus)"
       url: "https://content.ces.ncsu.edu/tree-of-heaven-ailanthus"
@@ -41,15 +55,24 @@ cells:
       note: null
   - category: timing_windows
     answer: >
-      For foliar spray on seedlings and small saplings, the effective window is July through October,
-      while leaves are fully expanded. For stem injection (hack-and-squirt) on larger trees, midsummer
-      gives the best results; a late-winter application also works but is somewhat less effective than
-      midsummer. There is no single "safe" season for cutting alone, because cutting without an
-      accompanying herbicide application triggers resprouting regardless of the time of year it's done —
-      the timing question only applies to when the herbicide itself is applied, not to when mechanical
-      cutting happens.
+      For seedlings and saplings, foliar spray should "thoroughly wet all leaves with one of the
+      following herbicides in water with a surfactant (July to October)." For stem injection
+      (hack-and-squirt) on larger trees, Clemson's control procedures specify "midsummer best,
+      late winter somewhat less effective." There is no safe season for cutting alone without a
+      paired herbicide application, since an untreated cut stump resprouts regardless of the time
+      of year it's cut — the timing question here only governs when the herbicide itself is
+      applied to the stump, cut face, or foliage, not when mechanical cutting happens. Because
+      glyphosate-type products "will kill almost all plants contacted," foliar spray should only be
+      applied "when air is calm to prevent drift" — a terrestrial glyphosate label's own drift warning
+      is explicit that contact with "foliage, green stems, exposed non-woody roots or fruit of crops,
+      desirable plants and trees" risks "severe plant injury or destruction."
     citation:
-      source: "Clemson Cooperative Extension, Forestry & Wildlife Blog — Invasive Species Spotlight: Tree-of-Heaven (Ailanthus altissima)"
+      source: >
+        Clemson Cooperative Extension, Forestry & Wildlife Blog — Invasive Species Spotlight:
+        Tree-of-Heaven (Ailanthus altissima), for the herbicide rates and timing; drift-warning quotes
+        per Ragan and Massey, LLC — Compare-N-Save Concentrate Weed & Grass Killer 41% Glyphosate
+        product label (EPA Reg. No. 84009-27) and Greenbook (Bayer CropScience) — AquaMaster Herbicide
+        Complete Directions for Use label (EPA Reg. No. 524-343)
       url: "https://blogs.clemson.edu/fnr/invasive-species-spotlight-tree-of-heaven-ailanthus-altissima/"
       publication_date: "2021-10-12"
     jurisdiction_range:
@@ -57,16 +80,24 @@ cells:
       note: null
   - category: herbicide_legality
     answer: >
-      Triclopyr is a federal general-use herbicide, not an EPA Restricted Use Pesticide, so a North
-      Carolina landowner without a pesticide applicator license can legally buy and apply it themselves.
-      Garlon 3A (triclopyr, triethylamine salt; EPA Reg. No. 62719-37) carries no Restricted Use Pesticide
-      designation on its label and is the product most commonly specified for cut-stump and stem-injection
-      (hack-and-squirt) treatment of tree-of-heaven, applied per label directions to the fresh cut surface.
-      For a smaller DIY job, ferti-lome Brush Killer • Stump Killer (8.8% triclopyr, triethylamine salt;
-      EPA Reg. No. 62719-226-7401) is an equivalent, explicitly homeowner-labeled ("For Outdoor Residential
-      Use Only") alternative sold over the counter, applied undiluted to the freshly cut stump surface. A
-      general-use glyphosate concentrate applied the same way to a fresh cut stump is an equally legal
-      alternative active ingredient.
+      Garlon 3A's label identifies its active ingredient as "Triclopyr: 2-[(3,5,6-trichloro-2-pyridinyl)oxy]
+      acetic acid, triethylamine salt ... 44.4%" (EPA Reg. No. 62719-37), and carries no Restricted
+      Use Pesticide classification — a North Carolina landowner without a pesticide applicator
+      license may legally buy and apply it. For cut-stump work, the label directs: "Spray or paint
+      the cut surfaces of freshly cut stumps and stubs with undiluted Garlon 3A. The cambium area
+      next to the bark is the most vital area to wet." For hack-and-squirt: "Make cuts at a
+      convenient height around the tree trunk with a hatchet or similar equipment so that the cuts
+      overlap slightly and make a continuous circle around the trunk. Spray 1/2 milliliter of
+      undiluted Garlon 3A or 1 milliliter of the diluted solution into each cut." The label also
+      sets a restricted-entry interval: "Do not enter or allow worker entry into treated areas
+      during the restricted entry interval (REI) of 48 hours." For a smaller DIY job, the
+      ferti-lome Brush Killer•Stump Killer label (EPA Reg. No. 62719-226-7401) is an equivalent,
+      "This Product Is For Outdoor Residential Use Only" homeowner-labeled alternative containing
+      "Triclopyr (3,5,6-trichloro-2-Pyridinyloxyacetic acid), as the Triethylamine salt ... 8.8%,"
+      instructing users to "apply the undiluted product with a paint brush or backpack sprayer to
+      completely cover the freshly cut surface" to "kill stumps and prevent sprouting." A
+      general-use glyphosate concentrate applied the same way to a fresh cut stump is an equally
+      legal alternative active ingredient.
     citation:
       source: "US EPA Office of Pesticide Programs — GARLON 3A product label (EPA Reg. No. 62719-37)"
       url: "https://www3.epa.gov/pesticides/chem_search/ppls/062719-00037-20160225.pdf"
@@ -76,15 +107,19 @@ cells:
       note: null
   - category: followup_secondary_invasion
     answer: >
-      A single treatment does not finish the job on two fronts. First, any resprouts that emerge after an
-      incomplete kill need to be spotted and retreated — well-established stands are "only eliminated
-      through repeated efforts." Second, and often overlooked, is the seed bank: buried Ailanthus seed
-      remained viable well beyond the two-year length of one seed-longevity study, with no measurable
-      decline in viable seed count after the first five months, and researchers conclude that complete
-      eradication of a population depends on eliminating the soil seed bank, which "may require many
-      years." A landowner should plan to monitor the treated site — and any canopy gaps created by removing
-      the tree, since open canopy favors new Ailanthus establishment — for multiple growing seasons, not
-      just re-check it once the following spring.
+      A single treatment does not finish the job, and there's a second, hidden front: the seed
+      bank. In a two-year burial study, "Fifty percent of Ailanthus seeds survived the full length
+      of the study (24 mo) after an initial phase of partial germination (51–79% of viable
+      seeds)," and "After the first 5 mo no further decline in seed number was observed,
+      suggesting persistence in the soil well beyond the 2-yr length of this study." The
+      researchers' bottom line: "Complete eradication of a population will depend on elimination
+      of the soil seed bank, which may require many years." They add a caution that cuts both
+      ways for management: "Management should avoid creating canopy openings near existing
+      populations with the goal of suppressing sexual reproduction and seedling establishment" —
+      since open canopy favors new Ailanthus germination, removing a tree without addressing the
+      resulting light gap can work against the goal of exhausting the seed bank. A landowner
+      should plan to monitor the treated site for multiple growing seasons, not just re-check it
+      once the following spring.
     citation:
       source: "Redwood, M.E., Matlack, G.R., & Huebner, C.D. — \"Seed longevity and dormancy state in an invasive tree species: Ailanthus altissima (Simaroubaceae)\" (USDA Forest Service Treesearch)"
       url: "https://research.fs.usda.gov/treesearch/58864"
@@ -94,20 +129,27 @@ cells:
       note: null
   - category: disposal_nontarget_risk
     answer: >
-      Tree-of-heaven produces allelopathic compounds (including ailanthone) in its wood, bark, and leaves,
-      and a 2025 USDA Forest Service study found that leaving cut stems to decompose in a pile on-site
-      measurably suppressed germination and biomass of two of three native perennial species tested in the
-      soil beneath the woodpile, an effect that lasted at least 18 months and extended up to about 2 meters
-      from the pile. The practical takeaway for a landowner: remove cut stem material from the site (or at
-      minimum keep it well away from any bed of desirable plants) rather than leaving it to decompose in
-      place, and don't compost it fresh, since stem fragments can root in moist soil — burning where
-      permitted, or landfill disposal, are the safer options. If using cut material as mulch is unavoidable,
-      the same study found that wood stored outside for 26+ months no longer showed the suppressive effect,
-      so aged (not fresh) material is the lower-risk choice. Because herbicide is often applied by foliar
-      spray or basal bark on standing trees near fence lines and property edges, drift onto neighboring
-      desirable trees and shrubs is also a real risk — favor stem-injection or cut-stump treatment over
-      foliar spray whenever the tree is close to plants worth protecting, since injection confines the
-      herbicide to the treated tree's own tissue.
+      Tree-of-heaven's wood carries the same allelopathic compounds documented in the standing
+      tree. A 2025 USDA Forest Service study found "soil under decomposing A. altissima wood is
+      likely to negatively impact germination and growth of some newly seeded species for at
+      least 18 mo," specifically finding "lower germination and biomass production for two of the
+      native species" tested in soil taken directly beneath woodpiles — while soil sampled 2 m
+      upslope or downslope from the same piles served as an unaffected control, so the measured
+      effect was confined to soil in direct contact with the decomposing wood, not distant drift.
+      The study's practical takeaway: "Removal of A. altissima coarse woody debris left behind
+      after control efforts or disease may help ensure successful restoration of a site,
+      especially if native seeding or planting is planned." If on-site disposal is unavoidable,
+      aging the material helps: mulch "left outside for at least 2 yr (26 mo)" no longer showed
+      the suppressive effect and "may be beneficial to native plants," so aged — not fresh —
+      chipped material is the lower-risk choice, not a fresh brush pile. Separately, because
+      herbicide is often applied by foliar spray or basal bark on standing trees near fence lines,
+      drift onto neighboring desirable plants is also a real risk: the Garlon 3A label directs
+      applicators to "not apply Garlon 3A directly to, or otherwise permit it to come into direct
+      contact with, grapes, tobacco, vegetable crops, flowers, or other desirable broadleaf
+      plants," and to "not permit spray mists containing Garlon 3A to drift onto such plants" —
+      favor stem-injection or cut-stump treatment over foliar spray whenever the tree stands close
+      to plants worth protecting, since the label's cut-surface method confines herbicide to "the
+      cut surfaces of freshly cut stumps and stubs."
     citation:
       source: "Huebner, C.D. — \"Native perennials' germination and growth response to decomposing tree of heaven (Ailanthus altissima) stems\" (Invasive Plant Science and Management, USDA Forest Service Northern Research Station)"
       url: "https://www.cambridge.org/core/product/C04662CEC7461103A1D0E6261F69FD79/core-reader"

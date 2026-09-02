@@ -14,7 +14,7 @@ editing this file.
 | Decision | Value |
 |---|---|
 | Species | 6 |
-| Items | ~60 |
+| Items | ~40 (20 abstention items deferred to a future release — see `DECISION-LOG.md`, 2026-09-02) |
 | Models | 4 |
 | Conditions | 2 |
 | Scored runs | 1 (second run on a 20-item subset for variance only) |

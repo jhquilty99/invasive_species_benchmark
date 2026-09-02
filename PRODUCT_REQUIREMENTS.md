@@ -22,6 +22,8 @@ The failure mode of concern is not refusal or obvious nonsense. It's fluent, con
 
 1. What is the accuracy and harm rate of LLM invasive management advice for an unlicensed layperson?
 2. Do models abstain when a question can't be safely answered without site assessment or licensure?
+   *(Deferred to a future release — see §9. The 20 abstention items this RQ depends on are out of scope
+   for this release.)*
 3. How much harm survives when the model is given the correct source documents?
 
 ---
@@ -33,14 +35,14 @@ The failure mode of concern is not refusal or obvious nonsense. It's fluent, con
 | Geography | North Carolina / southeastern coastal plain |
 | Persona | Private landowner, no pesticide applicator license |
 | **Species** | **6** |
-| **Items** | **~60** |
+| **Items** | **~40** (20 abstention items deferred to a future release — see §9) |
 | **Models** | **4** |
 | **Conditions** | **2** |
 | **Scored runs** | **1** (second run on a 20-item subset for variance only) |
 | Judge | Human primary; LLM secondary with agreement reported |
 | Expert validation | Optional, 20-item spot check. Ships without it. |
 
-**Estimated scoring load:** 60 items × 2 conditions × 4 models = 480 responses at ~45 sec = ~6 hours. This is the single largest fixed cost and the reason item count is capped.
+**Estimated scoring load:** 40 items × 2 conditions × 4 models = 320 responses at ~45 sec = ~4 hours. This is the single largest fixed cost and the reason item count is capped.
 
 ### Species (6, chosen for maximum divergence in correct action)
 
@@ -75,7 +77,7 @@ Saves roughly 10 hours and removes the retriever as a confound.
 - Confirm earliest graduate application deadline; back-plan
 - Create repo; commit `SCOPE.md` with §2 locked
 - Send optional expert-validation email to three candidates (NC State Extension forestry, NC Forest Service, regional CWMA). Two-hour ask, 20 responses. Ships without a reply.
-- Confirm API budget: 60 × 2 × 4 × 2 runs ≈ 960 calls
+- Confirm API budget: 40 × 2 × 4 × 2 runs ≈ 640 calls
 
 **Days 2–4 — Ground truth corpus**
 
@@ -93,10 +95,13 @@ Build a 6 × 8 grid: species × question category. Each cell holds the defensibl
 | Herbicide legality | 8 |
 | Follow-up & secondary invasion | 6 |
 | Disposal & non-target risk | 4 |
-| **Unanswerable / abstention** | **20** |
-| **Total** | **60** |
+| **Total** | **40** |
 
-Abstention items: species outside the region; scenarios genuinely requiring site assessment; questions whose answer depends on an unstated variable (water proximity, listed species present); requests that would require an application rate a layperson cannot legally follow.
+*(Deferred to a future release — see §9: 20 unanswerable/abstention items — species outside the region;
+scenarios genuinely requiring site assessment; questions whose answer depends on an unstated variable
+(water proximity, listed species present); requests that would require an application rate a layperson
+cannot legally follow. Already written and citation-reviewed; saved at
+`data/deferred/abstention-items.jsonl` rather than rebuilt from scratch when reintroduced.)*
 
 Write items as realistic queries: *"There's a tree of heaven in my fence line, about 15 feet tall, how do I kill it"* — not exam phrasing.
 
@@ -140,12 +145,12 @@ Write anchors for every level *before* scoring anything.
 
 **Days 15–17 — Finish scoring, run analysis**
 
-Four analyses:
+Three analyses (a 4th — abstention rate on the 20 unanswerable items — is deferred along with those items;
+see §9):
 
 1. **Accuracy and harm by model and condition**, bootstrap CIs, not bare percentages
-2. **Abstention rate on the 20 unanswerable items**, per model — distinguish appropriate hedging from answering anyway
-3. **Condition 1 vs 2, paired** — McNemar's test. **The headline is residual harm under oracle grounding.** "Give it the docs and it's fine" is almost certainly false; the remainder is the useful number.
-4. **Failure taxonomy** — qualitative clustering. Predicted: over-recommending cutting, under-recommending follow-up, generalizing timing across differing phenology, plausible rates matching no label. Likely the most-cited section.
+2. **Condition 1 vs 2, paired** — McNemar's test. **The headline is residual harm under oracle grounding.** "Give it the docs and it's fine" is almost certainly false; the remainder is the useful number.
+3. **Failure taxonomy** — qualitative clustering. Predicted: over-recommending cutting, under-recommending follow-up, generalizing timing across differing phenology, plausible rates matching no label. Likely the most-cited section.
 
 Plus: run-to-run variance on the 20-item subset. Same question yielding H0 once and H3 twice is a finding.
 
@@ -153,7 +158,7 @@ Plus: run-to-run variance on the 20-item subset. Same question yielding H0 once 
 
 Structure: motivation → why this domain has verifiable ground truth → benchmark design → rubric → results → failure taxonomy → oracle-grounding delta → limitations → generalization.
 
-**Limitations, written honestly:** one region, one persona, six species, 60 items, single scorer, no retrieval-system evaluation, ground truth reflects current guidance and will age, models change. Naming these yourself is worth more than hoping nobody notices.
+**Limitations, written honestly:** one region, one persona, six species, 40 items (no abstention/unanswerable items this release — see §9), single scorer, no retrieval-system evaluation, ground truth reflects current guidance and will age, models change. Naming these yourself is worth more than hoping nobody notices.
 
 **Day 21 — Release**
 - GitHub: items, ground truth, rubric, raw responses, scores, notebooks
@@ -166,7 +171,7 @@ Structure: motivation → why this domain has verifiable ground truth → benchm
 
 The likely objection is *"we already know models hallucinate specifics."*
 
-The defense: the general finding doesn't tell us the harm distribution across error types, whether models abstain when they should, or what survives being handed the correct documents. **Lead with the oracle-grounding residual and the abstention analysis.** If the paper's only claim is "models are sometimes wrong," there's no paper.
+The defense: the general finding doesn't tell us the harm distribution across error types or what survives being handed the correct documents. **Lead with the oracle-grounding residual.** (The abstention question — whether models know when to decline — is deferred to a future release; see §9.) If the paper's only claim is "models are sometimes wrong," there's no paper.
 
 Write the introduction so the generalization is explicit — building codes, drug interactions, firearm law, electrical work, food safety share the same structure. The plants are the substrate, chosen because the ground truth is legally fixed. Stating that reasoning in the methods is the strongest signal in the paper about how you think.
 
@@ -189,7 +194,7 @@ Write the introduction so the generalization is explicit — building codes, dru
 | Corpus takes longer than 3 days | **High** | Cut to 4 species immediately; do not borrow time from Week 3 |
 | Scoring exceeds 6 hours | Medium | Drop the 4th model; 3 models still supports every analysis |
 | No expert reply | **High** | Planned for. Ships without it. |
-| Null result (models perform well) | ~1 in 3 | Becomes an over-refusal analysis; abstention data carries it |
+| Null result (models perform well) | ~1 in 3 | Becomes an over-refusal analysis via Condition 1 vs 2 framing; the abstention-rate angle that would otherwise carry this is deferred (see §9) |
 | "Already known" objection | Medium | §5 framing |
 | Label licensing blocks corpus release | Low–Med | Publish the extracted fact grid with citations, not source PDFs |
 
@@ -201,15 +206,16 @@ Write the introduction so the generalization is explicit — building codes, dru
 |---|---|
 | Setup + outreach | 2 |
 | Corpus | 12 |
-| Item writing | 8 |
+| Item writing | 6 (40 items; 20 abstention items already written and deferred — see §9) |
 | Rubric | 3 |
 | Runs | 4 |
-| Scoring | 7 |
-| Analysis | 6 |
+| Scoring | 5 (320 responses vs. 480) |
+| Analysis | 5 (3 analyses vs. 4 — abstention-rate analysis deferred) |
 | Writeup + release | 8 |
-| **Total** | **~50** |
+| **Total** | **~45** |
 
-Slightly over 45. The buffer comes from cutting the 4th model or two species if Week 1 slips.
+Right at 45. The buffer that used to come from the item-count cut is now already banked by deferring
+abstention items; cutting the 4th model or two species is still the fallback if Week 1 slips further.
 
 ---
 
@@ -222,6 +228,7 @@ Slightly over 45. The buffer comes from cutting the 4th model or two species if 
 | 9 species, 84 items | Narrower claims, wider CIs. Acceptable at this n. |
 | Bare zero-shot condition | Can't isolate the persona-prompt effect. Minor. |
 | Required expert validation | Harm scale is one person's judgment. State it in limitations. This is the most real loss. |
+| Abstention/unanswerable items (20) | Loses RQ2 entirely for this release — no data on whether models know when to decline, and Week 3 drops to 3 analyses instead of 4. **Defer, don't discard** — items are fully written and citation-reviewed, saved at `data/deferred/abstention-items.jsonl`; reintroducing them in a future release is a re-merge into `data/items.jsonl`, not a rebuild. See `DECISION-LOG.md`, 2026-09-02. |
 | Journal submission | Preprint only. For application purposes the preprint is what matters. |
 
 **The defer-don't-discard note matters.** If this lands well and you have time in spring, Study B extends it into a stronger second paper rather than a rewrite.
@@ -244,9 +251,9 @@ Weekday targets assume ~2 hrs; weekend targets ~4–5 hrs. Adjust the split, not
 | 4 | Thu Sep 3 | Corpus: *Phragmites australis* ssp. *australis*, *Wisteria sinensis*. Pull NCDA restricted-use classifications. | 2 |
 | 5 | Fri Sep 4 | **Gate: is the grid complete?** If not, cut to 4 species today. Fill label-derived legality cells. | 2 |
 | 6 | Sat Sep 5 | Write 40 answerable items across the 6 categories. | 5 |
-| 7 | Sun Sep 6 | Write 20 abstention items. Review all 60 against ground truth. **FREEZE BENCHMARK.** Tag the commit. | 5 |
+| 7 | Sun Sep 6 | Review all 40 against ground truth. **FREEZE BENCHMARK.** Tag the commit. | 3 |
 
-**Week 1 total: ~20 hrs.** This is the heaviest week by design — everything downstream depends on it.
+**Week 1 total: ~18 hrs.** This is the heaviest week by design — everything downstream depends on it.
 
 ### Week 2 — Rubric and runs (Sep 7 – Sep 13)
 
@@ -257,24 +264,24 @@ Weekday targets assume ~2 hrs; weekend targets ~4–5 hrs. Adjust the split, not
 | 10 | Wed Sep 9 | Assemble per-species document bundles for Condition 2. Write the run harness. | 2 |
 | 11 | Thu Sep 10 | Execute runs: Condition 1, all 4 models, 2 runs. Verify logging captures version strings. | 2 |
 | 12 | Fri Sep 11 | Execute runs: Condition 2, all 4 models, 2 runs. Spot-check outputs for truncation or refusal loops. | 2 |
-| 13 | Sat Sep 12 | Score ~160 responses (Models 1–2, both conditions), blind. | 4 |
-| 14 | Sun Sep 13 | Score ~160 responses (Model 3, both conditions; start Model 4). | 4 |
+| 13 | Sat Sep 12 | Score ~105 responses (Models 1–2, both conditions), blind. | 3 |
+| 14 | Sun Sep 13 | Score ~105 responses (Model 3, both conditions; start Model 4). | 3 |
 
-**Week 2 total: ~19 hrs.**
+**Week 2 total: ~17 hrs.**
 
 ### Week 3 — Analysis and release (Sep 14 – Sep 20)
 
 | Day | Date | Task | Hrs |
 |---|---|---|---|
-| 15 | Mon Sep 14 | Finish scoring (~160 remaining). **Gate: if behind, drop Model 4 entirely.** | 3 |
-| 16 | Tue Sep 15 | Analyses 1 and 2: accuracy/harm by model and condition; abstention rates. Bootstrap CIs. | 2 |
-| 17 | Wed Sep 16 | Analysis 3: paired condition comparison, McNemar's. Residual harm under oracle grounding. Variance on the 20-item subset. | 2 |
-| 18 | Thu Sep 17 | Analysis 4: failure taxonomy. Cluster errors qualitatively; pick illustrative examples (with rates redacted). | 2 |
+| 15 | Mon Sep 14 | Finish scoring (~110 remaining). **Gate: if behind, drop Model 4 entirely.** | 2 |
+| 16 | Tue Sep 15 | Analysis 1: accuracy/harm by model and condition. Bootstrap CIs. | 2 |
+| 17 | Wed Sep 16 | Analysis 2: paired condition comparison, McNemar's. Residual harm under oracle grounding. Variance on the 20-item subset. | 2 |
+| 18 | Thu Sep 17 | Analysis 3: failure taxonomy. Cluster errors qualitatively; pick illustrative examples (with rates redacted). | 2 |
 | 19 | Fri Sep 18 | Draft: motivation, methods, rubric. Generate final figures. | 2 |
 | 20 | Sat Sep 19 | Draft: results, taxonomy, limitations, generalization. Full read-through. | 5 |
 | 21 | Sun Sep 20 | Clean repo. Zenodo archive → DOI. Post to arXiv (cs.CL) and EcoEvoRxiv. | 4 |
 
-**Week 3 total: ~20 hrs. Project total: ~59 hrs.**
+**Week 3 total: ~19 hrs. Project total: ~54 hrs.**
 
 ### Dated gates
 
@@ -290,5 +297,5 @@ Weekday targets assume ~2 hrs; weekend targets ~4–5 hrs. Adjust the split, not
 
 - **Sep 7 is Labor Day.** Treated as a light 3-hour day. If you're free, pull Week 2 work forward — the buffer is worth more than the rest.
 - **Expert reply, if it comes**, will likely land Sep 7–14. Slot their 20-item review into Sep 15–16 and report agreement. If nothing by Sep 14, ship without it as planned.
-- **Total is ~59 hrs against a ~45 hr target.** The overage is real. Absorb it by cutting to 4 species on Sep 4 or 3 models on Sep 14 — those are the two pre-authorized cuts. Do not absorb it by shortening Week 3.
+- **Total is ~54 hrs against a ~45 hr target.** Deferring the 20 abstention items (§9, 2026-09-02) already absorbed most of the original ~59 hr overage; the two pre-authorized cuts (4 species on Sep 4, or 3 models on Sep 14) remain available for whatever's left. Do not absorb it by shortening Week 3.
 - **Weekends carry the load** (Sep 5, 6, 12, 13, 19, 20 are all 4–5 hr days). If a weekend is unavailable, that week needs replanning before it starts, not during.

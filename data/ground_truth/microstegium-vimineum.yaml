@@ -6,15 +6,36 @@ jurisdiction: "NC / southeastern coastal plain"
 cells:
   - category: method_selection
     answer: >
-      For small or scattered patches, hand-pulling is effective — stiltgrass has a shallow, weak
-      root system that comes up easily, especially after rain — but NC State notes hand-weeding is
-      "generally not practical" once an infestation is large. For larger infestations, mowing or an
-      herbicide program is the realistic option. Because stiltgrass is a shallow-rooted annual grass
-      with no perennial rootstock, method selection here is about defeating the seed bank rather than
-      preventing resprouts from a cut plant, and the same preemergent and postemergent herbicides sold
-      for crabgrass control in lawns and landscapes will generally control Japanese stiltgrass as well.
+      NC State Extension's stiltgrass management guidance: "Hand weeding is effective on small
+      infestations but is generally not practical for larger infestations." For larger stands, mowing is
+      an option — "Regular, close mowing reduces seed production. Mowing once in late summer can be as
+      effective as frequent mowing in reducing seed production." Mechanical control has one hard
+      deadline: "When flowers are first visible, many seed will mature even if the plants are mowed or
+      pulled. Therefore, mechanical control should be done before flowers are visible." For herbicide
+      control, no stiltgrass-specific product is required — "In general, herbicides that control
+      crabgrass will also control Japanse stiltgrass" [sic, as printed on the source page].
+
+      A 2020 randomized field trial on the NC Piedmont (Denver, NC) gives the first direct,
+      side-by-side comparison of landowner-accessible methods: "Removal of M. vimineum was most
+      effective in the herbicide treatment with glyphosate (98 ± 0 percent average removal), followed
+      by the herbicide alternative treatment with vinegar (79 ± 21 percent removal), and mechanical
+      removal treatment (48 ± 15 percent removal)... Hand pulling was the least effective treatment
+      for the removal of M. vimineum at 28 ± 14 percent." Vinegar's overall average understates its
+      best-case use, though — control "were more effective in the summer and fall treatment
+      applications than spring," reaching 90-100 percent removal in those two seasons per the study's
+      reported figures. Hand pulling's poor showing has a stated cause: it "was the most labor
+      intensive of all the treatment applications and required every stem and root system to be
+      extracted from the soil to be effective." Beyond glyphosate, the study's discussion section also
+      lists fenoxaprop-p-ethyl, clethodim, and sethoxydim among other post-emergent active ingredients
+      "considered effective treatments" for stiltgrass.
     citation:
-      source: "NC State Extension Publications — Japanese Stiltgrass Identification and Management"
+      source: >
+        NC State Extension Publications — Japanese Stiltgrass Identification and Management, for
+        general control guidance; landowner-accessible treatment efficacy figures per Beam, C.L.,
+        Siegert, C.M., Granger, J.J., & Iglay, R.B. — "Evaluation of Landowner Accessible Control
+        Methods for Japanese Stiltgrass (Microstegium vimineum)," in Proceedings of the 21st Biennial
+        Southern Silvicultural Research Conference, USDA Forest Service Gen. Tech. Rep. SRS-268
+        (2022), https://research.fs.usda.gov/download/treesearch/65187.pdf
       url: "https://content.ces.ncsu.edu/japanese-stiltgrass-identification-and-management"
       publication_date: "2023-06-21"
     jurisdiction_range:
@@ -22,13 +43,16 @@ cells:
       note: null
   - category: resprout_regrowth
     answer: >
-      Japanese stiltgrass does not resprout from cut, mowed, or pulled material — it is a summer
-      annual that dies outright with the first hard frost, and cut or pulled plants do not regenerate
-      from root or stem tissue. The "regrowth" a landowner actually contends with each spring is new
-      seedlings germinating from the soil seed bank, not resprouting of existing plants; a single
-      missed late-summer mowing that lets the plant flower will replenish that seed bank even though
-      the mowed plants themselves are dead. Dead stiltgrass thatch persists on the soil surface
-      through winter, which can look like a live infestation but represents no active regrowth risk.
+      Japanese stiltgrass "is a summer annual; reproduction is by seed that germinate in early to
+      mid-spring." "Plants have a shallow fibrous root system" and no perennial rootstock, so cut, mowed,
+      or pulled plants do not regenerate from root or stem tissue. Mowing doesn't kill it outright either:
+      the plant "will remain prostrate if mowed," lying flat to dodge the blades rather than dying, and can
+      still flower low to the ground. The standing plant does die back on its own each winter regardless of
+      mowing — "Plants tolerate mild frosts, often flowering after the first frost, but die with hard
+      frost." What looks like "regrowth" the following year is new seedlings from the seed
+      bank, not resprouting: the plant "can produce large numbers of seeds – from 16,000 to 50,000 seeds
+      per square meter," and "research suggests that seeds remain viable in the soil for less than 7
+      years."
     citation:
       source: "NC State Extension Publications — Japanese Stiltgrass Identification and Management"
       url: "https://content.ces.ncsu.edu/japanese-stiltgrass-identification-and-management"
@@ -38,16 +62,24 @@ cells:
       note: null
   - category: timing_windows
     answer: >
-      Two windows matter for stiltgrass. Preemergent herbicide must go down before germination —
-      several weeks ahead of crabgrass, which germinates in early-to-mid March in central North
-      Carolina, so a preemergent application timed off crabgrass alone is already a bit late for
-      stiltgrass. Postemergent herbicide is most effective applied in early summer, though it will
-      generally control stiltgrass anytime from germination up to flowering. For mowing or hand-
-      cutting, the hard deadline is the same: once flowers are first visible, seed will mature even on
-      a mowed plant, so cutting must happen before flowering. Done correctly, a single well-timed
-      late-summer mowing can be as effective as repeated mowing through the season.
+      "Japanese stiltgrass germinates in early spring, several weeks before crabgrass," so a preemergent
+      timed off crabgrass alone is already late for stiltgrass: "If preemergence herbicides are to be
+      used, applications must be made before the seeds germinate." Postemergent herbicide has a wide
+      window: "Stiltgrass is generally well controlled with labeled postemergence herbicides anytime
+      after germination until flowering." For mowing or hand-cutting, the same flowering deadline
+      applies: "When flowers are first visible, many seed will mature even if the plants are mowed or
+      pulled. Therefore, mechanical control should be done before flowers are visible." Done right, one
+      cut suffices: "Mowing once in late summer can be as effective as frequent mowing in reducing seed
+      production." Clemson Extension adds the payoff of mowing late enough in the season: "Mowing it
+      late in the season should prohibit it from growing back" because "the plants won't have enough
+      time to regrow and flower" before frost.
     citation:
-      source: "NC State Extension Publications — Japanese Stiltgrass Identification and Management"
+      source: >
+        NC State Extension Publications — Japanese Stiltgrass Identification and Management; "should
+        prohibit it from growing back"/"won't have enough time to regrow and flower" per Clemson
+        Cooperative Extension — Home & Garden Information Center: Japanese Stiltgrass: Identification,
+        Control Methods & Removal Tips, https://hgic.clemson.edu/japanese-stiltgrass-identification-control-methods-removal-tips/
+        (2025-07-31)
       url: "https://content.ces.ncsu.edu/japanese-stiltgrass-identification-and-management"
       publication_date: "2023-06-21"
     jurisdiction_range:
@@ -55,17 +87,17 @@ cells:
       note: null
   - category: herbicide_legality
     answer: >
-      Glyphosate is legal for a North Carolina landowner without a pesticide applicator license to
-      buy and apply themselves — it is a General Use Pesticide with no Restricted Use designation
-      anywhere on the label. Compare-N-Save Concentrate Weed & Grass Killer 41% Glyphosate (EPA Reg.
-      No. 84009-27), sold over the counter, directs 1.5 oz (3 Tbsp) of concentrate per gallon of water
-      via tank sprayer for general control of annual weeds and grasses such as stiltgrass, covering
-      about 300 sq ft per gallon of mixed spray (or 2 tsp per 24 oz of water in a hand-trigger sprayer
-      for spot treatment). Because glyphosate is non-selective, the label explicitly warns against
-      using it for spot treatment in lawns, since it "kills all green plants, including lawn grass" —
-      for stiltgrass growing within desirable turf, a grass-selective postemergent product (e.g., a
-      fenoxaprop-based lawn product, also general-use and sold over the counter) is the appropriate
-      legal alternative that won't also kill the turfgrass.
+      Compare-N-Save Concentrate Weed & Grass Killer 41% Glyphosate (EPA Reg. No. 84009-27) is sold over
+      the counter under the signal word "WARNING," with no "Restricted Use Pesticide" statement anywhere
+      on the label, so a North Carolina landowner may legally buy and apply it without a pesticide
+      applicator license. The active ingredient is listed as "Glyphosate, isopropylamine salt
+      ................ 41.0%." For general weed control, the label directs: "Use 1½ oz (3 Tbs)
+      Compare-N-Save Concentrate Weed & Grass Killer 41% Glyphosate in 1 gal of water" via tank sprayer,
+      covering "300 sq ft (30 ft x 10 ft)," or, with a hand-trigger sprayer, "Use 2 tsp in 24 oz of water"
+      for spot treatment of single weeds. Because it is non-selective, the label warns directly: "Do not
+      make applications for spot weed control in lawns since Compare-N-Save Concentrate Weed & Grass
+      Killer 41% Glyphosate kills all green plants, including lawn grass" — for stiltgrass growing within
+      turf, a selective product is the legal alternative (see disposal_nontarget_risk).
     citation:
       source: "Ragan and Massey, LLC — Compare-N-Save Concentrate Weed & Grass Killer 41% Glyphosate product label (EPA Reg. No. 84009-27)"
       url: "https://www.raganandmassey.com/pub/media/files/labels/CNS_84009-27_32oz_web.pdf"
@@ -75,15 +107,21 @@ cells:
       note: null
   - category: followup_secondary_invasion
     answer: >
-      A single season of control will not finish the job: stiltgrass seed remains viable in the soil
-      for under seven years, and NC State notes that populations decline rapidly only once control
-      measures prevent seed production for consecutive years — meaning the follow-up plan has to be
-      multi-year, not a one-time removal. Stiltgrass infestations "typically begin in disturbed sites"
-      and, once established, can spread into adjacent undisturbed areas, so any bare or disturbed
-      ground left after removal work is itself a foothold for stiltgrass (or other invasive species)
-      to move into if it isn't replanted or otherwise stabilized.
+      A single season of control does not finish the job: "Research suggests that seeds remain viable in
+      the soil for less than 7 years," so "long-term management programs should emphasize prevention of
+      seedhead formation to deplete the seed reservoir." A separate NC field-trial paper gives a shorter,
+      more specific estimate for the same question — "seeds can remain viable for 2 to 5 years in the
+      soil seedbank" — both are real published figures, just not reconciled with each other; treat "up to
+      several years" as the safe operating assumption rather than picking one number. Stiltgrass is also
+      opportunistic about where it spreads next — "Infestations typically begin in disturbed sites; once
+      established, infestations can spread to undisturbed areas" — so any bare or disturbed ground left
+      after removal work is itself an invasion risk if it isn't replanted or otherwise stabilized.
     citation:
-      source: "NC State Extension Publications — Japanese Stiltgrass Identification and Management"
+      source: >
+        NC State Extension Publications — Japanese Stiltgrass Identification and Management; "2 to 5
+        years" seedbank figure per Beam, C.L., Siegert, C.M., Granger, J.J., & Iglay, R.B. — "Evaluation
+        of Landowner Accessible Control Methods for Japanese Stiltgrass (Microstegium vimineum)" (USDA
+        Forest Service Gen. Tech. Rep. SRS-268, 2022), https://research.fs.usda.gov/download/treesearch/65187.pdf
       url: "https://content.ces.ncsu.edu/japanese-stiltgrass-identification-and-management"
       publication_date: "2023-06-21"
     jurisdiction_range:
@@ -91,15 +129,13 @@ cells:
       note: null
   - category: disposal_nontarget_risk
     answer: >
-      After mowing or pulling, bag any plant material that has already headed out and put it in the
-      household trash rather than leaving it on-site or composting it — cut stiltgrass that has
-      reached flowering can still mature and drop viable seed even after being cut, and seed remains
-      viable in the soil for five years or more, so removing the cut material from the site matters as
-      much as the cutting itself. Nontarget risk is highest with the nonselective glyphosate option: it
-      will kill any desirable plant it contacts, and for the warm-season lawns most common on the NC
-      coastal plain (Bermuda, centipede, zoysia, St. Augustine) there is no herbicide labeled for
-      homeowner use that controls stiltgrass without also damaging the turf — in those lawns, hand-
-      weeding is the only nontarget-safe control option.
+      Clemson Extension directs landowners to "bag the clippings and throw them in the trash to be sure
+      no seeds are left," rather than composting or leaving cut material on site, because stiltgrass seed
+      "can remain in the seed bank for 5 years or more." Nontarget risk is highest with nonselective
+      glyphosate, so for stiltgrass growing in turf: "If stiltgrass is in a fescue lawn, use products with
+      the active ingredient fenoxaprop." But "If stiltgrass is in a warm-season lawn, like Bermuda,
+      centipede, zoysia, or St. Augustine, there is no product labeled and available to homeowners for
+      control" — in those lawns, hand-pulling is the only nontarget-safe control option.
     citation:
       source: "Clemson Cooperative Extension — Home & Garden Information Center: Japanese Stiltgrass: Identification, Control Methods & Removal Tips"
       url: "https://hgic.clemson.edu/japanese-stiltgrass-identification-control-methods-removal-tips/"
