@@ -1,0 +1,249 @@
+interactions:
+- request:
+    body: "{\"max_tokens\":1024,\"messages\":[{\"role\":\"user\",\"content\":\"Candidate
+      facts the user could be asked about:\\n- water_proximity: Whether the treatment
+      site is near standing or flowing water.\\n- stem_diameter: Stem size, which
+      determines foliar spray vs. cut-stump treatment.\\n- yard_size: Overall property
+      size \u2014 a distractor, doesn't change treatment class.\\n\\nAssistant's latest
+      message:\\n\\\"\\\"\\\"\\nBefore I can recommend a treatment, is the hedge near
+      any water \u2014 a ditch, stream, or pond?\\n\\\"\\\"\\\"\\n\\nWhich candidate
+      facts (by name) is the assistant asking the user to provide in this message?
+      Return an empty list if none of them are being asked about.\"}],\"model\":\"claude-haiku-4-5-20251001\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"asked_slot_names\":{\"type\":\"array\",\"items\":{\"type\":\"string\",\"enum\":[\"water_proximity\",\"stem_diameter\",\"yard_size\"]}}},\"required\":[\"asked_slot_names\"],\"additionalProperties\":false}}},\"system\":\"You
+      classify which of a fixed list of candidate facts (slots) an assistant's message
+      is asking the user to provide. A slot counts as 'asked' only if the assistant's
+      message poses a question (or an equivalent request for information) that the
+      slot's fact would answer. Do not mark a slot as asked just because it is thematically
+      related to the message \u2014 the assistant must actually be requesting that
+      specific information. Return only slot names drawn exactly from the candidate
+      list.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '1460'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3WRXUvDMBSG/4rkeoV2bgq9VRREBb1dRzg2xzZbmtTkZG6W/ndPxopfeJXwPu/5
+        HkTnFBpRitpAVJi1oLcxW2TLbJ7Pl0WeF2ImtGJDFxqZF8UVNh+b57uHxa3dXD893tA9wIE9dOgx
+        uTAEaJAF70wSIAQdCCyxVDtLyL9yNUx+wn0ix6cUQ8X+LSoZjCNpgbNVojxbVeIdCL3svdvrTtOh
+        EutRjOuZCOR66RGCsxyPVkmK3ooTCPgW0dZcyEZjTqJCAm3CpMVjv+UgtO0jSXJbtAwX55fcMNQt
+        yprzk3ZW/nTkE2es/mNTbCqAfYsdejBy2f31f9Gi/U3HmXCRvkvFBU+DfqdrlKTR8/Bpywq8Sgez
+        r+jT4LJBx8jyNmHHU8MLH2UcPwF3Gs8W9wEAAA==
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-03T18:41:12Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-03T18:41:12Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-03T18:41:12Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-03T18:41:12Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a356e3215da482b6-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Thu, 03 Sep 2026 18:41:12 GMT
+      request-id:
+      - req_011CegzjPiLx3fcqgWb9LD3V
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-4eb054143bd581d22dedd7f15e00f41e-e6b2f29727a31446-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "{\"max_tokens\":512,\"messages\":[{\"role\":\"user\",\"content\":\"The
+      assistant just said:\\n\\\"\\\"\\\"\\nBefore I can recommend a treatment, is
+      the hedge near any water \u2014 a ditch, stream, or pond?\\n\\\"\\\"\\\"\\n\\nRespond
+      as the user, in one short message.\"}],\"model\":\"claude-haiku-4-5-20251001\",\"system\":\"You
+      are roleplaying as a person asking an AI assistant for help managing an invasive
+      plant on their property. The assistant's latest message asked you one or more
+      questions. Answer using ONLY the facts listed below, phrased naturally in your
+      own voice, as this person would actually say it. Do not mention, hint at, or
+      invent any fact that is not listed below, even if it seems related or would
+      be helpful \u2014 and do not volunteer information the assistant did not ask
+      about.\\n\\nFacts you may convey:\\n- water_proximity: A drainage ditch runs
+      along the property line, about 3 feet from the hedge.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '885'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3WRTW4jIRCFr4LYZNOOup04irxMlrPNZjSKULl57iamoQcKK7ZlKYeYE85JUm3F
+        yp+ygnrfK+BRBz1EC6+XuvVULGY9uU2ZXc8Ws3k9XzR13ehKOyuGIXembpp7dPunh/0v57r5/fhw
+        s87xbiMe3o2YXMiZOoiQop8EytllpsAitTEwZLf8czj7Gc8TOS1L/RvUV4p7JFxkRcomckGOU9Zx
+        2wsgVqkEQT6GbjKqMcURiXfKu4BKSrAUrY8Z/1/+DbRbQdEqFlZXag2wWqc4nDp72A6X+vhY6cxx
+        NAmUY5BXIFjDJQX9BjL+FoRWnhuK92+iBZPz+ayVU+rlQbswFjYcNwgCm9uFxKa2h2nlfHYxmM+O
+        +swF25/YuXe6AGOPAYm8WQzf/e+06b/SY6XlHz5KV42kQdq6FoYdkoSfZmUp2WnsYS2DkOCmQxQU
+        IhvaSmpayWiPx1eqcnUSPQIAAA==
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-03T18:41:13Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-03T18:41:13Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-03T18:41:12Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-03T18:41:13Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a356e3268ad482b6-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Thu, 03 Sep 2026 18:41:13 GMT
+      request-id:
+      - req_011CegzjTGutjn7PoEvTcg7j
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-f7adc626993523154a20fe417d47ac1d-64337490fa88c1de-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+version: 1

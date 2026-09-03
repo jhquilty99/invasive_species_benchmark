@@ -88,3 +88,10 @@ index, not a history of *why*.
 - 2026-09-03 — Stood up a local self-hosted Langfuse instance (`infra/langfuse/`, Docker Compose, v4.28.0)
   ahead of the run harness; verified all 6 services healthy and the bootstrapped project/API key work
   end-to-end. SDK wiring into the harness itself deferred until the `pyproject.toml` scaffold exists.
+- 2026-09-03 — Day 1 complete: `pyproject.toml`/`harness/` package scaffold; `cards/SCHEMA.md` +
+  `harness/models.py` card schema; both PRD §13 open-question decisions; the `ailanthus-stump-resprout-01`
+  test card; the slot-gated simulated user (`harness/simulated_user.py`); the `openevals` conversation
+  loop + stopping condition (`harness/conversation.py`); Langfuse SDK wiring (`harness/langfuse_client.py`).
+  30 passing tests (VCR cassettes recorded), ruff/mypy clean, verified end to end with a live run whose
+  trace landed in the local Langfuse instance (detail: `DECISION-LOG.md`, 2026-09-03 "Resolved PRD
+  §13.2..." and "Card citations trace through `data/ground_truth/*.yaml`...").

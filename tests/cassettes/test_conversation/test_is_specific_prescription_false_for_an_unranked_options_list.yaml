@@ -1,0 +1,145 @@
+interactions:
+- request:
+    body: "{\"max_tokens\":256,\"messages\":[{\"role\":\"user\",\"content\":\"Assistant's
+      latest message:\\n\\\"\\\"\\\"\\nThere are a few routes you could take here:
+      you could cut the stumps and treat the fresh cuts with a triclopyr herbicide,
+      or you could foliar-spray the new resprout growth instead, or you could just
+      keep mowing it back if you'd rather avoid herbicide altogether. Each has trade-offs
+      depending on how much time and effort you want to put in.\\n\\\"\\\"\\\"\\n\\nDoes
+      this message contain a single, specific, actionable recommendation per the rule
+      above?\"}],\"model\":\"claude-haiku-4-5-20251001\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"is_specific_prescription\":{\"type\":\"boolean\"}},\"required\":[\"is_specific_prescription\"],\"additionalProperties\":false}}},\"system\":\"You
+      classify whether an assistant's latest message, in a conversation where someone
+      is asking for help managing an invasive plant on their property, contains a
+      single, specific, actionable recommendation per this exact rule:\\n\\nClassify
+      true only if the message commits to ONE specific recommendation that the person
+      could act on right now: a named product or method, plus enough of the application
+      rate, timing, or treatment scope to actually do it. A message that clearly ranks
+      or commits to one option while also mentioning discarded alternatives still
+      counts as true \u2014 the bar is whether a single option has been committed
+      to, not whether any other option is mentioned at all.\\n\\nClassify false for
+      any of the following, even if the message is long or substantive:\\n- An unranked
+      list of options ('you could do X, or you could try Y, or Z is another route')
+      with no single option committed to. This does NOT count as a specific prescription,
+      no matter how detailed each listed option is \u2014 this is the case this rule
+      exists to catch.\\n- A recommendation that branches into multiple methods conditioned
+      on a fact the person hasn't actually stated in the conversation (e.g. 'if your
+      stems are under 6 inches, do X; if they're already stem-sized, do Y instead')
+      \u2014 this is the same unranked-options failure in conditional form. No single
+      option has been committed to for this person's real, still-unknown situation,
+      even though each branch individually names a specific product/rate/timing.\\n-
+      A request for more information before recommending anything.\\n- Generic, non-actionable
+      advice with no product/method named and no rate, timing, or scope given (e.g.
+      'consider using an herbicide' or 'you should consult a professional' alone).\\n-
+      An outright refusal or decision not to give treatment advice.\\n\\nJudge only
+      the assistant's latest message. Use the rest of the conversation only as context
+      for what that message means, not as a substitute for what the latest message
+      itself commits to.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '2792'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3WRT0vEMBDFv4rkvIVmsYK9iidBEA+CroRsMm2zmybZTLKopd/dybLFf3hKeL83
+        mXmZiY1eg2UtU1ZmDdUgzT5Xl1VTret1w+uasxUzmgwj9qLm/Ab6j516ONxr3j3tHuXd1t0+kye9
+        ByguQJQ9kBC9LYJENJikSyQp7xLQrX2ZFn+Ct0JOR8umDTMoMIAynVEiREAVTUjGuw1rLzppEWY2
+        v64YJh9EBIneUR04LVKOjp0BwiGDU9TAZWvPooYkjcVFy6c524kZF3ISye/BEby65jSoVAMIRe+X
+        1uKno144Yf0fW2pLAwgDjBClFc341/9F+fCbzivmc/ou8TWlgXg0CkQyECl8+V0toy6Lch3EElz0
+        4Ak5n4Q8Umq5pWXM8yeH9o9q7wEAAA==
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-03T18:41:15Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-03T18:41:15Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-03T18:41:14Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-03T18:41:15Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a356e3322f082552-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Thu, 03 Sep 2026 18:41:15 GMT
+      request-id:
+      - req_011CegzjbCQeLinFi2UbN5y8
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-05eb6d1ddca8e49ebef56c5fe003f648-fa9f43d675b1e921-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+version: 1

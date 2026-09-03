@@ -26,79 +26,71 @@ in a rule file or `DECISION-LOG.md`.
   reviews the cards" ask, if a reply lands, is a separate follow-up from this outreach.)
 - **Task list:** replaced entirely with PRD v4 §10's 17-day schedule, then broken down (2026-09-03, same
   day) from one bullet per day into the actual build steps each day bundles — the original "Day 1: build
-  the harness" line hid ~7 separate pieces of engineering. Ranked by dependency/day order. None of the
-  new-methodology work has started yet — everything below is Day 1 onward.
-- **Last touched:** 2026-09-03 (task breakdown)
+  the harness" line hid ~7 separate pieces of engineering. Ranked by dependency/day order.
+- **Day 1 complete (2026-09-03):** harness scaffold, card schema, both PRD §13 open-question decisions,
+  the Ailanthus test card, slot-gated simulated user, conversation loop, and Langfuse wiring are all built,
+  tested (30 passing tests, VCR cassettes recorded), and verified end to end with a live run whose trace
+  landed in Langfuse. Three things worth knowing for Day 2: the slot classifier (task 1 below) still
+  needs tuning — a live run showed it occasionally gating on topic proximity rather than an explicit
+  question; the stopping condition needed a fix mid-build for conditional/branching recommendations (see
+  `DECISION-LOG.md`, 2026-09-03 "Resolved PRD §13.2..."); and the Langfuse trace that landed is a single
+  flat span with the whole transcript dumped as `output` (from a one-off script outside the repo, not the
+  harness itself) rather than real per-turn tracing — task 5 below. Full detail: `DECISION-LOG.md`'s
+  2026-09-03 entries from "Resolved PRD §13.2..." onward.
+- **Last touched:** 2026-09-03 (Day 1 build)
 
 ## Open tasks (ranked)
 
-1. **[Day 1]** Scaffold the Python project: `pyproject.toml` via `uv`, flat `harness/` package layout, deps
-   (`openevals`, Langfuse SDK, `pydantic`/`pydantic-settings`, `pytest`, `pytest-recording`, `ruff`, `mypy`)
-   — per `.claude/rules/python.md`'s locked conventions. Closes the long-open "no code yet" gap noted in
-   `DEVELOPMENT.md`.
-2. **[Day 1]** Write the case-card schema (`cards/SCHEMA.md` + a validator): species/true identity,
-   opening message, slots with a per-card decision-relevant-vs-distractor flag, the 4 treatment classes
-   (acceptable/suboptimal-but-safe/ineffective/harmful) enumerated for the situation, required specificity
-   elements, expected follow-up plan (PRD §5.1). Needed before any card — including the Day 1 test card —
-   can be authored.
-3. **[Day 1]** Decide the two PRD §13 open questions that gate harness design, before building the
-   stopping condition and Q2 judge: (a) §13.2 — does an unranked "you could do X or Y" list count as a
-   prescription? PRD's stated lean is no; confirm or override. (b) §13.3 — models that refuse outright need
-   a `declined` Q2 category; define it now so the classifier isn't retrofitted after the sweep. (§13.1
-   lookalike-arm rubric and §13.4 second-judge-model are lower-priority — can wait past Day 1.)
-4. **[Day 1]** Hand-author one test card against the schema from task 2 — the fixture the rest of Day 1's
-   harness work runs against end to end.
-5. **[Day 1]** Build the slot-gated simulated user (PRD §5.2): a turn-level classifier that determines
-   which slots the assistant actually asked about, feeding a response generator that's shown — and
-   instructed to reveal — only newly-asked slots. This is what makes elicitation measurement (Q1) meaningful
-   instead of a prompted persona volunteering information.
-6. **[Day 1]** Wire the conversation loop: `openevals.run_multiturn_simulation` + the slot-gated user from
-   task 5 + the stopping condition from task 3a, running end to end on the task 4 test card.
-7. **[Day 1]** Wire the Langfuse SDK into the harness against the already-running self-hosted instance
-   (`infra/langfuse/`): one dataset, one item per card (`input` = opening message/persona/slots,
-   `expected_output` = ground truth), a run per (model × prompt version), score configs named to match the
-   gate/quality dimensions so the UI cross-tabs across runs (PRD §6).
-8. **[Day 2]** Tune the slot classifier from task 5 against the test card until it reliably matches which
-   slots were actually asked about.
-9. **[Day 2]** Implement the R5 leakage check in code (not judged): no card slot value may appear in a user
+1. **[Day 2]** Tune the slot classifier (`harness/simulated_user.py`) against the test card until it
+   reliably matches which slots were actually asked about — a live Day 1 run showed it can over-trigger on
+   topic proximity rather than an explicit question.
+2. **[Day 2]** Implement the R5 leakage check in code (not judged): no card slot value may appear in a user
    turn that wasn't preceded by a matching elicitation. Pass it on the one-card harness.
-10. **[Day 2]** Write the 5 gate judge prompts (G1-G5 — identity verified, no spread-increasing action,
-    aquatic-appropriate formulation, no restricted-use product to an unlicensed applicator, no fabricated
-    citation), each a separate single-purpose judge call with the card in context (R2 — no combined rubric
-    call). Every prompt must instruct the judge to put its deciding evidence in the score's `comment` field
-    (R1 — non-negotiable).
-11. **[Day 2]** Write the quality-dimension judging: Q2 as a judge classification into the 4 treatment-class
-    labels (+ `declined` from task 3b); Q3-Q5 as judge scores 0-2 with an R1 `comment`. Implement Q1 and the
-    derived metrics (turns to recommendation, premature-prescription rate, distractor questions asked,
-    hit-max-turns rate) in code, never judged (R3).
-12. **[Gate — Fri Sep 5]** Harness + leakage check working end to end (tasks 1-11 done). If not met, this is
-    the day to cut card-count scope (PRD §8 rule 2), not later.
-13. **[Days 4-5]** Author the Ailanthus matrix: 12-16 cards varying stem size, extent, and season, holding
-    species and correct-treatment-class logic constant per the task 2 schema.
-14. **[Days 6-7]** Author the lookalike arm: fresh ground truth for sumac, native wisteria (*Wisteria
-    frutescens*), coral honeysuckle, and Virginia creeper — none have existing `data/ground_truth/*.yaml`
-    files — then ~10 cards where the correct behaviour is declining to prescribe treatment. Apply whatever
-    task 3-adjacent decision gets made on §13.1 (own rubric vs. shared) once that's settled.
-15. **[Days 8-9]** Author the breadth set (privet, stiltgrass, wisteria, Callery pear, Phragmites), drawing
-    directly on the existing `data/ground_truth/*.yaml` for all 5 species. Target 60-80 cards total across
-    depth + lookalike + breadth.
-16. **[Gate — Thu Sep 11]** Card count in range, corpus frozen (PRD §8 rule 1) — no card changes after this
+3. **[Day 2]** Write the 5 gate judge prompts (G1-G5 — identity verified, no spread-increasing action,
+   aquatic-appropriate formulation, no restricted-use product to an unlicensed applicator, no fabricated
+   citation), each a separate single-purpose judge call with the card in context (R2 — no combined rubric
+   call). Every prompt must instruct the judge to put its deciding evidence in the score's `comment` field
+   (R1 — non-negotiable).
+4. **[Day 2]** Write the quality-dimension judging: Q2 as a judge classification into the 5 treatment-class
+   labels (incl. `declined`); Q3-Q5 as judge scores 0-2 with an R1 `comment`. Implement Q1 and the
+   derived metrics (turns to recommendation, premature-prescription rate, distractor questions asked,
+   hit-max-turns rate) in code, never judged (R3).
+5. **[Day 2]** Instrument per-turn Langfuse tracing in `harness/conversation.py` and
+   `harness/simulated_user.py`: every individual Anthropic call (model-under-test turn, slot classifier,
+   response generator, stopping-condition classifier) should land as its own nested span/generation under
+   the conversation's trace, not — as Day 1 shipped it — a single flat `output` blob covering the whole
+   transcript, dumped by a one-off script outside the repo rather than the harness itself. Not required for
+   the Fri Sep 5 gate below, but should land before task 11's full sweep (so every sweep run is properly
+   traced from the start) and definitely before task 12's human-annotation queue (annotators need to review
+   actual per-turn conversations, not a flat blob).
+6. **[Gate — Fri Sep 5]** Harness + leakage check working end to end (tasks 1-4 done, on top of Day 1's
+   already-working harness). If not met, this is the day to cut card-count scope (PRD §8 rule 2), not later.
+7. **[Days 4-5]** Author the Ailanthus matrix: 12-16 cards varying stem size, extent, and season, holding
+   species and correct-treatment-class logic constant per `cards/SCHEMA.md`.
+8. **[Days 6-7]** Author the lookalike arm: fresh ground truth for sumac, native wisteria (*Wisteria
+   frutescens*), coral honeysuckle, and Virginia creeper — none have existing `data/ground_truth/*.yaml`
+   files — then ~10 cards where the correct behaviour is declining to prescribe treatment. Apply whatever
+   decision gets made on PRD §13.1 (own rubric vs. shared) once that's settled.
+9. **[Days 8-9]** Author the breadth set (privet, stiltgrass, wisteria, Callery pear, Phragmites), drawing
+   directly on the existing `data/ground_truth/*.yaml` for all 5 species. Target 60-80 cards total across
+   depth + lookalike + breadth.
+10. **[Gate — Thu Sep 11]** Card count in range, corpus frozen (PRD §8 rule 1) — no card changes after this
     point for any reason.
-17. Pick the specific open-weight model and host (Together.ai/Groq/Fireworks/local) for the 4-6 model
-    line-up, and wire a model client for every provider in the line-up — needed before task 18.
-18. **[Days 10-11]** Full sweep across 4-6 models (incl. the open-weight model). Fix what breaks; re-run.
+11. Pick the specific open-weight model and host (Together.ai/Groq/Fireworks/local) for the 4-6 model
+    line-up, and wire a model client for every provider in the line-up — needed before task 12.
+12. **[Days 10-11]** Full sweep across 4-6 models (incl. the open-weight model). Fix what breaks; re-run.
     Confirm transcripts complete for every (model × card) pair. Log the pinned card-set version, judge
     prompt version, and exact model version strings in run metadata (R4 — non-negotiable, carries forward
     PRD §8 rule 5).
-19. **[Day 12]** Set up the Langfuse human-annotation queue; brief annotators; select the stratified ~50
+13. **[Day 12]** Set up the Langfuse human-annotation queue; brief annotators; select the stratified ~50
     sample (oversampled on gate failures and `harmful` Q2 classifications).
-20. **[Days 13-14]** Human annotation, blind to judge scores. Write and run the Krippendorff's alpha
+14. **[Days 13-14]** Human annotation, blind to judge scores. Write and run the Krippendorff's alpha
     computation per dimension (PRD §7).
-21. **[Days 15-16]** Write-up: motivation, method, gates/quality design, results, failure examples (rates
+15. **[Days 15-16]** Write-up: motivation, method, gates/quality design, results, failure examples (rates
     redacted per PRD §8 rule 3), limitations, generalization. Repo cleanup — assemble the PRD §12 release
     layout (`cards/`, `harness/`, `results/`, README with the schema documented standalone).
-22. **[Day 17]** Zenodo archive → DOI. Post to arXiv (cs.CL) and EcoEvoRxiv.
-23. Fix `outreach/EMAIL-TRACKER.md`'s Status/Date-sent columns to reflect the emails that were actually
+16. **[Day 17]** Zenodo archive → DOI. Post to arXiv (cs.CL) and EcoEvoRxiv.
+17. Fix `outreach/EMAIL-TRACKER.md`'s Status/Date-sent columns to reflect the emails that were actually
     sent (currently still shows "Not sent" for all real contacts). No dependency on anything above — pure
     housekeeping, lowest priority.
 
@@ -109,4 +101,6 @@ to now-archived files) — see `archive/study-a-single-turn/README.md` if they n
 
 ## Pending tests
 
-_None yet — no code to test._
+30 tests passing (`harness/` unit/integration tests, VCR cassettes recorded for the Anthropic-hitting
+ones — see `tests/cassettes/`). No dedicated tests yet for work not yet built: leakage check, gate/quality
+judges, per-turn Langfuse tracing (tasks 2-5 above).
