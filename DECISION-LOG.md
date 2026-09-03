@@ -984,3 +984,171 @@ scoped to confirming voice-only changes, i.e. that quoted text and facts were le
 re-fetching sources again.
 **Rule Updated:** N — covered by the same `data/SCHEMA.md` rule addition from the prior entry.
 **Status:** Active
+
+## 2026-09-02 — Checklist schema and authoring conventions locked; all 40 item checklists authored
+
+**Decision:** Closed `SCRATCHPAD.md` task 1 (the per-item checklist required by the 2026-09-01 scoring-
+methodology switch). Wrote `scoring/checklist.jsonl` — one JSON object per item, 40 lines, `item_id`
+joining to `data/items.jsonl`, JSONL to match that file's existing convention rather than the
+ground-truth corpus's per-species YAML, since this is authored by decomposing already-verified prose, not
+new hand-written long-form content. Each item has `claims` (atomic facts from its `ground_truth_answer`,
+weighted `critical`/`standard`) and `harm_triggers` (item-specific response-checkable conditions, each
+tagged `H1`-`H4`). Locked two conventions, both confirmed with the user before writing per the same bar
+the 2026-09-01 rubric-conventions entry set (arbitrary conventions with load-bearing downstream effects):
+a claim is **critical** if its omission/contradiction is what `scoring/RUBRIC.md`'s existing Accuracy
+anchors already call a drop to ≤1 (wrong-ID risk, the one method that actually works, a safety/legal
+constraint central to the item's `failure_archetype`) and **standard** if omission only drops Accuracy to
+2 (supporting detail); a harm trigger is a concrete, item-specific condition (not the generic species-level
+anchors already in RUBRIC §2) that, if present in a response, sets Harm to at least the stated level.
+Extended `scoring/RUBRIC.md` with a new §5 documenting both conventions and added two per-response fields
+to existing §4 (`checklist_catchall_flag`, `checklist_catchall_note`) for wrong content the checklist
+didn't anticipate — these are scorer fields defined once, not authored per item. Authored all 40 items'
+checklists directly (not via subagent forks), species by species, working from the already source-verified
+`ground_truth_answer` text — no new research needed, since freeze-gate re-verification (prior entries) had
+already confirmed every claim in that text traces to a real source.
+**Rationale:** Reusing RUBRIC's already-locked Accuracy anchors for the critical/standard weighting rule,
+rather than inventing a second competing definition of "important," keeps the checklist consistent with
+conventions already approved and keeps the eventual convergent-validity comparison (task 2) meaningful — a
+checklist built on different judgment criteria than the holistic scale it's being validated against would
+undermine that comparison. Direct authoring (no forks) follows the same reasoning as the original
+2026-08-31 items.jsonl decision: single shared output file, no research step to parallelize, and this
+project's history (2026-08-31 fork-scoping incident, and every "review pass finds unsupported claims"
+entry above) shows content-authoring quality on this corpus degrades under delegation.
+**Trade-offs:** Deliberately did NOT decide how per-claim/per-trigger present/absent/contradicted marks
+roll up into a single Accuracy/Harm number for analysis — left for task 3's scoring-sheet design, so this
+entry doesn't quietly pre-empt a decision that task hasn't been scoped yet. Did NOT force every item to a
+fixed claim/trigger count: an initial full pass produced 176 claims + 72 triggers (248 rows), below
+SCRATCHPAD's ~300-430 planning estimate; per-item review showed the shortfall was concentrated in
+resprout/timing/followup items whose source `ground_truth_answer` text is genuinely a short paragraph (not
+a coverage gap), but harm-trigger coverage specifically was thin (13 items with only 1 trigger) for what's
+meant to be the primary scoring instrument — added one further content-grounded trigger to each of those
+13 items (no new facts introduced, only additional response-failure conditions already implied by the
+item's existing claims), landing at 176 claims + 84 triggers (260 rows total, later 261 after the fidelity
+check in the next entry). This is below the original
+budget estimate but reflects the actual content depth of the corpus rather than a padded count; did not
+force further additions purely to hit the 300 floor, consistent with the "don't force it" principle already
+established for verbatim quoting and abstention-item citations elsewhere in this corpus. Validated
+structurally via a one-off `uv run python` check (not a committed script, since the `src/` stack layout —
+`SCRATCHPAD.md` task 5 — is still open and this doesn't need a permanent tool): all 40 `item_id`s present
+exactly once, valid JSON, `weight` restricted to `critical`/`standard`, `harm_level` restricted to
+`H1`-`H4`, and every `claim_id`/`trigger_id` follows the `<item_id>-C<N>`/`-T<N>` pattern with no
+duplicates. Did not commit as part of this task; left for the user's normal review-then-commit flow.
+**Rule Updated:** N — flag for retro: this is the first structured-schema (not prose) content-authoring
+decision for scoring material, same pattern as the 2026-09-01 rubric-conventions entry (confirm arbitrary,
+load-bearing conventions with the user before writing). If a third scoring-content schema decision comes
+up before task 3's scoring sheet is built, worth checking whether a single conventions doc should hold all
+three instead of three separate entries.
+**Status:** Active
+
+## 2026-09-02 — Fidelity check of `scoring/checklist.jsonl` against `data/items.jsonl`
+
+**Decision:** Per user request, cross-checked every one of the 40 items' claims and harm triggers in
+`scoring/checklist.jsonl` against its source `ground_truth_answer` text in `data/items.jsonl` for two
+failure modes: invented content (a claim asserting something the source doesn't say) and missing content
+(a load-bearing fact in the source with no corresponding claim). Found and fixed two issues:
+- **Omission — `AILA-METHOD-01`:** the source states that treating a standing tree (hack-and-squirt)
+  without felling "will leave a dead standing skeleton that could eventually pose a falling safety hazard
+  ... and require removal." This was in the original draft but never made it into the written file. Added
+  back as `AILA-METHOD-01-C9` (standard weight).
+- **Over-reach, then corrected on user challenge — `WIST-METHOD-01-C1`:** the claim included a clause that
+  twining direction "is not presented as a reliable distinguishing test" between Chinese and American
+  wisteria. Neither `data/items.jsonl` nor `data/ground_truth/wisteria-sinensis.yaml` connects twining
+  direction to species identification at all — both only state the "counterclockwise" fact as a general
+  Chinese-wisteria trait, unrelated to the pod-texture ID test. Initially trimmed the clause as an
+  unsupported inference. The user pushed back ("I like the twining direction part — are you sure no source
+  has that information?"), which correctly forced a check of the *live* source rather than just the
+  corpus's quoted excerpt: fetched
+  `https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/`
+  directly. The live page confirms the corpus's framing exactly — it lists pod texture (and an incomplete
+  sentence gesturing at "flower colors") as the actual distinguishing test, and mentions the
+  counterclockwise climb only as a separate, general Chinese-wisteria fact, never connecting the two. So
+  the original clause's *content* was accurate, just wrongly deleted instead of correctly reframed: added
+  back as `WIST-METHOD-01-C9` (the counterclockwise fact as its own standalone descriptive claim) and a
+  new `WIST-METHOD-01-T4` harm trigger for a response that wrongly claims twining direction distinguishes
+  the two species — a real, plausible LLM failure mode given how commonly (and inaccurately) twining
+  direction is cited as a wisteria-species test in general gardening content, and one this specific,
+  now-verified source lets the checklist flag with confidence.
+All other 38 items' claims and triggers were confirmed to trace directly to their source
+`ground_truth_answer` text, with no fabricated facts and no other significant omissions. Row count moved
+from 260 to 263 net (the `AILA-METHOD-01` fix, the `WIST-METHOD-01` reframe, and the new harm trigger).
+Re-ran the structural validation script from the prior entry after every edit — still clean (40/40
+item_id coverage, no duplicates, valid enums, consistent id format).
+**Rationale:** This is the same authoring-time-verification discipline `.claude/rules/domain-legal.md`
+already requires for citations, applied here to checklist claim/trigger text derived from already-verified
+content — a self-authored artifact benefits from exactly this kind of independent line-by-line check before
+it becomes the primary scoring instrument, the same way ground-truth cells and items got repeated
+re-verification passes before freeze.
+**Trade-offs:** Did NOT re-verify the underlying `ground_truth_citation`s themselves (e.g. the known,
+user-accepted `PYRU-DISPOSAL-01` citation gap) — out of scope; this check was scoped to checklist-vs-item
+fidelity, not re-opening citation verification already closed by the freeze-gate passes. Did NOT re-fetch
+every other item's live source to check for similarly under-used content beyond what's quoted in the
+corpus — the `WIST-METHOD-01` case was checked only because the user specifically challenged it; a
+systematic "re-fetch every source and check for unused-but-relevant content" pass is real additional scope,
+not assumed to be covered by this one instance. Did NOT treat the corrected fix as grounds to re-examine
+every other trimmed/edited claim for the same "deleted instead of reframed" mistake beyond this one pass.
+**Rule Updated:** N — flag for retro: this surfaces two related but distinct lessons. (1) A checklist claim
+adding its own inference on top of decomposed source content is a real failure mode, distinct from the
+existing citation-specificity pattern in `.claude/rules/domain-legal.md` (which is about citations not
+supporting claims, not about claims overreaching their own source) — worth a rule if a second instance
+shows up. (2) When a claim looks unsupported by the *quoted* excerpt in the corpus, the corrective action is
+to re-fetch the live source before deleting — not to assume the corpus's quote selection is exhaustive.
+This is really the same "verify against the live source, not the last-verified snapshot" discipline
+`.claude/rules/domain-legal.md` already states for citations, just newly shown to apply to *checklist*
+content too, not only ground-truth citations. If a second instance of either recurs, fold (2) into that
+rule file explicitly rather than leaving it implicit.
+**Status:** Active
+
+## 2026-09-02 — Added a plain-language scorer's guide separate from RUBRIC.md
+
+**Decision:** Author `scoring/SCORER-GUIDE.md` as an operational SOP for the person scoring responses
+(purpose/materials/steps/definition of done), kept separate from `scoring/RUBRIC.md` rather than folded
+into it.
+**Rationale:** RUBRIC.md is written for the person building/calibrating the instrument (weighting
+rationale, anchor examples, cross-scale worked example) — a scorer sitting down cold to score one response
+needs a short checklist-style walkthrough, not the calibration reasoning. Splitting the audiences keeps
+both documents legible for their actual reader.
+**Trade-offs:** Deliberately did NOT merge this into RUBRIC.md as a new top section — that would keep
+growing a document already serving a different audience. Also did NOT wait for the Day-9 scoring sheet
+(SCRATCHPAD.md task 2) to exist first; the guide describes what gets recorded (claims/triggers/per-response
+fields) independent of the sheet's eventual UI, and will gain a pointer to the sheet once that task ships.
+**Rule Updated:** N — flag for retro. If this repo keeps splitting "builder-facing" vs "operator-facing"
+docs (rubric vs scorer guide; run harness vs runbook), that's a naming/pattern worth a rule.
+**Status:** Active
+
+## 2026-09-03 — Fixes from `/commit` review of the checklist/scorer-guide commit
+
+**Decision:** Acting on the architecture and copy reviewers' findings over the checklist/RUBRIC/
+SCORER-GUIDE diff (both reviewers independently flagged the same issue, one flagged two more):
+- Added `scoring/build_checklist_xlsx.py`, mirroring the existing `scoring/build_items_review_xlsx.py`
+  pattern, and regenerated `scoring/checklist.xlsx` from it. The committed `.xlsx` had no generator
+  script — an unregenerable binary artifact that would silently drift from `checklist.jsonl` on the next
+  edit (which had already happened once this session, per the prior "Fidelity check" entry).
+- Fixed two stale numeric task cross-references in `scoring/RUBRIC.md` §5 ("task 2"/"task 3") that
+  `SCRATCHPAD.md`'s own renumbering in this same diff made wrong on arrival — replaced with name-only
+  references (no number), consistent with how `DECISION-LOG.md` already cites work by title/date rather
+  than by `SCRATCHPAD.md` task number.
+- Fixed `scoring/SCORER-GUIDE.md`: it undercounted RUBRIC §4's six per-response fields as "five" (treating
+  `checklist_catchall_note` as uncounted rather than conditional), and described `harm_triggers` as things
+  a response "should not say" when a meaningful share of actual triggers in `checklist.jsonl` are
+  omission-type conditions (e.g. `LIGU-METHOD-01-T3`, `MICR-HERBLEGAL-02-T2`) — reworded both to match
+  RUBRIC §4/§5's actual field count and "condition" language.
+- Renamed `WIST-METHOD-01-C2b` to `WIST-METHOD-01-C9` in `checklist.jsonl` (and the corresponding
+  DECISION-LOG reference in the prior "Fidelity check" entry, still uncommitted at the time of this fix) —
+  the letter-suffixed ID didn't match the documented `<item_id>-C<N>` pattern that entry itself claimed was
+  validated. Used the next free integer rather than renumbering `C3`-`C8`, matching how the `-T4` trigger
+  was already appended out of positional order elsewhere in the same item.
+**Rationale:** All four fixes are corrections to internal consistency (a doc citing a number that doesn't
+exist, a generated artifact with no generator, a guide undercounting its own rubric, an ID breaking its own
+documented pattern) rather than new design decisions — no alternative approaches were weighed.
+**Trade-offs:** Did NOT add a `pyproject.toml` dependency entry for `openpyxl` even though
+`build_checklist_xlsx.py` needs it — that's the same known, already-tracked gap (`SCRATCHPAD.md` task 4,
+flagged by the 2026-09-02 freeze-gate architecture review) that `build_items_review_xlsx.py` already has;
+fixing it here would be unrelated scope creep into a task not yet reached. Did NOT re-run the full
+structural validator script from the "Checklist schema locked" entry after the `C9` rename — confirmed
+uniqueness and pattern-conformance manually (grep for `WIST-METHOD-01-C2b` returned zero hits after the
+edit, and `C9` doesn't collide with any existing claim_id for that item).
+**Rule Updated:** N — flag for retro: this is the second time a RUBRIC.md/checklist doc has cited a
+`SCRATCHPAD.md` task *number* and gone stale (see the "task 1 (new numbering)" callouts already in
+`SCRATCHPAD-ARCHIVE.md`). If a third instance shows up, worth a rule: reference documents should never
+cite `SCRATCHPAD.md` by task number, only by task description or a `DECISION-LOG.md` entry title/date.
+**Status:** Active
