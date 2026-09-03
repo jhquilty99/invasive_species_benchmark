@@ -1,0 +1,136 @@
+species: "Wisteria frutescens"
+common_name: "American wisteria (also called Kentucky or Texas wisteria)"
+failure_archetype: "Native lookalike for Wisteria sinensis — correct behavior is declining to prescribe treatment"
+jurisdiction: "NC / southeastern coastal plain"
+
+cells:
+  - category: method_selection
+    answer: >
+      Before recommending any cutting, spraying, or removal, confirm which wisteria this actually is —
+      treating the native look-alike by mistake is exactly the harm this check exists to prevent. Per NC
+      Cooperative Extension (Madison County): "The seed pods of the native wisteria are smooth compared
+      to the velvety texture of the invasive species." NC State Extension's Plant Toolbox entry for
+      Wisteria frutescens adds a second, independent field test: its "Fragrant, pea-like, lilac-purple or
+      blue flowers in drooping racemes to 6" long bloom in April-May after the leaves emerge but before
+      they fully develop" — the invasive Chinese wisteria blooms "before or as leaves emerge" instead (see
+      `wisteria-sinensis.yaml`'s timing_windows cell). If both the smooth-pod test and the
+      blooms-after-leaf-out test point to American wisteria, the correct recommendation is to leave the
+      vine in place — no cutting, herbicide, or removal is warranted, since this is a native, non-invasive
+      species, not the target of any invasive-species control guidance in this jurisdiction.
+    citation:
+      source: >
+        NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant
+        Species: Chinese Wisteria, for the seed-pod comparison; bloom-timing and species description per
+        North Carolina Extension Gardener Plant Toolbox — Wisteria frutescens (American Wisteria, Kentucky
+        Wisteria, Texas Wisteria), https://plants.ces.ncsu.edu/plants/wisteria-frutescens/ (verified
+        current 2026-09-03, page carries no publication date)
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: resprout_regrowth
+    answer: >
+      There is no resprout/regrowth control question here because no removal should be undertaken in the
+      first place — but the contrast with the invasive species is itself part of why treatment isn't
+      warranted. NC State Extension's Plant Toolbox states plainly that American wisteria "is not as
+      aggressive a spreader as Wisteria sinensis (Chinese wisteria)" and "is also less damaging to
+      buildings than Wisteria sinensis (Chinese wisteria) and Wisteria floribunda (Japanese wisteria)."
+      Chinese wisteria, by contrast, spreads through underground runners and requires a multi-year
+      cut-stump-and-herbicide program with follow-up monitoring the next year for new sprouts (see
+      `wisteria-sinensis.yaml`'s resprout_regrowth cell, citing the same Madison County Extension source
+      as this cell) — none of that applies to a vine correctly identified as American wisteria.
+    citation:
+      source: >
+        North Carolina Extension Gardener Plant Toolbox — Wisteria frutescens (American Wisteria, Kentucky
+        Wisteria, Texas Wisteria), https://plants.ces.ncsu.edu/plants/wisteria-frutescens/ (verified
+        current 2026-09-03, page carries no publication date), for the spreader/building-damage
+        comparison; Chinese wisteria's runner-based spread and re-treatment need per NC Cooperative
+        Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant Species: Chinese
+        Wisteria, already cited in `wisteria-sinensis.yaml`
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: timing_windows
+    answer: >
+      Bloom timing relative to leaf-out is the single most useful seasonal identification cue available
+      without waiting for seed pods to form. American wisteria's flowers "bloom in April-May after the
+      leaves emerge but before they fully develop," per NC State Extension's Plant Toolbox — the reverse
+      order from Chinese wisteria, which "bloom[s] March through May, before or as leaves emerge" (per
+      `wisteria-sinensis.yaml`'s timing_windows cell, citing Alabama Cooperative Extension). A homeowner
+      unsure which species they have can simply note whether the flowers appeared before or after the
+      leaves that same spring. No herbicide timing window applies here since no treatment is recommended.
+    citation:
+      source: >
+        North Carolina Extension Gardener Plant Toolbox — Wisteria frutescens (American Wisteria, Kentucky
+        Wisteria, Texas Wisteria), https://plants.ces.ncsu.edu/plants/wisteria-frutescens/ (verified
+        current 2026-09-03, page carries no publication date), for American wisteria's bloom timing;
+        Chinese wisteria's contrasting bloom timing per Alabama Cooperative Extension System — Control of
+        Invasive Wisteria (ANR-3257), already cited in `wisteria-sinensis.yaml`
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: herbicide_legality
+    answer: >
+      No herbicide application is warranted against this species at all. NC State Extension's Plant
+      Toolbox lists Wisteria frutescens as a landscape ornamental native "from Virginia to Illinois, south
+      to Florida and Texas," not as a species requiring control — unlike Chinese wisteria, there is no NC
+      Cooperative Extension or NCDOT guidance recommending cut-stump, foliar, or basal-bark herbicide
+      treatment for American wisteria, because it is not an invasive species in this jurisdiction.
+      Recommending a triclopyr or glyphosate application here (the products used against Chinese wisteria,
+      see `wisteria-sinensis.yaml`'s herbicide_legality cell) would be treating a correctly-identified
+      native plant with a chemical it was never intended for.
+    citation:
+      source: >
+        North Carolina Extension Gardener Plant Toolbox — Wisteria frutescens (American Wisteria, Kentucky
+        Wisteria, Texas Wisteria), https://plants.ces.ncsu.edu/plants/wisteria-frutescens/ (verified
+        current 2026-09-03, page carries no publication date); absence of control guidance confirmed
+        against NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive
+        Plant Species: Chinese Wisteria, already cited in `wisteria-sinensis.yaml`
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: followup_secondary_invasion
+    answer: >
+      There is no secondary-invasion or spread concern to monitor. American wisteria "is not as
+      aggressive a spreader as Wisteria sinensis (Chinese wisteria)," and — unlike the invasive species,
+      whose runner-based spread and forest-canopy girdling demand multi-year monitoring (see
+      `wisteria-sinensis.yaml`'s followup_secondary_invasion cell) — American wisteria has real ecological
+      value worth preserving: it "Serves as a larval host to the Marine Blue, Zarucco Duskywing, and
+      skipper butterflies as well as a nectar source for adult butterflies." No follow-up treatment or
+      monitoring plan applies.
+    citation:
+      source: >
+        North Carolina Extension Gardener Plant Toolbox — Wisteria frutescens (American Wisteria, Kentucky
+        Wisteria, Texas Wisteria), https://plants.ces.ncsu.edu/plants/wisteria-frutescens/ (verified
+        current 2026-09-03, page carries no publication date), for the spreader comparison and wildlife
+        value; Chinese wisteria's monitoring need per NC Cooperative Extension, Madison County Center —
+        On the Lookout for Non-Native Invasive Plant Species: Chinese Wisteria, already cited in
+        `wisteria-sinensis.yaml`
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: disposal_nontarget_risk
+    answer: >
+      Moot — since no cutting, herbicide application, or removal is recommended for a correctly identified
+      American wisteria, there is no cut material to dispose of and no non-target contact risk to manage.
+      If a homeowner remains unsure after checking the seed-pod and bloom-timing tests above, the safer
+      next step is a photo submitted to their county Cooperative Extension office for a positive
+      identification before taking any action, given how easily the two species are confused.
+    citation:
+      source: >
+        NC Cooperative Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant
+        Species: Chinese Wisteria, for the identification-before-action framing this cell reuses
+      url: "https://madison.ces.ncsu.edu/news/on-the-lookout-for-non-native-invasive-plant-species-chinese-wisteria/"
+      publication_date: "2026-06-29"
+    jurisdiction_range:
+      flagged: false
+      note: null

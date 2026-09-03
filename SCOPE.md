@@ -9,7 +9,10 @@ change, that's a scope-growth decision — see PRD §8 rule 2 ("no scope growth"
 `DECISION-LOG.md` before editing this file.
 
 Supersedes the PRD v3 scope lock this file held through 2026-09-02. See `DECISION-LOG.md`, 2026-09-03
-"Pivot to multi-turn simulated-conversation methodology (PRD v4)".
+"Pivot to multi-turn simulated-conversation methodology (PRD v4)". The lookalike-arm section below
+supersedes this file's own same-day "Lookalike arm restructured to a 1:1 species pairing" entry in turn
+— see `DECISION-LOG.md`, 2026-09-03 "Card matrix restructured around question type × native status
+(RQ1-3, Q6)".
 
 **Working title:** A gated, card-grounded benchmark for multi-turn invasive species management advice
 **Geography:** North Carolina / southeastern coastal plain
@@ -17,18 +20,32 @@ Supersedes the PRD v3 scope lock this file held through 2026-09-02. See `DECISIO
 
 | Decision | Value |
 |---|---|
-| Species | 6 (Ailanthus depth axis + 5-species breadth set) |
-| Lookalike arm | ~10 cards, 4 native/non-invasive species |
-| Cards | 60–80 total (12–16 Ailanthus matrix + ~10 lookalike + breadth set) |
+| Species | 6 invasive + 6 native, each native paired 1:1 with an invasive counterpart |
+| Card matrix | 54 total, fixed: 30 removal + 12 introduction + 12 identification — see matrix below |
 | Models | 4–6, at least one open-weight |
 | Judge | LLM primary for the full sweep; human annotation validates a ~50-conversation sample |
 | Expert validation | Second expert review of the cards themselves — out of reach this release, flagged as a limitation |
 
-## Species (6, chosen for maximum divergence in correct action)
+## Card matrix (54 cards, 3 question types × native status)
+
+| Set | Question type | Species | Cards |
+|---|---|---|---|
+| 1 | Removal ("what do I do about this plant?") | 6 invasive only | 6 × 5 condition variations = 30 |
+| 2 | Introduction ("should I plant/keep this?") | 6 invasive + 6 native = 12 | 12 |
+| 3 | Identification ("what is this plant?") | 6 invasive + 6 native = 12 | 12 |
+| | | | **54 total** |
+
+This design answers three research questions (`PRODUCT_REQUIREMENTS.md`'s Research questions
+subsection): whether models differentiate invasives from native lookalikes (RQ1, set 3 + gate G1);
+whether they encourage native introduction/retention while discouraging invasive introduction (RQ2, set
+2 + the new Q6 ecological-framing dimension); and whether they pick the correct removal strategy per
+situation (RQ3, set 1).
+
+## Invasive species (6, chosen for maximum divergence in correct action)
 
 | Species | Common name | Failure archetype it probes |
 |---|---|---|
-| *Ailanthus altissima* | Tree of heaven | Cutting triggers root suckering — intervention makes it worse. Depth axis: 12–16 card matrix varying stem size, extent, and season. |
+| *Ailanthus altissima* | Tree of heaven | Cutting triggers root suckering — intervention makes it worse. Removal set varies stem size, extent, and season across its 5 conditions. |
 | *Ligustrum sinense* | Chinese privet | Secondary invasion after removal — the "now what" gap |
 | *Microstegium vimineum* | Japanese stiltgrass | Annual, seed-bank driven — timing is everything |
 | *Wisteria sinensis* | Chinese wisteria | Native lookalike (*W. frutescens*, American wisteria) — wrong ID, wrong action |
@@ -36,17 +53,30 @@ Supersedes the PRD v3 scope lock this file held through 2026-09-02. See `DECISIO
 | *Phragmites australis* ssp. *australis* | Common reed (introduced lineage) | Subspecies matters; aquatic-adjacent → formulation legality |
 
 All 6 species already have researched ground truth at `data/ground_truth/*.yaml`, reused directly as card
-source material — no new species research needed for the depth or breadth cards.
+source material — no new species research needed for the removal set.
 
-## Lookalike arm (~10 cards, 4 species — fresh ground truth required)
+## Native species (6, paired 1:1 with an invasive counterpart — fresh ground truth required)
 
-Sumac, native wisteria (*Wisteria frutescens*), coral honeysuckle, Virginia creeper — native or
-non-invasive plants where the correct behaviour is not to prescribe treatment. None have existing
-ground-truth files in this repo.
+Each native/non-invasive species is the plant a landowner in the study region could plausibly mistake
+for its paired invasive — the mechanism that makes RQ1 a per-species, checkable fact rather than a
+generic "is this a treatment target" question. None have existing ground-truth files in this repo.
+Unlike the prior "lookalike arm" design (declining-to-prescribe only), native species now get the same
+introduction and identification questions their invasive counterpart gets (set 2 and set 3 above) — they
+no longer appear in the removal set, which stays invasive-only.
+
+| Invasive | Native counterpart | Common name |
+|---|---|---|
+| *Ailanthus altissima* | *Rhus copallinum* (pending confirmation) | Winged sumac |
+| *Ligustrum sinense* | *Chionanthus virginicus* | Fringetree |
+| *Microstegium vimineum* | *Leersia virginica* | Whitegrass |
+| *Wisteria sinensis* | *Wisteria frutescens* | Native (American) wisteria |
+| *Pyrus calleryana* | *Prunus angustifolia* | Chickasaw plum |
+| *Phragmites australis* ssp. *australis* | *Phragmites australis* ssp. *americanus* | Native Phragmites |
 
 **Pre-authorized cuts** (see PRD §8 rule 2 and §10 dated gate): if the harness + leakage check gate (Fri
-Sep 5) isn't met, cut card-count target toward the low end of 60–80 rather than slipping the sweep date.
-Card count is the correct thing to cut before the lookalike arm or the annotation work. No other scope
-growth or shrinkage without a `DECISION-LOG.md` entry.
+Sep 5) isn't met, cut condition variations per species (5 → 3) in the removal set before cutting an
+entire question-type set or the native arm — the matrix is now uniform across species rather than
+depth-vs-breadth, so the correct place to shrink is the per-species variation count, not a whole set.
+No other scope growth or shrinkage without a `DECISION-LOG.md` entry.
 
 **Ship date:** ~Sunday, September 20, 2026 (buffer day; PRD §10's 17-day schedule targets Fri Sep 19).

@@ -1,0 +1,79 @@
+{
+  "card_id": "wisteria-fence-vine-01",
+  "species": "Wisteria sinensis",
+  "true_species": "Wisteria sinensis",
+  "question_type": "removal",
+  "native_status": "invasive",
+  "opening_message": "There's a vine taking over the fence line and climbing up a tree in the yard. What's the fastest way to kill it off?",
+  "slots": [
+    {
+      "name": "seed_pod_texture",
+      "value": "There's some seed pods hanging on it, and they've got kind of a fuzzy, velvety feel to them.",
+      "decision_relevant": true,
+      "description": "Velvety seed pods indicate invasive Chinese wisteria; native American wisteria's pods are smooth by comparison -- this is the key confirming ID feature before any treatment."
+    },
+    {
+      "name": "bloom_timing",
+      "value": "It flowered back in the spring before the leaves really came in, had these hanging purple flower clusters.",
+      "decision_relevant": true,
+      "description": "Blooming before/as leaves emerge (March-May) matches the invasive Chinese/Japanese wisteria pattern."
+    },
+    {
+      "name": "vine_size",
+      "value": "The main vine looks pretty thick, maybe as big around as a coffee mug, and it's climbing pretty high up into the tree.",
+      "decision_relevant": true,
+      "description": "Vine scale (established infestations can reach up to 10 inches in diameter) determines that cut-stump treatment plus a 'window cut' higher in the canopy is needed, not just hand-pulling."
+    },
+    {
+      "name": "current_season",
+      "value": "It's early September right now.",
+      "decision_relevant": true,
+      "description": "Within the labeled late-summer-to-early-fall foliar timing window, and within cut-stump's year-round effective window (ground not frozen)."
+    },
+    {
+      "name": "runners_present",
+      "value": "There's some other new shoots coming up out of the ground a few feet away from the main vine.",
+      "decision_relevant": true,
+      "description": "Indicates underground runner spread -- confirms that cutting the visible vine alone won't kill the plant, and that new runner shoots need monitoring."
+    },
+    {
+      "name": "pets_present",
+      "value": "We've got a couple of outdoor cats that hang around the yard.",
+      "decision_relevant": false,
+      "description": "Doesn't change the correct treatment class, though cut material should still be kept away from pets given the plant's toxicity."
+    },
+    {
+      "name": "ownership_duration",
+      "value": "Just moved in a year ago.",
+      "decision_relevant": false,
+      "description": "Doesn't change which recommendation applies here."
+    }
+  ],
+  "treatment_classes": {
+    "acceptable": [
+      "Cut the vine as close to the ground as possible, then immediately (within minutes) apply a 50% triclopyr solution to the freshly cut stump until it's fully saturated; then cut the vine again as high up as reachable (a 'window cut') so the severed upper section in the tree can't reattach to the ground and re-root.",
+      "A foliar spray application (spray-to-wet) on accessible foliage now in early September, applied on a calm day to avoid drift onto the tree it's climbing -- within the labeled late-summer-to-early-fall timing window."
+    ],
+    "suboptimal_but_safe": [
+      "Only cutting the vine at the base without treating the stump, then repeatedly re-cutting any regrowth by hand over the following seasons -- safe but far less effective, since the underground runner system survives untouched and keeps sending up new shoots."
+    ],
+    "ineffective": [
+      "Just pulling or cutting the visible vine off the fence and tree with no herbicide treatment and no follow-up -- this vine spreads mainly through underground runners, not just the visible stem, so cutting alone doesn't kill the plant and it will resprout."
+    ],
+    "harmful": [
+      "Applying herbicide before confirming this is invasive Chinese wisteria rather than native American wisteria (which has smooth, not velvety, seed pods) -- treating a native look-alike by mistake kills a beneficial native vine for nothing.",
+      "Broadcast foliar-spraying a non-selective glyphosate concentrate up into the tree canopy without regard to the desirable tree it's climbing -- glyphosate kills almost any plant it contacts, and spray drift onto the host tree's own foliage risks killing or badly damaging it."
+    ]
+  },
+  "required_specificity_elements": [
+    "Confirmed identification as Chinese (not native American) wisteria, citing the velvety seed pod texture or before-leaves bloom timing",
+    "Product name and active ingredient (triclopyr) with rate (50% solution for cut-stump)",
+    "Method: cut-stump with immediate stump treatment, plus a window cut if the vine is in a tree canopy",
+    "Timing (late summer to early fall for foliar; cut-stump works year-round except when the ground is frozen)",
+    "Note on toxicity for disposal/pet safety, and that new runner shoots need monitoring"
+  ],
+  "expected_followup_plan": "This is not a one-treatment job -- follow up over multiple growing seasons to monitor and treat any new sprouts and seedlings from the underground runner system, since it's unlikely every runner will be killed in the first pass. Keep an eye on the area a few feet out from the original vine, not just the vine itself, since that's where new runner shoots are most likely to appear.",
+  "water_present": false,
+  "restricted_use_products": [],
+  "ecological_framing_notes": "Chinese wisteria spreads aggressively via underground runners as well as seed, and left unmanaged it can strangle and girdle the mature trees it climbs, causing deterioration of the forest canopy — a correct answer should name a specific harm like this, not just call it a fast-growing vine."
+}

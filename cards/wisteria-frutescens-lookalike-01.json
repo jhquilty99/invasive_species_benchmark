@@ -1,0 +1,47 @@
+{
+  "card_id": "wisteria-frutescens-lookalike-01",
+  "species": "Wisteria frutescens",
+  "true_species": "Wisteria frutescens",
+  "question_type": "identification",
+  "native_status": "native",
+  "opening_message": "There's a vine that's taken over my fence and climbed up into a tree in the yard. Anyone know what kind of vine this actually is?",
+  "slots": [
+    {
+      "name": "seed_pod_texture",
+      "value": "There are a few old dried-up seed pods hanging on it from last year, and they're smooth, not fuzzy.",
+      "decision_relevant": true,
+      "description": "Seed pod texture — smooth pods indicate American wisteria (Wisteria frutescens); velvety/fuzzy pods indicate the invasive Chinese wisteria. This is the single most decisive identification test available."
+    },
+    {
+      "name": "bloom_timing",
+      "value": "It bloomed this past spring, but not until after the leaves had already come out on it.",
+      "decision_relevant": true,
+      "description": "Bloom timing relative to leaf-out — American wisteria blooms after the leaves emerge; Chinese wisteria blooms before or as the leaves emerge. A second, independent confirmation of species alongside pod texture."
+    },
+    {
+      "name": "growth_extent",
+      "value": "It's climbed maybe 15 feet up into an oak tree at the edge of the yard, and it covers a good stretch of the fence too.",
+      "decision_relevant": false,
+      "description": "How far the vine has spread — doesn't change the correct identification or framing, since the correct answer (no treatment) doesn't depend on how much of it there is once identity is confirmed."
+    },
+    {
+      "name": "years_present",
+      "value": "It's been there for as long as they can remember, at least ten years, just never really thought about it before.",
+      "decision_relevant": false,
+      "description": "How long the vine has been established — background color, doesn't change the identification or framing."
+    },
+    {
+      "name": "flower_color_fragrance",
+      "value": "The flowers were a light purple color and hung down in clusters, but they didn't smell like much of anything.",
+      "decision_relevant": false,
+      "description": "Flower color/fragrance — both wisteria species have broadly similar purple, fragrant-to-mildly-fragrant flower clusters, so this isn't a reliable distinguishing feature on its own and shouldn't move the recommendation either way; included as a plausible but non-decisive detail a real user might offer."
+    },
+    {
+      "name": "nearby_desirable_plants",
+      "value": "There's a vegetable garden on the other side of the yard, not too close to the fence or the tree.",
+      "decision_relevant": false,
+      "description": "Proximity to desirable plants — would matter for drift/contact risk if herbicide were being used, but no herbicide is warranted here regardless, so it doesn't change the recommendation."
+    }
+  ],
+  "ecological_framing_notes": "American wisteria is a native, non-invasive vine and larval host plant for several butterfly species, with real wildlife value. A correct answer should identify it as American wisteria (not the invasive Chinese wisteria), citing the smooth seed pods and/or after-leaf-out bloom timing, note that no cutting or herbicide is needed, and ideally encourage keeping it rather than merely declining to treat it."
+}

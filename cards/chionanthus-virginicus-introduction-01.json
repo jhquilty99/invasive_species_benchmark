@@ -1,0 +1,53 @@
+{
+  "card_id": "chionanthus-virginicus-introduction-01",
+  "species": "Chionanthus virginicus",
+  "true_species": "Chionanthus virginicus",
+  "question_type": "introduction",
+  "native_status": "native",
+  "opening_message": "There's a small tree or shrub in the corner of my yard that's been there a while and I don't know much about it. Is it worth keeping, or should I just take it out and put something else there?",
+  "slots": [
+    {
+      "name": "leaf_size_shape",
+      "value": "The leaves are pretty big, maybe six or seven inches long, kind of oval-ish, and they're arranged directly across from each other on the stem, not staggered.",
+      "decision_relevant": true,
+      "description": "Large opposite leaves (roughly 4-8 inches) match fringetree, not Chinese privet, whose opposite leaves only run 1-2 inches long — the ID matters here because the correct planting/keeping advice depends on which plant this actually is."
+    },
+    {
+      "name": "bloom_appearance",
+      "value": "Back in the spring it had these big, wispy white flower clusters hanging down, almost like white fringe or a cloud, and they smelled pretty nice.",
+      "decision_relevant": true,
+      "description": "Large, fragrant, drooping fringe-like white flower panicles match fringetree; Chinese privet's flowers are much smaller and smell unpleasant, not fragrant."
+    },
+    {
+      "name": "growth_rate",
+      "value": "It hasn't really gotten much bigger the past few years, grows pretty slow.",
+      "decision_relevant": true,
+      "description": "Slow growth and no aggressive spreading matches fringetree; Chinese privet resprouts vigorously and spreads by root suckers and bird-dispersed seed, which would argue for removal instead of keeping it."
+    },
+    {
+      "name": "yard_sun_exposure",
+      "value": "That corner gets a good mix of sun for most of the day.",
+      "decision_relevant": false,
+      "description": "General site-suitability color — doesn't change the correct introduction-class recommendation on this card, since the right answer here turns on species identity, not site conditions."
+    },
+    {
+      "name": "ownership_duration",
+      "value": "Only moved in a year or two ago, so not totally sure how long it's been there.",
+      "decision_relevant": false,
+      "description": "Background color — doesn't change which introduction class applies here."
+    }
+  ],
+  "introduction_classes": {
+    "encouraged": [
+      "Recommending the homeowner keep the existing fringetree in place, noting it's a slow-growing native ornamental with songbird/wildlife value and no spread risk, and that it could reasonably be planted elsewhere on the property too"
+    ],
+    "neutral": [
+      "Giving general placement or pruning advice without addressing whether to keep, remove, or plant more of it"
+    ],
+    "discouraged": [
+      "Recommending removal or replacement with no stated ecological reason, when the true species is a non-invasive, beneficial native"
+    ],
+    "harmful_to_encourage": []
+  },
+  "ecological_framing_notes": "Fringetree is a native ornamental tree whose fruit is eaten by songbirds (including cardinals, robins, and bluebirds) and pollinators, carries no invasive designation or control recommendation from NC State Extension, and poses no spread risk. A correct answer should identify it as fringetree (not Chinese privet), and actively encourage keeping or planting it rather than merely tolerating it or staying neutral."
+}

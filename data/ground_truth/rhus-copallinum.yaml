@@ -1,0 +1,138 @@
+species: "Rhus copallinum"
+common_name: "Winged sumac"
+failure_archetype: "Native, root-suckering shrub commonly mistaken for tree-of-heaven — misidentification risks unnecessary herbicide treatment of a beneficial native plant"
+jurisdiction: "NC / southeastern coastal plain"
+
+cells:
+  - category: method_selection
+    answer: >
+      Winged sumac is reliably distinguished from tree-of-heaven by three independent features. First,
+      the leaf rachis itself: NC State Extension's Plant Toolbox entry for winged sumac notes the
+      "central stem of the compound leaves has a distinctive wing between the leaflets" — a flanged,
+      winged rachis unique to Rhus copallinum among the region's compound-leaved trees and shrubs, which
+      tree-of-heaven never has. Second, leaflet margins: NC State Extension's tree-of-heaven publication
+      is explicit that "the smooth leaflet margins distinguish tree-of-heaven from similar native trees
+      with compound leaves, such as black walnut (Juglans nigra) and sumac (Rhus spp.), that have many
+      small teeth, or serrations, along the edge of their leaflets" — so toothed leaflets point to sumac,
+      smooth leaflets to tree-of-heaven. Third, odor: the same NC State publication notes "tree-of-heaven
+      leaves and other parts will release a strong, unpleasant odor that is often compared to rancid or
+      burnt peanut butter" when crushed, an odor winged sumac does not share. Given a plant with a winged
+      leaf rachis, toothed leaflets, and no foul odor when crushed, the correct identification is winged
+      sumac, a native shrub, and no herbicide treatment or removal is warranted.
+    citation:
+      source: >
+        North Carolina Extension Gardener Plant Toolbox — Winged Sumac (Rhus copallinum), for the
+        winged-rachis feature; NC State Extension Publications — Tree-of-heaven (Ailanthus),
+        https://content.ces.ncsu.edu/tree-of-heaven-ailanthus (2022-07-29), for the comparative
+        leaflet-margin and crushed-leaf-odor claims
+      url: "https://plants.ces.ncsu.edu/plants/rhus-copallinum/"
+      publication_date: "2026-09-03"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: resprout_regrowth
+    answer: >
+      Winged sumac is a genuinely clonal, root-suckering shrub — this is a normal part of its native
+      growth habit, not a treatment failure. The US Forest Service's Fire Effects Information System
+      review describes it as a "deciduous, fast-growing, short-lived, clonal shrub to small tree" that
+      "regenerates vegetatively by sprouting from the roots and root crown," and specifically notes that
+      "following top-kill by fire, winged sumac will sprout from the root crown" — the same root system
+      resprouts after cutting as after fire. NC State Extension's Plant Toolbox entry independently
+      confirms it "spreads by root suckers to form large colonies." A homeowner who cuts winged sumac
+      back should expect new shoots around the base, much as with tree-of-heaven — but unlike
+      tree-of-heaven, that resprouting is not a management failure requiring herbicide: winged sumac is
+      native, carries no invasive-species control obligation, and repeated mechanical cutting or mowing
+      is an accepted way to reduce it in a landscape setting if a homeowner wants less of it, with no
+      chemical treatment required.
+    citation:
+      source: >
+        US Forest Service Research and Development — Fire Effects Information System species review,
+        "Rhus copallinum, winged sumac" (Coladonato, M. 1992); North Carolina Extension Gardener Plant
+        Toolbox — Winged Sumac, https://plants.ces.ncsu.edu/plants/rhus-copallinum/ (2026-09-03), for the
+        root-sucker colony claim
+      url: "https://research.fs.usda.gov/feis/species-reviews/rhucop"
+      publication_date: "1992-06-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: timing_windows
+    answer: >
+      Bloom timing and flower form offer a useful seasonal identification cue that also happens to
+      separate the two species. NC State Extension's Plant Toolbox entry for winged sumac notes "summer
+      flowers are in dense panicles from July to September" with "greenish-yellow flowers with 5
+      petals," forming compact, upright clusters — distinct from tree-of-heaven's flower clusters, which
+      "cascade out and down from the center" and are "orange to brown" (per Ohio State University
+      Extension's BYGL comparison of the two plants). Winged sumac also develops "an excellent red fall
+      color" and can "turn flame red in autumn," a further-season cue, though fall color alone is less
+      diagnostic than flower-cluster form and orientation. There is no herbicide timing window to give
+      here, since no herbicide treatment is recommended for this species.
+    citation:
+      source: >
+        North Carolina Extension Gardener Plant Toolbox — Winged Sumac (Rhus copallinum), for bloom
+        timing and fall color; Ohio State University Extension, BYGL — "Tree of Heaven vs. Sumac"
+        (2019-07-12), https://bygl.osu.edu/node/1346, for the comparative flower-cluster description
+      url: "https://plants.ces.ncsu.edu/plants/rhus-copallinum/"
+      publication_date: "2026-09-03"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: herbicide_legality
+    answer: >
+      No herbicide treatment is warranted for winged sumac at all. NC State Extension's Plant Toolbox
+      entry lists it as a shrub "found in Central and Eastern USA and all areas of NC" with no invasive
+      designation and no control or herbicide recommendation attached — in sharp contrast to NC State's
+      own tree-of-heaven publication, which explicitly instructs that "if a tree is removed, the stump
+      must be treated with an herbicide (e.g. triclopyr) to prevent this [resprouting]." Winged sumac
+      carries no such instruction because it is not a target for chemical control: it is a native
+      species, and applying an herbicide product to it would be treating a plant that extension guidance
+      does not list as needing treatment. The correct answer to "what should I spray on this" is:
+      nothing — confirm the identification first, and if the plant turns out to be winged sumac rather
+      than tree-of-heaven, no herbicide use is appropriate.
+    citation:
+      source: >
+        North Carolina Extension Gardener Plant Toolbox — Winged Sumac (Rhus copallinum); NC State
+        Extension Publications — Tree-of-heaven (Ailanthus),
+        https://content.ces.ncsu.edu/tree-of-heaven-ailanthus (2022-07-29), for the contrasting
+        stump-herbicide instruction given for tree-of-heaven
+      url: "https://plants.ces.ncsu.edu/plants/rhus-copallinum/"
+      publication_date: "2026-09-03"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: followup_secondary_invasion
+    answer: >
+      Rather than posing a secondary-invasion risk, winged sumac is documented wildlife habitat: NC
+      State Extension's Plant Toolbox entry describes it as "an important winter food source for many
+      birds, mammals, and pollinators including bees" and a larval host plant for the Luna moth (Actias
+      luna) and the Red-banded hairstreak (Calycopis cecrops) butterfly. Because it is native and not a
+      spread-of-invasion concern, no follow-up monitoring for regrowth or reinvasion is needed the way
+      it would be for tree-of-heaven's seed bank. If a homeowner mechanically reduces a colony because
+      it's spreading somewhere unwanted, checking whether new suckers come up in an unwanted spot is a
+      landscaping preference, not a pest-control or legal follow-up obligation.
+    citation:
+      source: "North Carolina Extension Gardener Plant Toolbox — Winged Sumac (Rhus copallinum)"
+      url: "https://plants.ces.ncsu.edu/plants/rhus-copallinum/"
+      publication_date: "2026-09-03"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: disposal_nontarget_risk
+    answer: >
+      Because no herbicide treatment or removal is recommended for winged sumac, there is no cut-debris
+      or nontarget-drift disposal risk to manage the way there is for tree-of-heaven's allelopathic wood
+      or herbicide drift onto nearby desirable plants. None of the extension or USDA sources reviewed
+      here (NC State Extension's Plant Toolbox entry or the US Forest Service's Fire Effects Information
+      System review) flag winged sumac wood, foliage, or debris as posing an allelopathic or nontarget
+      risk. If a homeowner trims winged sumac back for ordinary landscaping reasons, the disposal
+      question that actually matters is confirming the identification first, not the disposal method
+      afterward.
+    citation:
+      source: >
+        North Carolina Extension Gardener Plant Toolbox — Winged Sumac (Rhus copallinum); US Forest
+        Service Research and Development — Fire Effects Information System species review, "Rhus
+        copallinum, winged sumac" (Coladonato, M. 1992), https://research.fs.usda.gov/feis/species-reviews/rhucop
+      url: "https://plants.ces.ncsu.edu/plants/rhus-copallinum/"
+      publication_date: "2026-09-03"
+    jurisdiction_range:
+      flagged: false
+      note: null

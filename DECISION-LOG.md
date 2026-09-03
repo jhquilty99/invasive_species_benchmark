@@ -1382,3 +1382,207 @@ documented step Claude follows, the same trust level the existing reviewer-paral
 runs at, is the proportionate response. Revisit as a real hook if this step gets skipped in practice.
 **Rule Updated:** Y — `.claude/commands/commit.md` and `.claude/docs/git-workflow.md` both updated.
 **Status:** Active
+
+## 2026-09-03 — Card `opening_message` must voice a naive, harmable user
+
+**Decision:** Added `.claude/rules/card-voice.md`, auto-loading for `cards/**` (same scope pattern as
+`domain-legal.md`), specifying that every card's `opening_message` must be first-person/casual, vague
+about plant identity (generic "grass"/"vine"/"bush"/"tree", never a species or common name), silent on
+location (no state/region/address — geography is already fixed globally via `SCOPE.md`), impatient/
+lazy in tone, and written by someone who does not know or suspect the plant is invasive. `slots[].value`
+keeps the same casual tone but must stay factually specific — the vagueness rule is `opening_message`-only.
+Updated `cards/SCHEMA.md`'s `opening_message` and `slots.value` field descriptions to point to the new
+rule file instead of duplicating it, added a `CLAUDE.md` trigger-table row, and rewrote the one existing
+real card (`cards/ailanthus-stump-resprout-01.json`)'s `opening_message` to conform (it previously named
+"tree-of-heaven" and stated "NC coastal plain").
+**Rationale:** User-specified. The benchmark's premise is testing advice given to someone who does *not*
+already know what they're dealing with — an opening message that already names the species or region
+lets the model skip the identification/scoping work gate G1 exists to test, and misrepresents the
+naive, harmable user this benchmark is meant to protect. Locking this in now, before the Days 4-9
+authoring push (60-80 cards), avoids a corpus-wide rewrite later.
+**Trade-offs:** Did NOT touch `treatment_classes`, `required_specificity_elements`, or
+`expected_followup_plan` on the existing card — those already carry the real facts and aren't voice
+fields. Did NOT fold the voice rules directly into `cards/SCHEMA.md` as an alternative to a new rule
+file — a separate auto-loading rule file means the guidance surfaces automatically on any `cards/**`
+edit (matching how `domain-legal.md` already works), not only when someone happens to open the schema
+doc first.
+**Rule Updated:** Y — `.claude/rules/card-voice.md` (new file); `CLAUDE.md`'s trigger table gained a row.
+**Status:** Active
+
+## 2026-09-03 — Lookalike arm restructured to a 1:1 species pairing
+
+**Decision:** Replaced `SCOPE.md`'s locked lookalike-arm list (sumac, native wisteria, coral honeysuckle,
+Virginia creeper — 4 species, ~10 cards, no fixed pairing to the 6 primary invasives) with a 1:1 mapping:
+exactly one native/non-invasive lookalike per primary invasive species. Sumac (*Rhus copallinum*,
+pending confirmation during sourcing) pairs with *Ailanthus altissima*; native wisteria (*Wisteria
+frutescens*) pairs with *Wisteria sinensis*; fringetree (*Chionanthus virginicus*) pairs with *Ligustrum
+sinense*; whitegrass (*Leersia virginica*) pairs with *Microstegium vimineum*; Chickasaw plum (*Prunus
+angustifolia*) pairs with *Pyrus calleryana*; native Phragmites (*P. australis* ssp. *americanus*) pairs
+with *Phragmites australis* ssp. *australis*. Coral honeysuckle and Virginia creeper are dropped.
+**Rationale:** User-directed. A 1:1 pairing tests a specific, realistic identity-confusion scenario per
+invasive (the exact plant a landowner in NC's coastal plain would plausibly mistake it for), rather than
+a generic "is this plant a treatment target" question spread across species with no particular
+connection to the 6 primary invasives. It also gives every primary species a matched lookalike test,
+closing a gap in coverage (the old 4-species list left 2 of the 6 primary species with no paired
+lookalike at all).
+**Trade-offs:** Card count for the lookalike arm changes from "~10 cards, 4 species" to "6 cards, one
+per species" — fewer cards, but each is now targeted rather than incidental. Did NOT keep coral
+honeysuckle or Virginia creeper as extra, unpaired lookalike cards — a clean 1:1 set is easier to reason
+about and report on than a mixed paired/unpaired set. This is scope-lock-relevant per `SCOPE.md`'s own
+header rule (no edit without a decision entry first).
+**Rule Updated:** Y — `SCOPE.md`'s lookalike-arm section rewritten to the new 6-species table.
+**Status:** Superseded by 2026-09-03 "Card matrix restructured around question type × native status (RQ1-3, Q6)" entry (below) — the 1:1 species pairing itself carries forward unchanged, but the "lookalike arm" framing (native species only appearing to test declined-to-prescribe) is replaced by native species getting the full introduction/identification question range.
+
+## 2026-09-03 — Card matrix restructured around question type × native status (RQ1-3, Q6)
+
+**Decision:** Replaced the depth-axis/breadth-set/lookalike-arm card design with a fixed 54-card matrix
+crossing 3 question types with native status: **removal** ("what do I do about this plant?", 6 invasive
+species × 5 condition variations = 30 cards, generalizing the old Ailanthus-only depth matrix to all 6
+invasive species), **introduction** ("should I plant/keep this?", 6 invasive + 6 native = 12 cards), and
+**identification** ("what is this plant?", same 12 species = 12 cards). The native species and their 1:1
+invasive pairings are unchanged from the entry directly above. Added three explicit research questions
+to `PRODUCT_REQUIREMENTS.md` (RQ1: do models differentiate invasives from native lookalikes; RQ2: do
+they encourage native introduction/retention while discouraging invasive introduction, and encourage
+invasive removal; RQ3: do they pick the correct removal strategy per situation) and a new quality
+dimension, **Q6 — ecological framing** (judge, 0-2, all question types): does the model say a native
+species is beneficial and worth keeping/planting, and name the specific ecological harm of an invasive
+one rather than just calling it a weed. `Card` gains a `question_type` / `native_status` discriminator;
+`treatment_classes` and its removal-specific siblings (`required_specificity_elements`,
+`expected_followup_plan`, `water_present`, `restricted_use_products`) are now conditional on
+`question_type == removal`; introduction cards get a parallel `introduction_classes` field; gates G2-G5
+score `not_applicable` outside removal cards (G1 applies to all three types). Updated
+`PRODUCT_REQUIREMENTS.md` (§2 research questions, §4 scope, §5.1 schema, §5.3 scoring, §5.4 headline
+metrics, §7 validation plan, §10 timeline, §11 risks, §13 open questions), `SCOPE.md`, and
+`cards/SCHEMA.md` accordingly.
+**Rationale:** User-directed. The prior design only ever asked invasive species "how do I get rid of
+you," which can't show whether a model differentiates invasives from lookalikes (native species only
+existed to test silent non-prescription) or whether it actively steers people toward planting/protecting
+natives and away from planting invasives — a distinct failure mode from unsafe removal advice, and the
+one RQ2 is built to catch. Generalizing the removal set from Ailanthus-only to all 6 invasive species
+also strengthens RQ3 (removal-strategy discrimination) by giving every species, not just one, a
+controlled condition-variation matrix.
+**Trade-offs:** Card count is now a fixed 54 rather than a 60-80 range — a small reduction, accepted
+because a uniform, fully-crossed matrix is easier to reason about and stratify the human-annotation
+sample against than an uneven depth/breadth/lookalike split. This lands after Day 1's harness was
+already built against the old single-question-type `Card` model, so it costs a day of harness rework
+(inserted as Day 4 in `PRODUCT_REQUIREMENTS.md` §10, pushing card authoring back accordingly) rather
+than landing for free — did NOT try to retrofit the new fields without a dedicated rework day, since
+that risks the same kind of half-finished-schema bug the Day 1 build already had to fix once (the
+conditional-recommendation stopping-condition issue, see the 2026-09-03 "Resolved PRD §13.2..." entry).
+Left open (flagged in `PRODUCT_REQUIREMENTS.md` §13.5) whether Q1/slot-gating applies at all to
+identification-only cards, since there's no treatment or introduction decision to gate slots against —
+deferred to the Day 4 harness-rework task rather than decided here.
+**Rule Updated:** Y — `PRODUCT_REQUIREMENTS.md`, `SCOPE.md`, and `cards/SCHEMA.md` all rewritten to
+match.
+**Status:** Active
+
+## 2026-09-03 — Harness rework: `Card` model supports question_type/native_status (implementation)
+
+**Decision:** Implemented the schema change from the entry directly above: `harness/models.py`'s
+`Card` model gained `question_type` (`removal`/`introduction`/`identification`), `native_status`
+(`invasive`/`native`), `introduction_classes` (mirrors `treatment_classes`' shape for introduction
+cards), and a required `ecological_framing_notes: str`. A `model_validator` enforces which fields a
+card may/must carry per `question_type`: `removal` requires the five removal-only fields
+(`treatment_classes`, `required_specificity_elements`, `expected_followup_plan`, `water_present`,
+`restricted_use_products`) and forbids `introduction_classes`; `introduction` requires
+`introduction_classes` and forbids the removal-only fields; `identification` forbids both.
+`tests/test_cards.py` covers all 3 `question_type` values' field requirements (known-correct and
+known-incorrect cases for each). All 12 pre-existing cards were migrated to the new shape in the same
+pass: the 6 invasive cards kept `question_type: removal`, gained `native_status: invasive` and an
+`ecological_framing_notes` value grounded in each species' `data/ground_truth/*.yaml`; the 6 native
+cards — previously written as `removal`-type cards whose only correct answer was "decline to
+treat" — were converted to `question_type: identification`, since their actual content (slots are all
+distinguishing-feature checks against an invasive lookalike) tests identification, not a removal
+decision. Converting them required rewriting each `opening_message` from a "kill it" framing to a
+"what is this plant?" framing per `.claude/rules/card-voice.md`, and dropping the now-forbidden
+removal-only fields. A 13th card, the first `introduction`-type card
+(`chionanthus-virginicus-introduction-01.json`), was authored separately to give the matrix at least
+one card of each of the 3 question types before the slot-classifier/judge-tuning work in
+`SCRATCHPAD.md` proceeds.
+**Rationale:** The card-matrix restructuring decided above is a schema and content change, not just a
+planning-doc change — the harness code and the actual card files both have to move together or the
+two diverge silently (a card file claiming a `question_type` the loader doesn't understand yet, or a
+loader accepting fields no card uses). Converting the native cards to `identification` rather than
+leaving them as `removal` cards with an empty `acceptable` bucket keeps the schema honest: per the PRD
+restructuring, native species no longer belong in the removal set at all, and a native card modeling
+"decline to treat" as a removal outcome would silently smuggle the old lookalike-arm design back in
+under the new field names.
+**Trade-offs:** Did NOT try to also produce the additional cards each set still needs (24 more removal,
+11 more introduction, 6 more identification, per `SCRATCHPAD.md`'s remaining-matrix task) — this pass
+closes the schema/migration gap, not the full 54-card authoring gap, which stays open. Did NOT rename
+the migrated native cards' `card_id`/filenames (they keep their old `-lookalike-01` suffix even though
+they're no longer modeling a "lookalike arm") — renaming would churn file paths for no functional gain;
+the `question_type` field, not the filename, is what the harness and judges actually read.
+**Rule Updated:** Y — `harness/models.py` and `tests/test_cards.py` now enforce and test this; no
+rule-file change beyond what the entry above already made.
+**Status:** Active
+
+**Decision:** Implemented the `harness/models.py` half of the "Card matrix restructured around question
+type × native status (RQ1-3, Q6)" decision: `Card` gained `question_type` (`removal` / `introduction` /
+`identification`), `native_status` (`invasive` / `native`), `introduction_classes`, and
+`ecological_framing_notes`. The five removal-only fields (`treatment_classes`,
+`required_specificity_elements`, `expected_followup_plan`, `water_present`, `restricted_use_products`)
+became `Optional`, and a `model_validator(mode="after")` enforces exactly which fields are
+required/forbidden per `question_type`, matching `cards/SCHEMA.md`'s field table. `QualityDimension`
+gained `Q6_ECOLOGICAL_FRAMING` and `QualityScore`'s `Literal` now includes it; `Q2_TREATMENT_CLASS` was
+renamed to `Q2_CLASSIFICATION` since Q2's label set is now type-conditional, not always "treatment
+class" (no code referenced the old enum member). `harness/langfuse_client.py`'s
+`build_dataset_item_expected_output` now builds its dict conditionally on `question_type` instead of
+assuming the five removal fields always exist. Updated `tests/test_cards.py`,
+`tests/test_simulated_user.py`, and `tests/test_langfuse_client.py`'s `Card`-constructing fixtures to
+match, and added known-correct/known-incorrect tests for the new conditional-validation rule (identification
+card with/without removal fields, removal card missing a required field, introduction card with/without
+`introduction_classes`) per `.claude/rules/testing.md`.
+**Rationale:** This is the "Day 4" harness-rework task `SCRATCHPAD.md` and the card-matrix-restructuring
+decision both call out as a prerequisite for authoring cards in the new shape — cards can't be authored
+against a schema the code doesn't yet enforce.
+**Trade-offs:** Deliberately did NOT model a `not_applicable` state for Q3/Q5's new "removal cards only"
+conditionality in `QualityScore` — that judge logic isn't built yet (`SCRATCHPAD.md`'s quality-judging
+task), and guessing at its shape now risks the same half-finished-schema problem the original Day 1 build
+had to fix once already. Left it for whoever implements that judge to decide. Also did NOT add a
+`Q2IntroductionLabel` enum for the future introduction-card Q2 judge (started to, then removed it) — it
+would have duplicated `IntroductionClass` without the `declined` counterpart PRD v4 §5.3 says that judge
+needs, so defining it now would just be wrong in a way someone would have to notice and fix later; better
+left to the quality-judging task itself.
+**Rule Updated:** Y — `harness/models.py`, `harness/langfuse_client.py`, and the three affected test
+files.
+**Status:** Active
+
+## 2026-09-03 — `/commit` review of the PRD v4 pivot + card-matrix restructuring diff
+
+**Decision:** Acting on the architecture and copy reviewers' findings over the combined pivot/
+restructuring diff (methodology pivot to PRD v4, card-matrix restructuring, harness rework, 12 cards
+migrated, 1 new `introduction` card): (1) `cards/SCHEMA.md`'s closing "Gate-support fields, at a glance"
+section claimed `harness/models.py` hadn't been updated to match the schema yet — stale, since this same
+diff updates it; rewrote the paragraph to point at the now-current `DECISION-LOG.md` entry instead. (2)
+`harness/langfuse_client.py`'s `build_dataset_item_expected_output` re-hardcoded the five removal-only
+field names as dict keys, duplicating `harness/models.py`'s `_REMOVAL_ONLY_FIELDS` tuple with nothing
+tying the two together; changed it to build that portion of the dict from `_REMOVAL_ONLY_FIELDS`
+directly. (3) `cards/phragmites-americanus-lookalike-01.json` and
+`data/ground_truth/phragmites-australis-americanus.yaml` wrote the native lineage as "... subsp.
+americanus" while every other reference to Phragmites subspecies in the repo (`PRODUCT_REQUIREMENTS.md`,
+`SCOPE.md`, the invasive-lineage ground-truth/card files) uses "... ssp. australis"/"... ssp.
+americanus" — normalized both files to `ssp.` to match. (4) `tests/test_cards.py`'s new
+question_type-conditional-field tests covered "introduction card missing `introduction_classes`" and
+"introduction card with `introduction_classes`" but not "introduction card that also sets a removal-only
+field" — the one branch of `_check_question_type_fields`'s validator with zero coverage; added
+`test_introduction_card_with_removal_fields_raises`.
+**Rationale:** All four are small, low-risk fixes that close gaps the reviewers found directly in the
+diff being committed — none needed a design discussion, so fixing them inline kept the review loop tight
+rather than deferring to `SCRATCHPAD.md`.
+**Trade-offs:** The architecture reviewer also raised a more structural question: `Card` models its five
+question_type-conditional field groups as `Optional`-everywhere with a runtime `model_validator`
+enforcing presence/absence, rather than as a discriminated union (three `question_type`-tagged subclasses
+or a `Field(discriminator=...)` union) that would let a type checker narrow e.g. `card.treatment_classes`
+to non-`Optional` after a `question_type` check. Deliberately did NOT refactor to a discriminated union in
+this pass — the current shape already has full runtime + test coverage of the invariant, a union
+refactor would touch every `Card`-constructing call site (all three test files, `langfuse_client.py`, and
+every future judge that reads type-specific fields) for a type-narrowing convenience with no functional
+bug behind it, and the schedule has the Fri Sep 5 harness gate ahead of it. Revisit if a future judge
+implementation (the quality-judging task in `SCRATCHPAD.md`) turns out to need real per-type field access
+in enough places that hand-checking `question_type` before every `Optional` field read becomes its own
+source of bugs.
+**Rule Updated:** N — flag for retro. This is the first time this repo's Pydantic modeling has hit an
+Optional-bag-vs-discriminated-union choice; if a future card-model or judge-output-model change hits the
+same choice again, `.claude/rules/python.md`'s "Data modeling" section should get a default answer.
+**Status:** Active

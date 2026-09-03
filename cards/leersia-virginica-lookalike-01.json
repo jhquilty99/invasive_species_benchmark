@@ -1,0 +1,47 @@
+{
+  "card_id": "leersia-virginica-lookalike-01",
+  "species": "Leersia virginica",
+  "true_species": "Leersia virginica",
+  "question_type": "identification",
+  "native_status": "native",
+  "opening_message": "There's a grass taking over a shady patch of my yard and it keeps spreading a bit more every year. Does anyone know what this actually is?",
+  "slots": [
+    {
+      "name": "leaf_midrib",
+      "value": "No, I don't see any kind of light or silvery stripe down the middle of the leaves - they're just plain green all the way across.",
+      "decision_relevant": true,
+      "description": "Whether the leaf has the silvery midrib stripe diagnostic of Japanese stiltgrass (Microstegium vimineum) — its absence is the single fastest way to rule out the invasive and confirm whitegrass."
+    },
+    {
+      "name": "stem_node_texture",
+      "value": "I ran my fingers along one of the stems near where a leaf comes off and it felt a little fuzzy/hairy right at that spot, not smooth.",
+      "decision_relevant": true,
+      "description": "Node hairiness — Leersia virginica has downward-pointing hairs at the nodes, while Microstegium vimineum's nodes are glabrous (hairless). A second confirming ID feature alongside the midrib check."
+    },
+    {
+      "name": "spread_pattern",
+      "value": "It's more like a thick clump that's gotten a bit wider each year, not really running or carpeting out across the whole yard.",
+      "decision_relevant": true,
+      "description": "Growth habit — whitegrass forms well-defined perennial clumps via short rhizomes, distinct from stiltgrass's stoloniferous, mat-forming 'rolling carpet' spread. A clumping habit supports whitegrass over stiltgrass."
+    },
+    {
+      "name": "winter_persistence",
+      "value": "Yeah, it's still there in the winter, just looking a bit rougher - it doesn't fully die back and disappear.",
+      "decision_relevant": true,
+      "description": "Whitegrass is perennial and persists year-round; Japanese stiltgrass is an annual that dies back completely after first frost. Winter persistence is strong evidence against stiltgrass."
+    },
+    {
+      "name": "location_in_yard",
+      "value": "It's in a shadier, damper spot near the back of the yard, close to where some other plants stay pretty wet.",
+      "decision_relevant": false,
+      "description": "Habitat preference — both whitegrass and stiltgrass favor moist, partly-shaded sites, so this doesn't help distinguish between them; included as plausible background detail a homeowner would mention."
+    },
+    {
+      "name": "how_long_noticed",
+      "value": "Been there a couple of years now, just seems to be getting a little bigger each summer.",
+      "decision_relevant": false,
+      "description": "How long the patch has been present — doesn't change the correct identification or framing once the plant is identified; background color only."
+    }
+  ],
+  "ecological_framing_notes": "Whitegrass is a native perennial grass with no invasive designation or documented ecological harm — it's part of the native understory community in moist, shaded sites. A correct answer should identify it as whitegrass (not Japanese stiltgrass), note that no herbicide or removal treatment is needed, and explain why treating it would be inappropriate (native, non-invasive, not a regulated or listed weed)."
+}

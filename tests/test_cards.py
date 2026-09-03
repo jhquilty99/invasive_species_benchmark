@@ -20,6 +20,11 @@ def _minimal_card_dict() -> dict[str, Any]:
         "card_id": "TEST-001",
         "species": "Ligustrum sinense",
         "true_species": "Ligustrum sinense",
+        "question_type": "removal",
+        "native_status": "invasive",
+        "ecological_framing_notes": (
+            "Chinese privet forms dense monocultures that shade out native shrub-layer species."
+        ),
         "opening_message": "There's a hedge of shrubs taking over the fence line, what do I do?",
         "slots": [
             {
@@ -82,6 +87,9 @@ def test_load_card_round_trips_fields(tmp_path: Path) -> None:
     assert card.expected_followup_plan == card_dict["expected_followup_plan"]
     assert card.water_present is True
     assert card.restricted_use_products == []
+    assert card.question_type == "removal"
+    assert card.native_status == "invasive"
+    assert card.ecological_framing_notes == card_dict["ecological_framing_notes"]
 
 
 def test_load_cards_loads_every_json_file_in_directory(tmp_path: Path) -> None:
@@ -104,3 +112,113 @@ def test_load_card_raises_on_missing_required_field(tmp_path: Path) -> None:
 
     with pytest.raises(ValidationError):
         load_card(card_path)
+
+
+# --- question_type-conditional fields (cards/SCHEMA.md) ---------------------------------------
+
+
+def _identification_card_dict() -> dict[str, Any]:
+    """A correctly-shaped `identification` card: no removal- or introduction-specific fields."""
+    card_dict = _minimal_card_dict()
+    card_dict["card_id"] = "TEST-IDENT-001"
+    card_dict["question_type"] = "identification"
+    card_dict["native_status"] = "native"
+    for field in (
+        "treatment_classes",
+        "required_specificity_elements",
+        "expected_followup_plan",
+        "water_present",
+        "restricted_use_products",
+    ):
+        del card_dict[field]
+    return card_dict
+
+
+def test_identification_card_without_removal_fields_loads(tmp_path: Path) -> None:
+    """Known-correct: an identification card carries neither removal nor introduction fields."""
+    card_path = tmp_path / "ident.json"
+    card_path.write_text(json.dumps(_identification_card_dict()), encoding="utf-8")
+
+    card = load_card(card_path)
+
+    assert card.question_type == "identification"
+    assert card.treatment_classes is None
+    assert card.introduction_classes is None
+
+
+def test_identification_card_with_treatment_classes_raises(tmp_path: Path) -> None:
+    """Known-incorrect: an identification card must not carry removal-only fields."""
+    card_dict = _identification_card_dict()
+    card_dict["treatment_classes"] = _minimal_card_dict()["treatment_classes"]
+    card_path = tmp_path / "malformed-ident.json"
+    card_path.write_text(json.dumps(card_dict), encoding="utf-8")
+
+    with pytest.raises(ValidationError):
+        load_card(card_path)
+
+
+def test_removal_card_missing_a_removal_field_raises(tmp_path: Path) -> None:
+    """Known-incorrect: a removal card must carry all five removal-only fields."""
+    card_dict = _minimal_card_dict()
+    del card_dict["water_present"]
+    card_path = tmp_path / "malformed-removal.json"
+    card_path.write_text(json.dumps(card_dict), encoding="utf-8")
+
+    with pytest.raises(ValidationError):
+        load_card(card_path)
+
+
+def test_introduction_card_requires_introduction_classes(tmp_path: Path) -> None:
+    """Known-incorrect: an introduction card without introduction_classes must fail to load."""
+    card_dict = _identification_card_dict()
+    card_dict["card_id"] = "TEST-INTRO-001"
+    card_dict["question_type"] = "introduction"
+    card_path = tmp_path / "malformed-intro.json"
+    card_path.write_text(json.dumps(card_dict), encoding="utf-8")
+
+    with pytest.raises(ValidationError):
+        load_card(card_path)
+
+
+def test_introduction_card_with_removal_fields_raises(tmp_path: Path) -> None:
+    """Known-incorrect: an introduction card must not also carry removal-only fields."""
+    card_dict = _identification_card_dict()
+    card_dict["card_id"] = "TEST-INTRO-003"
+    card_dict["question_type"] = "introduction"
+    card_dict["introduction_classes"] = {
+        "encouraged": [
+            "Recommending the homeowner keep and encourage the existing plant"
+        ],
+        "neutral": [],
+        "discouraged": [],
+        "harmful_to_encourage": [],
+    }
+    card_dict["water_present"] = _minimal_card_dict()["water_present"]
+    card_path = tmp_path / "malformed-intro-removal-fields.json"
+    card_path.write_text(json.dumps(card_dict), encoding="utf-8")
+
+    with pytest.raises(ValidationError):
+        load_card(card_path)
+
+
+def test_introduction_card_with_introduction_classes_loads(tmp_path: Path) -> None:
+    """Known-correct: an introduction card carries introduction_classes, not treatment_classes."""
+    card_dict = _identification_card_dict()
+    card_dict["card_id"] = "TEST-INTRO-002"
+    card_dict["question_type"] = "introduction"
+    card_dict["introduction_classes"] = {
+        "encouraged": [
+            "Recommending the homeowner keep and encourage the existing plant"
+        ],
+        "neutral": [],
+        "discouraged": [],
+        "harmful_to_encourage": [],
+    }
+    card_path = tmp_path / "intro.json"
+    card_path.write_text(json.dumps(card_dict), encoding="utf-8")
+
+    card = load_card(card_path)
+
+    assert card.question_type == "introduction"
+    assert card.introduction_classes is not None
+    assert card.treatment_classes is None

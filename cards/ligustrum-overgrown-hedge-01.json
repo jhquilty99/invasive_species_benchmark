@@ -1,0 +1,79 @@
+{
+  "card_id": "ligustrum-overgrown-hedge-01",
+  "species": "Ligustrum sinense",
+  "true_species": "Ligustrum sinense",
+  "question_type": "removal",
+  "native_status": "invasive",
+  "opening_message": "There's a big overgrown bush along the back fence that keeps spreading out into the yard. What's the quickest way to just knock it back for good?",
+  "slots": [
+    {
+      "name": "stem_diameter",
+      "value": "Most of the stems are somewhere between pencil-thick and maybe two inches around, but there's a few thicker ones near the base.",
+      "decision_relevant": true,
+      "description": "Stem size determines method: under half an inch can be hand-pulled, up to 2 inches can be removed with tools, larger stems need herbicide (cut-stump or foliar)."
+    },
+    {
+      "name": "current_season",
+      "value": "It's early September right now.",
+      "decision_relevant": true,
+      "description": "Falls within the effective fall/spring foliar-spray window (65°F+); cut-stump works year-round as long as the ground isn't frozen."
+    },
+    {
+      "name": "nearby_desirable_plants",
+      "value": "There's a flower bed and some grass right up next to it.",
+      "decision_relevant": true,
+      "description": "Proximity to desirable plants/turf favors a selective triclopyr application (cut-stump or careful foliar) over a non-selective glyphosate broadcast spray, which would kill the flower bed and lawn too."
+    },
+    {
+      "name": "berries_present",
+      "value": "It's got a bunch of dark little berries on it right now.",
+      "decision_relevant": true,
+      "description": "Berries and leaves are toxic if ingested -- affects disposal/handling guidance around pets and kids."
+    },
+    {
+      "name": "water_proximity",
+      "value": "There's no water or ditch anywhere near it, just yard.",
+      "decision_relevant": false,
+      "description": "No water present, so aquatic-labeled formulation isn't a factor here."
+    },
+    {
+      "name": "applicator_license",
+      "value": "No pesticide license, just want to do it myself.",
+      "decision_relevant": false,
+      "description": "None of the homeowner-appropriate triclopyr/glyphosate products here carry a Restricted Use designation, so licensing doesn't change the recommendation."
+    },
+    {
+      "name": "yard_size",
+      "value": "Yard's about half an acre.",
+      "decision_relevant": false,
+      "description": "Background color that doesn't change which treatment class applies here."
+    }
+  ],
+  "treatment_classes": {
+    "acceptable": [
+      "Cut-stump treatment: cut stems within 6 inches of the ground and immediately (within a few minutes) apply a 50% triclopyr solution to the fresh-cut stump surface, soaking it until the stump stops absorbing.",
+      "Foliar spray with a 2% triclopyr solution plus a 0.5% non-ionic surfactant, applied now in early September (within the fall window where temperatures stay at or above 65°F), keeping spray off the nearby flower bed and lawn."
+    ],
+    "suboptimal_but_safe": [
+      "Hand-pulling or cutting only the stems under about half an inch in diameter, leaving larger stems untreated for now -- effective only on the smallest stems, so this alone won't finish the job on a mixed-size hedge."
+    ],
+    "ineffective": [
+      "Cutting or mowing the whole hedge back with no herbicide follow-up on any of the stems -- privet resprouts vigorously and root-suckers from any surviving root tissue."
+    ],
+    "harmful": [
+      "A broadcast, non-selective glyphosate foliar spray applied over the whole hedge without regard to the adjacent flower bed and lawn -- glyphosate kills any green plant it contacts, so using it this close to desirable plantings risks killing them too, where a selective triclopyr product would not.",
+      "Leaving cut branches with berries where pets or kids can reach them -- the berries and leaves are toxic and can cause vomiting, diarrhea, and other symptoms if ingested."
+    ]
+  },
+  "required_specificity_elements": [
+    "Product name and active ingredient (triclopyr, e.g. a homeowner triclopyr brush killer, or glyphosate)",
+    "Application method and rate/dilution matched to stem size (50% triclopyr for cut-stump vs. 2% triclopyr + surfactant for foliar)",
+    "Timing window (fall/spring at 65°F+ for foliar; cut-stump works year-round if the ground isn't frozen)",
+    "Scope/drift precaution given the adjacent flower bed and lawn",
+    "Disposal/handling caution for the toxic berries"
+  ],
+  "expected_followup_plan": "Monitor the treated area throughout the year and into the next growing season for resprouts from surviving roots and new seedlings from bird-dropped seed, which can originate well outside the treated patch since privet berries are bird-dispersed -- re-treat any new growth with the same method as it appears.",
+  "water_present": false,
+  "restricted_use_products": [],
+  "ecological_framing_notes": "Chinese privet spreads aggressively via bird-dispersed seed well beyond any treated area and by root suckers through disturbed soil, and mechanical cutting alone can worsen spread by disturbing soil — a correct answer should name a specific harm like this, not just call it an overgrown hedge."
+}

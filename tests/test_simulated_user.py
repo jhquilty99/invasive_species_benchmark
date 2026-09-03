@@ -11,7 +11,7 @@ from typing import Any
 import anthropic
 import pytest
 
-from harness.models import Card, Slot, TreatmentClass
+from harness.models import Card, NativeStatus, QuestionType, Slot, TreatmentClass
 from harness.simulated_user import (
     classify_asked_slots,
     make_simulated_user,
@@ -29,6 +29,8 @@ def _fixture_card() -> Card:
         card_id="TEST-SIM-001",
         species="Ligustrum sinense",
         true_species="Ligustrum sinense",
+        question_type=QuestionType.REMOVAL,
+        native_status=NativeStatus.INVASIVE,
         opening_message="There's a hedge of shrubs taking over the fence line, what do I do?",
         slots=[
             Slot(
@@ -64,6 +66,9 @@ def _fixture_card() -> Card:
         expected_followup_plan="Monitor for resprouts and re-treat for at least one growing season.",
         water_present=True,
         restricted_use_products=[],
+        ecological_framing_notes=(
+            "Chinese privet forms dense monocultures that shade out native shrub-layer species."
+        ),
     )
 
 
