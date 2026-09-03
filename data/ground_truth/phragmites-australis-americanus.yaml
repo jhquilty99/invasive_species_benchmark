@@ -1,0 +1,128 @@
+species: "Phragmites australis ssp. americanus"
+common_name: "Native Phragmites (American common reed)"
+failure_archetype: >
+  Native lookalike for Phragmites australis ssp. australis — subspecies confusion risks unnecessary
+  aquatic-herbicide treatment of native wetland vegetation
+jurisdiction: "NC / southeastern coastal plain"
+
+cells:
+  - category: method_selection
+    answer: >
+      Because non-native and native Phragmites are frequently confused, and North Carolina's own state
+      guidance notes the two lineages "are difficult to distinguish without genetic analysis" in
+      ambiguous cases, the first step in any Phragmites situation is a careful field ID, not treatment.
+      Several field characters combine to make the call: "the stems of invasive Phragmites are typically
+      a dull greenish-tan color, whereas native stems often display a reddish or purplish tone" —
+      matching North Carolina's own NC Forest Service guidance that "The stems of native P. australis are
+      reddish in the summer and fall." Ligule length is a second, more precise check: "Invasive ligules
+      are usually half as wide as those of native plants, measuring between 0.1–0.4 mm and 0.4–1.0 mm,
+      respectively." Leaf sheath persistence is a third: "the leaf sheaths of native Phragmites are
+      easily removed and sometimes even fall off the stems," while "the sheaths of invasive Phragmites
+      are particularly difficult to remove from dead stems," consistent with NC Forest Service's own note
+      that "Non-native P. australis tends to have leaves that persist in contrast to the native P.
+      australis that typically loses most of its leaves by fall." Once a stand is confirmed to be the
+      native lineage, no herbicide or removal is warranted — see herbicide_legality and
+      followup_secondary_invasion.
+    citation:
+      source: >
+        Great Lakes Phragmites Collaborative — "Identifying Native vs. Invasive Phragmites" blog post,
+        for the stem-color/ligule/sheath field characters; North Carolina-specific corroboration per NC
+        Forest Service (NCDA&CS) — Invasive Species Alert No. 6: Phragmites australis (Common Reed),
+        https://www.ncagr.gov/divisions/nc-forest-service/is06/download?attachment= (2010-03-01)
+      url: "https://www.greatlakesphragmites.net/blog/20180830-native-vs-invasive/"
+      publication_date: "2018-08-30"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: resprout_regrowth
+    answer: >
+      Native Phragmites does not form the aggressive monocultures the introduced lineage does: "Invasive
+      Phragmites is often characterized by large, tall, and extremely dense monoculture stands that
+      prevent sunlight from reaching other species and effectively crowds them out... Native Phragmites
+      stands are far less robust, and usually appear as stems scattered throughout a relatively
+      biodiverse wetland community." A peer-reviewed review of native Phragmites ecology confirms the
+      same pattern nationally: native stands "tend to grow more sparsely with an admixture of other
+      plants, compared with Old World Phragmites." There is no resprouting problem to manage here in the
+      first place, because no cutting or herbicide treatment of the native lineage is warranted.
+    citation:
+      source: >
+        Great Lakes Phragmites Collaborative — "Identifying Native vs. Invasive Phragmites"; growth-habit
+        corroboration per Kiviat, E. — "Ecosystem services of Phragmites in North America with emphasis
+        on habitat functions" (AoB Plants, 2013, DOI: 10.1093/aobpla/plt008)
+      url: "https://www.greatlakesphragmites.net/blog/20180830-native-vs-invasive/"
+      publication_date: "2018-08-30"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: timing_windows
+    answer: >
+      The most reliable field season for the stem-color and leaf-persistence checks above is
+      mid-to-late summer through fall, when North Carolina's own guidance places the diagnostic colors
+      and leaf drop: "The stems of native P. australis are reddish in the summer and fall," while
+      non-native stands "tend to have leaves that persist in contrast to the native P. australis that
+      typically loses most of its leaves by fall." There is no herbicide timing window to plan around
+      here, because — unlike the introduced lineage's mid-summer-to-fall glyphosate application window —
+      no herbicide application is warranted once the stand is confirmed native.
+    citation:
+      source: "NC Forest Service (NCDA&CS) — Invasive Species Alert No. 6: Phragmites australis (Common Reed)"
+      url: "https://www.ncagr.gov/divisions/nc-forest-service/is06/download?attachment="
+      publication_date: "2010-03-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: herbicide_legality
+    answer: >
+      No herbicide is warranted against a confirmed stand of native Phragmites. The risk runs the other
+      direction from the introduced lineage's case: because native Phragmites grows in the same wetland
+      and ditch-margin habitat as the introduced lineage, an aquatic-labeled glyphosate product like
+      AquaMaster carries the same legal and environmental constraints regardless of which lineage it's
+      sprayed on — the label's aquatic-use restriction that "a nonionic surfactant that is labeled for
+      use with herbicides and approved for direct application to bodies of water must be used," and its
+      oxygen-depletion mitigation steps, apply independent of whether the target plant should have been
+      treated at all. Treating a misidentified native stand does not relax any of those label
+      requirements — it just means the label's precautions were followed against the wrong target, which
+      is itself the definition of a false-positive treatment.
+    citation:
+      source: "Greenbook (Bayer CropScience) — AquaMaster Herbicide Complete Directions for Use label (EPA Reg. No. 524-343)"
+      url: "https://assets.greenbook.net/15-15-32-28-09-2022-AquaMaster_-_label.pdf"
+      publication_date: "2020-10-01"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: followup_secondary_invasion
+    answer: >
+      Far from being a spread risk, native Phragmites is itself a conservation concern in parts of its
+      range: a peer-reviewed review found that "Native Phragmites, contrary to many published statements,
+      as well as North American native Phragmites, provide valuable ecosystem services including products
+      for human use and habitat functions for other organisms," and warned that specialized natural
+      enemies used to control the invasive lineage "are likely to switch to native Phragmites" — a real
+      biodiversity risk illustrated by "the recent description of a new species of fly from native
+      Phragmites in New York" that depends on it. No monitoring for spread is needed for the native
+      lineage — the appropriate follow-up, if any, is confirming the identification (e.g., with a local
+      extension office) before any control action is taken against a Phragmites stand at all, given how
+      easily the two lineages are confused.
+    citation:
+      source: >
+        Kiviat, E. — "Ecosystem services of Phragmites in North America with emphasis on habitat
+        functions" (AoB Plants, 2013, DOI: 10.1093/aobpla/plt008)
+      url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC4104640/"
+      publication_date: "2013-02-18"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: disposal_nontarget_risk
+    answer: >
+      No removal or disposal is warranted for a confirmed native Phragmites stand, so this category is
+      moot in the ordinary sense. The relevant risk sits upstream of disposal: killing any large stand of
+      Phragmites (native or introduced) in or near water risks oxygen depletion from decomposing plant
+      material — "Killing aquatic weeds can result in depletion or loss of oxygen in the water due to
+      decomposition of dead plant material. This oxygen loss can cause fish suffocation" — which is
+      exactly why misidentifying and unnecessarily treating a native stand carries a real ecological cost
+      beyond the wasted effort, not just a wrongly-spent afternoon.
+    citation:
+      source: "Greenbook (Bayer CropScience) — AquaMaster Herbicide Complete Directions for Use label (EPA Reg. No. 524-343)"
+      url: "https://assets.greenbook.net/15-15-32-28-09-2022-AquaMaster_-_label.pdf"
+      publication_date: "2020-10-01"
+    jurisdiction_range:
+      flagged: false
+      note: null

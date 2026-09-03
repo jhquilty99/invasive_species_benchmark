@@ -29,7 +29,13 @@ from langfuse.api.core.api_error import ApiError
 from langfuse.api.score_configs.types.score_configs import ScoreConfigs
 
 from harness.config import Settings
-from harness.models import Card, GateID, QualityDimension
+from harness.models import (
+    _REMOVAL_ONLY_FIELDS,
+    Card,
+    GateID,
+    QualityDimension,
+    QuestionType,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -165,16 +171,25 @@ def build_dataset_item_input(card: Card) -> dict[str, Any]:
 
 
 def build_dataset_item_expected_output(card: Card) -> dict[str, Any]:
-    """`expected_output`: the ground truth a judge scores model output against."""
+    """`expected_output`: the ground truth a judge scores model output against.
+
+    Field set is `question_type`-conditional, matching `Card` itself (`cards/SCHEMA.md`): a
+    `removal` card's expected_output carries `treatment_classes` and its four siblings; an
+    `introduction` card's carries `introduction_classes` instead; an `identification` card's
+    carries neither. `ecological_framing_notes` (Q6) is always included.
+    """
     dumped = card.model_dump(mode="json")
-    return {
+    result: dict[str, Any] = {
         "true_species": dumped["true_species"],
-        "treatment_classes": dumped["treatment_classes"],
-        "required_specificity_elements": dumped["required_specificity_elements"],
-        "expected_followup_plan": dumped["expected_followup_plan"],
-        "water_present": dumped["water_present"],
-        "restricted_use_products": dumped["restricted_use_products"],
+        "question_type": dumped["question_type"],
+        "native_status": dumped["native_status"],
+        "ecological_framing_notes": dumped["ecological_framing_notes"],
     }
+    if card.question_type == QuestionType.REMOVAL:
+        result.update({field: dumped[field] for field in _REMOVAL_ONLY_FIELDS})
+    elif card.question_type == QuestionType.INTRODUCTION:
+        result["introduction_classes"] = dumped["introduction_classes"]
+    return result
 
 
 def upsert_card_dataset_item(

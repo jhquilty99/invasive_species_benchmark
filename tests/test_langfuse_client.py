@@ -39,7 +39,7 @@ from harness.langfuse_client import (
     start_dataset_run,
     upsert_card_dataset_item,
 )
-from harness.models import Card, Slot, TreatmentClass
+from harness.models import Card, NativeStatus, QuestionType, Slot, TreatmentClass
 
 
 def _settings(**overrides: str) -> Settings:
@@ -60,6 +60,8 @@ def _card() -> Card:
         card_id="TEST-001",
         species="Ailanthus altissima",
         true_species="Ailanthus altissima",
+        question_type=QuestionType.REMOVAL,
+        native_status=NativeStatus.INVASIVE,
         opening_message="There's a tall weedy tree by my fence, what should I do?",
         slots=[
             Slot(
@@ -77,6 +79,9 @@ def _card() -> Card:
         expected_followup_plan="Monitor for resprouts, re-treat foliar in following season.",
         water_present=False,
         restricted_use_products=[],
+        ecological_framing_notes=(
+            "Tree-of-heaven is allelopathic and outcompetes native trees for light and root space."
+        ),
     )
 
 
@@ -208,6 +213,9 @@ def test_build_dataset_item_expected_output_carries_ground_truth() -> None:
     result = build_dataset_item_expected_output(card)
 
     assert result["true_species"] == card.true_species
+    assert result["question_type"] == "removal"
+    assert result["native_status"] == "invasive"
+    assert result["ecological_framing_notes"] == card.ecological_framing_notes
     assert result["treatment_classes"] == {
         "acceptable": ["Cut-stump with triclopyr"],
         "harmful": ["Mowing repeatedly with no herbicide"],
@@ -216,6 +224,7 @@ def test_build_dataset_item_expected_output_carries_ground_truth() -> None:
     assert result["expected_followup_plan"] == card.expected_followup_plan
     assert result["water_present"] is False
     assert result["restricted_use_products"] == []
+    assert "introduction_classes" not in result
 
 
 # --- dataset create-or-get ---------------------------------------------------------

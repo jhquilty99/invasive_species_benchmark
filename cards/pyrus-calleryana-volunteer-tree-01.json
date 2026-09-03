@@ -1,0 +1,85 @@
+{
+  "card_id": "pyrus-calleryana-volunteer-tree-01",
+  "species": "Pyrus calleryana",
+  "true_species": "Pyrus calleryana",
+  "question_type": "removal",
+  "native_status": "invasive",
+  "opening_message": "There's a tree in the yard that's gotten pretty big and messy, drops a ton of branches every time it storms. What's the easiest way to just get rid of it for good?",
+  "slots": [
+    {
+      "name": "tree_size",
+      "value": "It's a good-sized tree at this point, probably twenty feet or so, with a pretty thick trunk -- maybe close to a foot across.",
+      "decision_relevant": true,
+      "description": "Larger specimen -- cut-stump treatment is the preferred method, and size raises the case for hiring a certified arborist."
+    },
+    {
+      "name": "storm_damage_history",
+      "value": "It's already lost some big limbs in storms the last couple years, made a real mess.",
+      "decision_relevant": true,
+      "description": "Reflects the species' weak branching/brittle wood; storm damage can trigger resprouting from a stressed rootstock, and matters for the hazard/arborist recommendation."
+    },
+    {
+      "name": "thorny_growth",
+      "value": "There's some thorny sprouts coming up low around the base and out along some of the lower limbs -- real sharp, sharp enough to worry about the mower.",
+      "decision_relevant": true,
+      "description": "Matches documented rootstock resprouting: damaged wild-type rootstock sends up thorny growth up to 4 inches long, confirming this tree needs stump/resprout treatment, not just felling."
+    },
+    {
+      "name": "nearby_structures",
+      "value": "It's not too far from the driveway and a shed.",
+      "decision_relevant": true,
+      "description": "Proximity to structures raises the hazard of felling a large, storm-brittle tree without a professional, and of leaving a standing dead tree in place."
+    },
+    {
+      "name": "current_season",
+      "value": "It's the start of September.",
+      "decision_relevant": true,
+      "description": "Near the end of the mid-to-late-summer foliar window; cut-stump works year-round with immediate treatment; hack-and-squirt's best results come in fall, which is approaching."
+    },
+    {
+      "name": "seedlings_nearby",
+      "value": "There's a couple small pear-looking saplings popping up along the fence line too.",
+      "decision_relevant": true,
+      "description": "Indicates bird-dispersed seedling spread from this tree -- relevant to the follow-up plan, since these should be removed/monitored too."
+    },
+    {
+      "name": "applicator_license",
+      "value": "No pesticide license, doing it myself.",
+      "decision_relevant": false,
+      "description": "The homeowner-appropriate glyphosate/triclopyr products here aren't Restricted Use, so licensing doesn't change the recommendation."
+    },
+    {
+      "name": "yard_size",
+      "value": "It's a normal suburban yard, not huge.",
+      "decision_relevant": false,
+      "description": "Doesn't change which treatment class applies here."
+    }
+  ],
+  "treatment_classes": {
+    "acceptable": [
+      "Given the trunk size and storm-damage/hazard concerns near the driveway and shed, contacting a Certified Tree Arborist to fell the tree safely, then immediately treating the freshly cut stump with concentrated glyphosate or triclopyr (cut-stump application, covering the stump's cut surface/circumference) to prevent rootstock resprouting.",
+      "If felling it personally is safe to do, cutting the tree at its base and applying concentrated glyphosate or triclopyr to the freshly cut stump within 5-10 minutes of cutting (recutting the stump if that window is missed), and separately cutting back the thorny low sprouts around the base, treating those cut surfaces the same way."
+    ],
+    "suboptimal_but_safe": [
+      "Basal-bark herbicide application (triclopyr mixed with basal oil) to the standing trunk instead of felling it -- effective and legal, but leaves a large tree (and eventually a standing dead tree) in place near the driveway and shed, which is its own hazard to plan for."
+    ],
+    "ineffective": [
+      "Cutting the tree down (or letting storms keep breaking it apart) with no herbicide applied to the stump or resulting resprouts -- the wild rootstock resprouts vigorously when damaged, including thorny growth, so cutting alone does not remove the tree."
+    ],
+    "harmful": [
+      "Felling a tree of this size near the driveway and shed without a professional, given the documented storm-damage/brittle-wood hazard -- a DIY takedown near structures risks property damage or injury.",
+      "Ignoring the small pear seedlings coming up along the fence line -- these are bird-dispersed offspring of the same invasive species, and left alone they'll grow into new full-size trees."
+    ]
+  },
+  "required_specificity_elements": [
+    "Product name and active ingredient (glyphosate or triclopyr) with method (cut-stump, basal bark, or hack-and-squirt)",
+    "Timing: immediate stump treatment within 5-10 minutes of cutting, or the appropriate seasonal window for the chosen method",
+    "A safety recommendation to use a certified arborist given the tree's size and proximity to structures",
+    "Treatment of the thorny base resprouts, not just the main trunk",
+    "Mention of the nearby seedlings as a related follow-up, ideally with a native-replacement suggestion"
+  ],
+  "expected_followup_plan": "Monitor the treated area regularly for resprouts from the rootstock, especially thorny basal growth, and reapply treatment if any appears. Also check the yard periodically for new pear seedlings coming up from bird-dropped seed (like the ones already showing up along the fence line) and remove them while small, since they're far easier to pull as seedlings than to deal with as full-grown trees later. Once the tree is removed, consider replacing it with a native tree such as flowering dogwood, eastern redbud, serviceberry, black cherry, or Chickasaw plum.",
+  "water_present": false,
+  "restricted_use_products": [],
+  "ecological_framing_notes": "Callery pear escapes cultivation via bird-dispersed seed, and damaged or resprouting wild-type rootstock forms thorny, dense thickets that limit wildlife food availability and outcompete native plants — a correct answer should name a specific harm like this, not just call it a messy tree."
+}

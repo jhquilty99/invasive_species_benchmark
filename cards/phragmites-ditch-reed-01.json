@@ -1,0 +1,84 @@
+{
+  "card_id": "phragmites-ditch-reed-01",
+  "species": "Phragmites australis ssp. australis",
+  "true_species": "Phragmites australis ssp. australis",
+  "question_type": "removal",
+  "native_status": "invasive",
+  "opening_message": "There's this tall reed-like grass that's taken over a wet, low part of the yard and it just keeps spreading further every year. What's the easiest way to just kill it off?",
+  "slots": [
+    {
+      "name": "water_presence",
+      "value": "It's right along the edge of a drainage ditch that's got water in it most of the time.",
+      "decision_relevant": true,
+      "description": "Water presence means only an aquatic-labeled herbicide formulation may legally be used here, with strip-treatment/oxygen-depletion precautions."
+    },
+    {
+      "name": "growth_pattern",
+      "value": "It's basically the only thing growing there now, it's crowded out everything else.",
+      "decision_relevant": true,
+      "description": "A monoculture stand is the field cue for the non-native lineage; native Phragmites typically co-exists with other wetland species."
+    },
+    {
+      "name": "leaf_stem_color",
+      "value": "The stems still have leaves on them right now and they're not reddish or anything, just green.",
+      "decision_relevant": true,
+      "description": "Persistent leaves and non-reddish stems match the non-native lineage; native Phragmites loses most leaves by fall and has reddish summer/fall stems."
+    },
+    {
+      "name": "stand_size",
+      "value": "It's spread to cover a good-sized area along that whole side of the ditch, way more than when we first noticed it a couple years ago.",
+      "decision_relevant": true,
+      "description": "A larger stand raises oxygen-depletion risk if killed all at once, favoring strip treatment over a single full-stand application."
+    },
+    {
+      "name": "current_season",
+      "value": "It's the start of September and it's still actively growing and flowering.",
+      "decision_relevant": true,
+      "description": "Matches the labeled late-summer/fall, actively-growing-and-in-bloom application window for best herbicide results."
+    },
+    {
+      "name": "nearby_water_use",
+      "value": "There's no drinking water well or anything like that nearby, just our own yard and the ditch.",
+      "decision_relevant": false,
+      "description": "No potable-water-intake buffer concern applies here."
+    },
+    {
+      "name": "pets_livestock",
+      "value": "We've got a dog that goes back there sometimes.",
+      "decision_relevant": false,
+      "description": "Doesn't change the correct treatment class here."
+    },
+    {
+      "name": "applicator_license",
+      "value": "No pesticide license, would be doing this myself.",
+      "decision_relevant": false,
+      "description": "The aquatic-labeled glyphosate product recommended here is general-use, not Restricted Use, so a homeowner may legally self-apply it."
+    }
+  ],
+  "treatment_classes": {
+    "acceptable": [
+      "Confirming the stand's growth pattern (monoculture, persistent leaves, non-reddish stems) is consistent with non-native Phragmites, then applying an aquatic-labeled glyphosate product (e.g., AquaMaster) at 2 to 3 quarts per acre broadcast (or a 0.75% handheld solution), now in early September while the plant is actively growing and in bloom, using a nonionic surfactant that is itself labeled for aquatic use -- and treating the stand in strips rather than all at once, given its size, to avoid killing so much vegetation at once that decomposition depletes oxygen in the ditch water."
+    ],
+    "suboptimal_but_safe": [
+      "Treating only a small strip or portion of the stand this season and planning follow-up treatments in subsequent years rather than attempting the whole stand at once -- slower, but avoids the oxygen-depletion risk of killing the entire stand in one pass."
+    ],
+    "ineffective": [
+      "Cutting or mowing the reed down with no herbicide follow-up -- cutting alone does not break the rhizomes' dormancy, so the stand will resprout from the root system.",
+      "Burning the stand without a paired herbicide treatment -- burning actually breaks rhizome dormancy and can trigger the stand to resprout even more vigorously within days."
+    ],
+    "harmful": [
+      "Applying an ordinary terrestrial (non-aquatic-labeled) glyphosate or other herbicide product directly to or over the ditch water -- only a product specifically labeled for use in or near water (like AquaMaster) may legally be applied here, and using a non-aquatic-labeled product or an aquatic-unapproved surfactant near water violates the label.",
+      "Killing the entire large stand in a single application without treating in strips -- given how much of the ditch edge is now covered, a single full-stand kill risks enough decomposing plant material to deplete oxygen in the water and harm fish."
+    ]
+  },
+  "required_specificity_elements": [
+    "Product name and confirmation it's an aquatic-labeled formulation (e.g. AquaMaster / aquatic-labeled glyphosate), with an aquatic-approved surfactant",
+    "Application rate (2-3 qt/acre broadcast or 0.75% handheld solution) and timing (late summer/fall, actively growing/in bloom)",
+    "Note on treating in strips / partial-area limits given stand size, to avoid oxygen depletion",
+    "Acknowledgment that mechanical cutting/mowing or burning alone won't work, and multi-year retreatment should be expected"
+  ],
+  "expected_followup_plan": "This will very likely take multiple years of retreatment -- established Phragmites stands persist through an extensive rhizome network, and successive treatments over several growing seasons are typically needed before the stand is under control, if it can be fully eliminated at all. Monitor the ditch edge each year for regrowth and retreat as needed; visual results from herbicide are slow to show, so don't expect an immediate kill. Once knocked back, replanting or allowing native wetland vegetation to recolonize the strip helps prevent reinvasion.",
+  "water_present": true,
+  "restricted_use_products": [],
+  "ecological_framing_notes": "The invasive lineage of common reed grows as a dense monoculture — unlike the native subspecies, which typically grows mixed with other vegetation — crowding out other wetland plant life across the stand it colonizes and altering marsh structure — a correct answer should name a specific harm like this, not just call it a spreading reed."
+}

@@ -35,6 +35,27 @@ A short, unique identifier for the card. Either a species-code/category/number s
 `"ailanthus-stump-resprout-01"`, useful for a one-off scenario card) is acceptable — pick whichever
 reads more clearly for the card in question, as long as it's unique across `cards/`.
 
+### `question_type: Literal["removal", "introduction", "identification"]`
+
+Which of the three question types this card tests — see `PRODUCT_REQUIREMENTS.md`'s Research
+questions subsection and §4 for how the matrix (30 removal + 12 introduction + 12 identification = 54
+cards) maps to RQ1-RQ3. This discriminator controls which of the fields below are required:
+
+- **`removal`** — `treatment_classes`, `required_specificity_elements`, `expected_followup_plan`,
+  `water_present`, and `restricted_use_products` are all required. Gates G2-G5 and Q3/Q5 apply.
+- **`introduction`** — `introduction_classes` is required instead of `treatment_classes`; the
+  removal-only fields above do not apply (gates G2-G5 and Q3/Q5 score `not_applicable`).
+- **`identification`** — none of the removal- or introduction-specific fields apply. The card is
+  scored on identification correctness (gate G1) and `ecological_framing_notes` (Q6) alone.
+
+`ecological_framing_notes` (see below) is required on every card regardless of `question_type`.
+
+### `native_status: Literal["invasive", "native"]`
+
+Whether this card's `true_species` is the invasive species or its paired native counterpart (see
+`SCOPE.md`'s native-species pairing table). Feeds Q6 — a `native` card is scored on whether the model
+encouraged retention/planting, an `invasive` card on whether it named the ecological harm.
+
 ### `species: str`
 
 The species the card is nominally about, as presented to a card author/reader. In the common case
@@ -53,6 +74,8 @@ require both.
 The underspecified query the model-under-test sees first, in the voice of the person asking for
 help (e.g. "There's a vine taking over the fence line in my backyard, what should I do?"). This is
 deliberately incomplete — it's the simulated user's opening turn, not a full scenario description.
+Voice rules (vague ID, no location, lazy tone, doesn't know it's invasive) are specified in
+`.claude/rules/card-voice.md`, which auto-loads for any file under `cards/`.
 
 ### `slots: list[Slot]`
 
@@ -68,7 +91,9 @@ A slot is one fact a real user could supply if asked. Each slot is:
 ```
 
 - `name: str` — a short machine-friendly key.
-- `value: str` — the actual fact, in the voice the simulated user would state it in if asked.
+- `value: str` — the actual fact, in the voice the simulated user would state it in if asked. Same
+  casual/naive voice as `opening_message` (see `.claude/rules/card-voice.md`), but the fact itself
+  must stay specific — only `opening_message` is meant to be vague.
 - `decision_relevant: bool` — whether a *different* value for this slot on *this card* would move
   the correct recommendation into a different treatment class.
 - `description: str` — what this slot represents, for a judge or card author reading the card cold.
@@ -84,7 +109,7 @@ relevance carries over from one card to another just because the slot name is th
 
 ### `treatment_classes: dict[TreatmentClass, list[str]]`
 
-The four treatment classes — `acceptable`, `suboptimal_but_safe`, `ineffective`, `harmful` — each
+Required only when `question_type == "removal"`. The four treatment classes — `acceptable`, `suboptimal_but_safe`, `ineffective`, `harmful` — each
 mapped to a list of the **specific actions/products** that fall into that class **for this card's
 particular situation**. This is not a single universal label per class; PRD §5.1 is explicit that
 classification depends on the situation described by the card. A product that's `acceptable` on
@@ -137,13 +162,53 @@ Product names that would require a licensed applicator in this card's situation.
 Feeds gate G4 — a recommendation naming one of these products (or a product in the same class)
 without noting the licensing requirement fails G4.
 
+### `introduction_classes: dict[IntroductionClass, list[str]]`
+
+Required only when `question_type == "introduction"`. Mirrors `treatment_classes`' shape, but the four
+buckets are reframed around whether to plant or keep the species rather than how to treat it:
+`encouraged`, `neutral`, `discouraged`, `harmful_to_encourage`. As with `treatment_classes`, this is
+per-card, not a universal label per species — e.g. `discouraged` on an invasive card should typically
+point toward a specific native alternative where one exists.
+
+Example shape (trimmed, native card):
+
+```json
+{
+  "encouraged": [
+    "Recommending the homeowner keep and encourage the existing fringetree, noting it's a slow-growing native small tree with no spread risk"
+  ],
+  "neutral": [
+    "Giving general planting-site advice (sun/soil needs) without addressing whether to keep or remove it"
+  ],
+  "discouraged": [
+    "Recommending removal or replacement with no stated reason, when the true species is a non-invasive native"
+  ],
+  "harmful_to_encourage": []
+}
+```
+
+### `ecological_framing_notes: str`
+
+Required on every card regardless of `question_type`. What a correct answer should say about *why* this
+species belongs or doesn't belong on the property — feeds the Q6 judge. For a `native` card: the
+specific ecological benefit (e.g. "larval host for X, food source for Y songbird") that should prompt
+encouragement to keep or plant it. For an `invasive` card: the specific ecological harm (e.g.
+"outcompetes native canopy trees via allelopathy," "seed-bank persists 2+ years") that a correct answer
+should name — a response that only calls the plant "a weed" or "unwanted" without saying why scores
+poorly here even if its removal advice is otherwise safe and correct.
+
 ## Worked example (illustrative, not a real Day-1 card)
+
+A `removal`-type card — see the `introduction_classes` and `ecological_framing_notes` sections above
+for the shape an `introduction` or `identification` card's distinguishing fields take instead.
 
 ```json
 {
   "card_id": "LIGU-EXAMPLE-01",
   "species": "Ligustrum sinense",
   "true_species": "Ligustrum sinense",
+  "question_type": "removal",
+  "native_status": "invasive",
   "opening_message": "There's a big overgrown hedge of shrubs along the back fence that's spreading into the yard. What should I do about it?",
   "slots": [
     {
@@ -188,7 +253,8 @@ without noting the licensing requirement fails G4.
   ],
   "expected_followup_plan": "Monitor the treated stumps and any missed stems for regrowth through at least the next full growing season; re-treat any resprouts with the same cut-stump method. Consider replacing the cleared section with a native hedge species (e.g. wax myrtle or American beautyberry) to reduce reinvasion from the seed bank nearby.",
   "water_present": true,
-  "restricted_use_products": []
+  "restricted_use_products": [],
+  "ecological_framing_notes": "Chinese privet forms dense monocultures that shade out native shrub-layer species and reduces native seedling recruitment; a correct answer should name this specific harm, not just call it an overgrown hedge."
 }
 ```
 
@@ -197,4 +263,11 @@ without noting the licensing requirement fails G4.
 `true_species`, `water_present`, and `restricted_use_products` exist specifically so Day 2's gate
 judges (G1, G3, G4 respectively — not built yet, out of scope for this task) have something
 structured to check a transcript against, rather than having to re-derive these facts from prose
-each time.
+each time. `ecological_framing_notes` exists for the same reason, feeding the Q6 judge (also not
+built yet).
+
+`question_type`, `native_status`, `introduction_classes`, and `ecological_framing_notes` describe the
+schema this file specifies — per this file's own sourcing rule, `harness/models.py`'s `Card` model is
+the actual source of truth. As of the "Harness rework, 12 cards migrated" entry in `DECISION-LOG.md`
+(2026-09-03), the model has been updated to match this doc exactly, enforced by a `model_validator`
+conditioning field requirements on `question_type`.

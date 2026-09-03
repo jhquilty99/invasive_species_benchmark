@@ -1,0 +1,53 @@
+{
+  "card_id": "chionanthus-virginicus-lookalike-01",
+  "species": "Chionanthus virginicus",
+  "true_species": "Chionanthus virginicus",
+  "question_type": "identification",
+  "native_status": "native",
+  "opening_message": "There's a shrub or small tree along the edge of my yard that's gotten pretty big. Does anyone know what kind of plant this actually is?",
+  "slots": [
+    {
+      "name": "leaf_size_shape",
+      "value": "The leaves are pretty big, maybe six or seven inches long, kind of oval-ish, and they're arranged directly across from each other on the stem, not staggered.",
+      "decision_relevant": true,
+      "description": "Large opposite leaves (roughly 4-8 inches) match fringetree, not Chinese privet, whose opposite leaves only run 1-2 inches long."
+    },
+    {
+      "name": "leaf_persistence_season",
+      "value": "It loses all its leaves in the winter -- right now there's nothing on it at all.",
+      "decision_relevant": true,
+      "description": "Fully deciduous habit matches fringetree; Chinese privet in this region is evergreen or semi-evergreen and keeps most of its leaves through winter."
+    },
+    {
+      "name": "bloom_appearance",
+      "value": "Back in the spring it had these big, wispy white flower clusters hanging down, almost like white fringe or a cloud, and they smelled pretty nice.",
+      "decision_relevant": true,
+      "description": "Large (4-8in), fragrant, drooping fringe-like white flower panicles match fringetree; Chinese privet's flowers are under an inch long on 2-3in panicles and smell unpleasant (\"fetid\"), not fragrant."
+    },
+    {
+      "name": "bark_texture",
+      "value": "The bark's kind of grayish-brown and flaky, breaks off in little thin flakes if you pick at it.",
+      "decision_relevant": true,
+      "description": "Thin, flattened bark broken into small plates matches documented fringetree bark texture, distinct from privet's smoother bark."
+    },
+    {
+      "name": "growth_rate",
+      "value": "It hasn't really gotten much bigger the past few years, grows pretty slow.",
+      "decision_relevant": true,
+      "description": "Slow growth (roughly 6-10 inches/year) and no aggressive spreading matches fringetree; Chinese privet resprouts vigorously and spreads by root suckers and bird-dispersed seed."
+    },
+    {
+      "name": "nearby_plants",
+      "value": "There's a fence line right behind it and a couple other bushes nearby that look different from this one.",
+      "decision_relevant": false,
+      "description": "Background color about the surrounding planting -- doesn't change the correct identification or framing for this plant."
+    },
+    {
+      "name": "ownership_duration",
+      "value": "Only moved in a year or two ago, so not totally sure how long it's been there.",
+      "decision_relevant": false,
+      "description": "How long the homeowner has owned the property -- doesn't change which identification or framing applies here."
+    }
+  ],
+  "ecological_framing_notes": "Fringetree is a native ornamental tree valued by songbirds and pollinators for its fruit and fragrant flowers, with no invasive designation or control recommendation from NC State Extension. A correct answer should identify it as fringetree (not Chinese privet), note that no removal is needed, and ideally encourage keeping it rather than merely declining to recommend treatment."
+}

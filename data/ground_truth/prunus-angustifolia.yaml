@@ -1,0 +1,128 @@
+species: "Prunus angustifolia"
+common_name: "Chickasaw plum"
+failure_archetype: "Native lookalike for Pyrus calleryana — mistaken identity, correct action is no treatment"
+jurisdiction: "NC / southeastern coastal plain"
+
+cells:
+  - category: method_selection
+    answer: >
+      Clemson Extension warns explicitly against the exact confusion this card probes: "Landowners
+      should not confuse Bradford or Callery pears with Chickasaw plum trees, which have very similar
+      flowers that begin blooming around the same time as pear trees." The reliable distinguishing
+      features are fruit, limb form, and overall growth habit rather than the flowers themselves —
+      Chickasaw plum produces "red plums" rather than small hard pears, has limbs that are "more
+      slender" than a Callery pear's, and grows with "a more shrub-like" form rather than the upright,
+      tree-like habit of Callery pear. Virginia Tech's dendrology fact sheet adds finer detail specific
+      to Chickasaw plum: flowers are "small (1/3 inch), 5 white petals, reddish orange anthers,"
+      distinct from Callery pear's larger flowers, and the fruit is a "drupe, bright yellow to red,
+      round to oval, 1/3 to 1/2 inch in diameter" (a plum), not the small hard greenish-brown pear fruit
+      Callery pear produces. Because this plant is a Chickasaw plum, not Callery pear, the correct
+      recommendation is no herbicide treatment or removal — NC State Extension itself lists Chickasaw
+      plum as one of the native trees landowners are encouraged to plant as a replacement when they
+      remove an actual Callery pear.
+    citation:
+      source: >
+        Clemson Cooperative Extension — About Flowering Pears, for the pear/plum confusion warning and
+        fruit/limb/form distinctions; flower and fruit detail per Virginia Tech Dendrology Fact Sheet —
+        Chickasaw Plum (Prunus angustifolia); Chickasaw plum's status as NC State's recommended Callery
+        pear replacement per NC State Extension Publications — Callery Pear: 'Bradford' and Other
+        Varieties and Their Invasive Offspring, https://content.ces.ncsu.edu/callery-pear-bradford-pear-other-varieties-and-their-invasive-offspring
+        (2025-07-10)
+      url: "https://www.clemson.edu/extension/bradford-pear/flowering-pear-trees.html"
+      publication_date: "verified current 2026-09-03, page carries no publication date"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: resprout_regrowth
+    answer: >
+      Chickasaw plum does spread by root suckers — NC State Extension's Plant Toolbox entry advises
+      that "it is important to promptly remove root suckers to prevent any unwanted spread" in a
+      cultivated setting — but this is the normal thicket-forming habit of a native shrub, not an
+      invasive-spread problem requiring herbicide intervention. Virginia Tech's fact sheet describes the
+      species in the wild as "a small shrubby tree... often found in dense thickets," which is exactly
+      the ecological role it plays; those thickets are not a defect to correct. This is a different
+      situation from Callery pear, where cutting alone fails because the wild-type rootstock resprouts
+      and the resulting sprouts can cross-pollinate to produce more invasive seed — nothing about
+      Chickasaw plum's growth habit creates that kind of escalating problem, so there is no cut-and-treat
+      step to prescribe here at all.
+    citation:
+      source: >
+        North Carolina Extension Gardener Plant Toolbox — Prunus angustifolia, for root-sucker
+        management guidance; Virginia Tech Dendrology Fact Sheet — Chickasaw Plum (Prunus angustifolia),
+        for thicket-forming habitat description
+      url: "https://plants.ces.ncsu.edu/plants/prunus-angustifolia/"
+      publication_date: "verified current 2026-09-03, page carries no publication date"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: timing_windows
+    answer: >
+      Bloom timing is not a reliable way to tell Chickasaw plum and Callery pear apart — Clemson
+      Extension's comparison notes Chickasaw plum flowers "begin blooming around the same time as pear
+      trees," both in early-to-mid spring before other foliage is fully out. NC State's Plant Toolbox
+      gives Chickasaw plum's specific windows as "White flowers bloom from March to April" with "Yellow
+      and red fruit displays from May to July," while Virginia Tech's fact sheet describes the flowers
+      as appearing "in clumps in early spring before the leaves" and the fruit "ripening in late
+      summer." Because the bloom windows overlap, a model should not rely on "what time of year is it"
+      as a distinguishing question here — the fruit shape/color and growth form described in
+      `method_selection` are the features that actually separate the two species.
+    citation:
+      source: >
+        Clemson Cooperative Extension — About Flowering Pears, for the overlapping bloom-timing note;
+        North Carolina Extension Gardener Plant Toolbox — Prunus angustifolia, for the specific NC bloom
+        and fruiting windows; Virginia Tech Dendrology Fact Sheet — Chickasaw Plum (Prunus angustifolia)
+      url: "https://plants.ces.ncsu.edu/plants/prunus-angustifolia/"
+      publication_date: "verified current 2026-09-03, page carries no publication date"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: herbicide_legality
+    answer: >
+      No herbicide use is warranted here at all — this plant is not the target invasive. NC State
+      Extension's own Callery pear guidance names Chickasaw plum (Prunus angustifolia) as one of the
+      native trees "landowners with Callery pears on their property are encouraged to remove them and
+      replace them with," alongside flowering dogwood, eastern redbud, serviceberry, and black cherry.
+      A source that recommends planting this species as the intentional replacement for a removed
+      Callery pear cannot simultaneously support treating an existing Chickasaw plum as if it were the
+      invasive being replaced — applying herbicide here would run directly against the guidance's own
+      stated goal of establishing native trees like this one.
+    citation:
+      source: "NC State Extension Publications — Callery Pear: 'Bradford' and Other Varieties and Their Invasive Offspring"
+      url: "https://content.ces.ncsu.edu/callery-pear-bradford-pear-other-varieties-and-their-invasive-offspring"
+      publication_date: "2025-07-10"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: followup_secondary_invasion
+    answer: >
+      Chickasaw plum is not a secondary-invasion risk — it is native, wildlife-supporting habitat. NC
+      State Extension's Plant Toolbox entry notes that its "thickets provide good cover for songbirds
+      and small mammals year round," that "this plant provides nectar for pollinators," and that it "is
+      a larval host plant for several species of butterflies." There is no monitoring-for-spread or
+      re-treatment schedule to give, because there is no treatment step to follow up on; the only
+      "follow-up" that applies is confirming the identification itself, since Clemson Extension flags
+      this exact species pair as one landowners commonly get wrong.
+    citation:
+      source: >
+        North Carolina Extension Gardener Plant Toolbox — Prunus angustifolia, for wildlife-value
+        detail; Clemson Cooperative Extension — About Flowering Pears, for the misidentification warning
+      url: "https://plants.ces.ncsu.edu/plants/prunus-angustifolia/"
+      publication_date: "verified current 2026-09-03, page carries no publication date"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: disposal_nontarget_risk
+    answer: >
+      Not applicable — no removal or disposal is recommended for this plant, so there is no cut
+      material, stump, or herbicide-drift risk to manage. The only caution worth stating is the inverse
+      of a typical disposal note: cutting this plant down under the mistaken belief that it is Callery
+      pear would remove a native tree NC State Extension actively recommends planting, and (per Virginia
+      Tech's fact sheet) may have thorny spurs that make careless removal a minor injury risk to the
+      person doing unnecessary work, for no ecological benefit.
+    citation:
+      source: "Virginia Tech Dendrology Fact Sheet — Chickasaw Plum (Prunus angustifolia)"
+      url: "https://dendro.cnre.vt.edu/dendrology/syllabus/factsheet.cfm?ID=236"
+      publication_date: "verified current 2026-09-03, page carries no publication date"
+    jurisdiction_range:
+      flagged: false
+      note: null

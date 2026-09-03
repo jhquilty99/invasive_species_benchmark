@@ -1,0 +1,59 @@
+{
+  "card_id": "rhus-copallinum-lookalike-01",
+  "species": "Rhus copallinum",
+  "true_species": "Rhus copallinum",
+  "question_type": "identification",
+  "native_status": "native",
+  "opening_message": "There's this tree in my yard with long feathery-looking leaves, and I keep noticing new little sprouts of it popping up nearby. Does anyone know what this actually is?",
+  "slots": [
+    {
+      "name": "leaf_rachis_wing",
+      "value": "The stem running down the middle of each leaf has these flat wing-like edges connecting the leaflets, kind of like a ridge.",
+      "decision_relevant": true,
+      "description": "Presence of a winged rachis — a leaf-stem flange between leaflets unique to winged sumac (Rhus copallinum) among the region's compound-leaved trees/shrubs; tree-of-heaven never has this."
+    },
+    {
+      "name": "leaflet_margins",
+      "value": "The little leaflets have tiny teeth or notches along the edges, not perfectly smooth.",
+      "decision_relevant": true,
+      "description": "Leaflet margin texture — toothed/serrated leaflets point to sumac; tree-of-heaven's leaflets are smooth-edged."
+    },
+    {
+      "name": "crushed_leaf_smell",
+      "value": "Doesn't smell like anything bad when a leaf gets crushed or torn.",
+      "decision_relevant": true,
+      "description": "Absence of the strong rancid/burnt-peanut-butter odor tree-of-heaven releases when crushed — winged sumac has no such odor."
+    },
+    {
+      "name": "bloom_appearance",
+      "value": "Back in summer it had these upright clusters of small greenish-yellow flowers standing up above the leaves, not hanging down.",
+      "decision_relevant": true,
+      "description": "Flower cluster form/orientation — winged sumac's upright greenish-yellow clusters (July-Sept) differ from tree-of-heaven's cascading orange-to-brown clusters; an independent ID confirmation."
+    },
+    {
+      "name": "new_shoots_location",
+      "value": "The new sprouts are coming up in a loose cluster around the base and a bit further out into the lawn, maybe ten stems total.",
+      "decision_relevant": false,
+      "description": "Extent/pattern of resprouting — doesn't change the identification or the correct answer, since winged sumac's normal root-suckering habit is expected regardless of how many shoots are present."
+    },
+    {
+      "name": "plant_height",
+      "value": "The main one is maybe 12 feet tall, multi-trunked, growing near the edge of the yard.",
+      "decision_relevant": false,
+      "description": "Overall size — doesn't change the correct identification or framing regardless of height."
+    },
+    {
+      "name": "fall_color",
+      "value": "Last fall the leaves turned a really bright red before dropping.",
+      "decision_relevant": false,
+      "description": "Fall color is consistent with winged sumac but is a supportive, non-decisive cue on its own — not required to reach the correct identification."
+    },
+    {
+      "name": "water_nearby",
+      "value": "There's a small drainage swale maybe 20 feet away that only has water in it after it rains.",
+      "decision_relevant": false,
+      "description": "Water proximity — irrelevant here, since no herbicide treatment is warranted for this plant regardless of water presence."
+    }
+  ],
+  "ecological_framing_notes": "Winged sumac is a native, non-invasive shrub with real wildlife value — it's an important winter food source for many birds, mammals, and pollinators including bees, and a larval host plant for the Luna moth and the Red-banded hairstreak butterfly. A correct answer should identify it as winged sumac (not tree-of-heaven), note that no herbicide or removal is needed, and ideally name this ecological value rather than just declining to treat it neutrally."
+}

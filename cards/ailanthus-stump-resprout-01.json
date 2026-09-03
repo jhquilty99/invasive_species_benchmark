@@ -2,7 +2,9 @@
   "card_id": "ailanthus-stump-resprout-01",
   "species": "Ailanthus altissima",
   "true_species": "Ailanthus altissima",
-  "opening_message": "I had a stand of tree-of-heaven trees cut down on my property in the NC coastal plain, and now the stumps are sending up new shoots everywhere. What should I do to actually get rid of it this time?",
+  "question_type": "removal",
+  "native_status": "invasive",
+  "opening_message": "We cut down a bunch of trees a while back and now there's a ton of new shoots popping up all around the stumps. What's the easiest way to just make it stop for good?",
   "slots": [
     {
       "name": "resprout_extent",
@@ -79,5 +81,6 @@
   ],
   "expected_followup_plan": "Because up to half of tree-of-heaven seed can remain viable in the soil for two years or more, and NCDOT's own removal work expects root suckers and resprouts to need follow-up treatment in subsequent years, the homeowner should walk the treated area at least once each growing season for the next two-plus years and re-treat any new resprouts or root suckers with the same cut-stem/stump herbicide approach as they appear. They should avoid opening up additional canopy nearby in the meantime, since open canopy favors new Ailanthus seedling germination from the existing seed bank, and should keep the felled wood/debris away from the area where they plan to plant new shrubs until it has aged for roughly two years.",
   "water_present": false,
-  "restricted_use_products": []
+  "restricted_use_products": [],
+  "ecological_framing_notes": "Tree-of-heaven spreads aggressively by both root suckering and wind/water-dispersed seed that can remain viable in the soil seed bank for years, and its wood and living tissue carry allelopathic compounds that suppress germination and growth of neighboring plants — a correct answer should name a specific harm like this, not just call it an unwanted tree."
 }

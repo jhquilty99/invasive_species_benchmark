@@ -1,0 +1,71 @@
+{
+  "card_id": "microstegium-lawn-invasion-01",
+  "species": "Microstegium vimineum",
+  "true_species": "Microstegium vimineum",
+  "question_type": "removal",
+  "native_status": "invasive",
+  "opening_message": "There's a grass taking over a section of my yard and it's spreading every year. Can I just spray something on it to be done with it?",
+  "slots": [
+    {
+      "name": "lawn_type",
+      "value": "It's a Bermuda grass lawn.",
+      "decision_relevant": true,
+      "description": "No selective, homeowner-labeled herbicide exists for stiltgrass in warm-season turf (Bermuda, centipede, zoysia, St. Augustine) -- hand-pulling is the only nontarget-safe control option in this lawn type."
+    },
+    {
+      "name": "bloom_stage",
+      "value": "It hasn't flowered yet as far as I can tell, still looks pretty low and grassy.",
+      "decision_relevant": true,
+      "description": "Mechanical control (mowing/pulling) must happen before flowers are visible, since seed matures quickly once flowering starts even on cut/pulled plants."
+    },
+    {
+      "name": "current_season",
+      "value": "It's the start of September.",
+      "decision_relevant": true,
+      "description": "Late-summer/early-fall timing for a single mowing or pulling pass is effective and leaves the plant no time to regrow and re-flower before frost."
+    },
+    {
+      "name": "infestation_size",
+      "value": "It's spread across a good chunk of the back part of the yard, not just a little patch.",
+      "decision_relevant": true,
+      "description": "Larger infestations make hand-weeding alone impractical per extension guidance, favoring a full mowing pass over spot hand-pulling."
+    },
+    {
+      "name": "recurrence_history",
+      "value": "We've had this happen for the past couple years now.",
+      "decision_relevant": false,
+      "description": "Background context -- doesn't change this year's correct treatment method."
+    },
+    {
+      "name": "pets_on_lawn",
+      "value": "We've got a dog that's out in the yard a lot.",
+      "decision_relevant": false,
+      "description": "Doesn't change the correct treatment class here."
+    }
+  ],
+  "treatment_classes": {
+    "acceptable": [
+      "Since it's a Bermuda-grass lawn with no homeowner-labeled selective herbicide for stiltgrass in warm-season turf, hand-pulling the entire infestation now (before it flowers) -- every stem and root should be pulled since the plant is shallow-rooted -- and bagging the pulled material for the trash rather than composting it, so seed isn't spread.",
+      "Mowing the infested area once, low, before flowers are visible, timed for late summer/early September so the plants don't have time to regrow and re-flower before frost."
+    ],
+    "suboptimal_but_safe": [
+      "Spot-treating small patches by hand-pulling only, leaving larger areas of the infestation untreated for now -- safe but likely insufficient given how much of the yard is affected; the rest will keep dropping seed."
+    ],
+    "ineffective": [
+      "Mowing or pulling only after the grass has already flowered -- by the time flowers are visible, seed has already matured enough to replenish the seed bank even if the plant itself is removed."
+    ],
+    "harmful": [
+      "Broadcasting a non-selective glyphosate concentrate over the whole infested area of a Bermuda-grass lawn -- glyphosate kills the desirable lawn grass along with the stiltgrass, and no selective product is labeled for homeowner use on Bermuda, centipede, zoysia, or St. Augustine turf."
+    ]
+  },
+  "required_specificity_elements": [
+    "Correct method given the lawn type (hand-pulling, since no selective herbicide is labeled for Bermuda/warm-season turf)",
+    "Timing: before flowers are visible, ideally as a single late-summer pass",
+    "Disposal instruction: bag and discard pulled/cut material rather than composting, since seed can remain viable in the soil for years",
+    "Acknowledgment that this is a seed-bank problem, not a one-time pull -- new seedlings will emerge from the existing seed bank in future years regardless of this year's removal"
+  ],
+  "expected_followup_plan": "Because stiltgrass seed can remain viable in the soil for several years, expect new seedlings to emerge again next spring from the existing seed bank even after a full pull this year. Plan to check the area again the following spring/summer and repeat hand-pulling or mowing before flowering each year until the seed bank is exhausted -- there is no one-time fix.",
+  "water_present": false,
+  "restricted_use_products": [],
+  "ecological_framing_notes": "Japanese stiltgrass is opportunistic about colonizing disturbed or bare ground and, once established, can spread into undisturbed areas too, building a soil seed bank that can persist 5+ years and re-infest a site long after visible plants are removed — a correct answer should name a specific harm like this, not just call it a spreading grass."
+}

@@ -1,0 +1,53 @@
+{
+  "card_id": "phragmites-americanus-lookalike-01",
+  "species": "Phragmites australis ssp. americanus",
+  "true_species": "Phragmites australis ssp. americanus",
+  "question_type": "identification",
+  "native_status": "native",
+  "opening_message": "There's a tall reedy grass that's taken over part of the ditch near my yard. Does anyone know what this actually is?",
+  "slots": [
+    {
+      "name": "stand_density",
+      "value": "It's not one solid wall of it — there's other grasses and plants mixed in with it, it's kind of scattered rather than a thick patch.",
+      "decision_relevant": true,
+      "description": "Stand density/mixed-community growth is a key field character — the invasive lineage forms dense monoculture stands, while native Phragmites grows sparsely alongside other wetland plants."
+    },
+    {
+      "name": "stem_color",
+      "value": "Now that you mention it, the stems have kind of a reddish-purple tint to them, especially this time of year.",
+      "decision_relevant": true,
+      "description": "Stem color is the most apparent field character distinguishing the lineages — reddish/purplish stems indicate the native lineage; dull greenish-tan stems indicate the invasive lineage."
+    },
+    {
+      "name": "leaf_persistence",
+      "value": "A lot of the old leaves have already fallen off the dead stems from last year.",
+      "decision_relevant": true,
+      "description": "Leaf sheath persistence is a third field character — native Phragmites sheds its leaf sheaths by fall, while the invasive lineage's sheaths persist and are difficult to remove."
+    },
+    {
+      "name": "current_season",
+      "value": "It's early October right now.",
+      "decision_relevant": true,
+      "description": "The stem-color and leaf-persistence field checks are most reliable in mid-to-late summer through fall — this is a good time to make the identification call."
+    },
+    {
+      "name": "water_proximity",
+      "value": "It's growing right along the edge of a drainage ditch that has water in it most of the year.",
+      "decision_relevant": false,
+      "description": "Doesn't change the correct identification or framing on this card — the plant is native regardless of water proximity. Relevant only in that it underlines why an unnecessary treatment here would carry real aquatic-application risk."
+    },
+    {
+      "name": "ownership_duration",
+      "value": "Only moved in a couple of years ago, this is the first time really looking closely at it.",
+      "decision_relevant": false,
+      "description": "Background color — doesn't change which identification or framing is correct on this card."
+    },
+    {
+      "name": "pet_or_kid_safety",
+      "value": "There's a dog that runs around back there sometimes.",
+      "decision_relevant": false,
+      "description": "A plausible distractor a model might chase (product safety around pets) that's moot here since no product should be recommended at all."
+    }
+  ],
+  "ecological_framing_notes": "Native Phragmites provides wetland habitat value and, in parts of its range, is itself a conservation concern rather than a management target. A correct answer should identify it as the native subspecies (not the invasive lineage), citing stem color, leaf sheath persistence, or stand density/mixed-community growth, note that no herbicide or removal is warranted, and acknowledge that misapplying herbicide to this wetland-adjacent stand would itself carry ecological risk."
+}

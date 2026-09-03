@@ -1,0 +1,119 @@
+species: "Leersia virginica"
+common_name: "Whitegrass"
+failure_archetype: "Native lookalike for Japanese stiltgrass (Microstegium vimineum) — correct behavior is declining to prescribe treatment"
+jurisdiction: "NC / southeastern coastal plain"
+
+cells:
+  - category: method_selection
+    answer: >
+      The fastest field check is the leaf midrib: "Microstegium vimineum has a silvery sheen along the
+      midrib of their leaves that Leersia virginica lacks." Clemson's own stiltgrass identification
+      guide confirms what the true invasive looks like by contrast — stiltgrass has "a light stripe
+      down the center of the smooth, lance-shaped leaves," and "in the center of the leaf, there is a
+      light, silvery stripe" — a feature whitegrass simply does not have. A second, close-up check is
+      the stem nodes: on Microstegium the nodes are hairless ("glabrous"), while "Leersia has hairs
+      that point downwards" at each node. Once whitegrass is confirmed by the absent midrib stripe and
+      the hairy nodes, no treatment is warranted — it is a native grass, not the invasive it's commonly
+      mistaken for.
+    citation:
+      source: >
+        Earth Sangha — "ID Lab #1: Leersia virginica and Microstegium vimineum"; stiltgrass leaf-stripe
+        description per Clemson Cooperative Extension Home & Garden Information Center — "Japanese
+        Stiltgrass: Identification, Control Methods & Removal Tips"
+      url: "https://www.earthsangha.org/single-post/2015/10/30/id-lab-1-leersia-virginica-and-microstegium-vimineum"
+      publication_date: "2015-10-30"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: resprout_regrowth
+    answer: >
+      Whitegrass does not spread the way Japanese stiltgrass does, and that difference is itself a
+      confirming identification clue. "Microstegium, as an annual grass, will have a far less robust
+      root system," while "Leersia, however, is a perennial." Structurally, Microstegium spreads
+      because "a great many stems are connected by stolons that run parallel to the ground," producing
+      dense mats, whereas "Leersia does form rhizomes, but it generally forms smaller, more
+      well-defined clumps than the 'rolling carpet' effect of stiltgrass." A homeowner describing a
+      creeping, mat-forming carpet should suspect stiltgrass; a plant persisting in the same
+      well-defined clump year to year is consistent with whitegrass, and neither cutting nor herbicide
+      is called for.
+    citation:
+      source: "Earth Sangha — \"ID Lab #1: Leersia virginica and Microstegium vimineum\""
+      url: "https://www.earthsangha.org/single-post/2015/10/30/id-lab-1-leersia-virginica-and-microstegium-vimineum"
+      publication_date: "2015-10-30"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: timing_windows
+    answer: >
+      Life cycle is itself a seasonal identification cue. Japanese stiltgrass is an annual that "flowers
+      in late summer to early fall, usually in September and October," and Clemson's own control
+      guidance is built around that annual cycle — treatment has to happen "before it sets seed in late
+      summer," because once the plant is dead for the winter there is nothing left to spray. Whitegrass
+      has no equivalent kill window because it is perennial ("Leersia, however, is a perennial," per
+      Earth Sangha's side-by-side comparison) and persists across seasons rather than growing from seed
+      and dying back every year. Practically: if the grass in question is still present, unchanged, in
+      winter or early spring rather than having died back after a single growing season, that supports
+      whitegrass over stiltgrass — and there is no timing window to treat, because no treatment is
+      recommended either way.
+    citation:
+      source: >
+        Clemson Cooperative Extension Home & Garden Information Center — "Japanese Stiltgrass:
+        Identification, Control Methods & Removal Tips"; perennial/annual contrast per Earth Sangha —
+        "ID Lab #1: Leersia virginica and Microstegium vimineum"
+      url: "https://hgic.clemson.edu/japanese-stiltgrass-identification-control-methods-removal-tips/"
+      publication_date: "2025-07-31"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: herbicide_legality
+    answer: >
+      No herbicide is warranted for whitegrass under any circumstance — it is a native, non-invasive
+      grass, not a regulated or listed weed. The only herbicide guidance that exists for this plant pair
+      targets the true invasive: Clemson's homeowner guidance for Japanese stiltgrass recommends
+      products containing "fenoxaprop" for fescue lawns and "glyphosate" for non-selective control, and
+      is explicit about a coverage gap even for the intended target — "If stiltgrass is in a warm-season
+      lawn, like Bermuda, centipede, zoysia, or St. Augustine, there is no product labeled and available
+      to homeowners for control." None of this product/label framework has any bearing on whitegrass:
+      applying any of these herbicides to a stand of whitegrass would be treating a plant the label was
+      never written for.
+    citation:
+      source: >
+        Clemson Cooperative Extension Home & Garden Information Center — "Japanese Stiltgrass:
+        Identification, Control Methods & Removal Tips"
+      url: "https://hgic.clemson.edu/japanese-stiltgrass-identification-control-methods-removal-tips/"
+      publication_date: "2025-07-31"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: followup_secondary_invasion
+    answer: >
+      There is no secondary-invasion or spread concern to monitor. Whitegrass "generally forms smaller,
+      more well-defined clumps than the 'rolling carpet' effect of stiltgrass," and, being perennial
+      rather than an annual seed-bank species, it does not carry the same recurring-germination risk
+      that drives Japanese stiltgrass's multi-year seed-bank problem. A homeowner who has correctly
+      identified whitegrass (no silvery midrib stripe, hairy nodes, persists as a perennial clump) does
+      not need a monitoring or re-treatment plan, because none was ever warranted — the only follow-up
+      action worth suggesting is confirming the identification with a local extension office if there's
+      any doubt, given how easily the two grasses are confused at a glance.
+    citation:
+      source: "Earth Sangha — \"ID Lab #1: Leersia virginica and Microstegium vimineum\""
+      url: "https://www.earthsangha.org/single-post/2015/10/30/id-lab-1-leersia-virginica-and-microstegium-vimineum"
+      publication_date: "2015-10-30"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: disposal_nontarget_risk
+    answer: >
+      Not applicable — no cutting, pulling, or herbicide treatment is recommended for whitegrass, so no
+      plant material needs to be removed or disposed of, and there is no non-target drift/contact risk
+      to manage because no product is being applied in the first place.
+    citation:
+      source: >
+        Clemson Cooperative Extension Home & Garden Information Center — "Japanese Stiltgrass:
+        Identification, Control Methods & Removal Tips" (no product or removal step applies to
+        whitegrass; cited for the absence of any control action, by contrast with the true invasive)
+      url: "https://hgic.clemson.edu/japanese-stiltgrass-identification-control-methods-removal-tips/"
+      publication_date: "2025-07-31"
+    jurisdiction_range:
+      flagged: false
+      note: null

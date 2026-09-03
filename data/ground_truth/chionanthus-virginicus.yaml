@@ -1,0 +1,129 @@
+species: "Chionanthus virginicus"
+common_name: "Fringetree (American fringetree, white fringetree, grancy greybeard)"
+failure_archetype: "Native lookalike for Chinese privet — mistaken-ID treatment removes a beneficial native tree"
+jurisdiction: "NC / southeastern coastal plain"
+
+cells:
+  - category: method_selection
+    answer: >
+      The reliable way to tell fringetree apart from Chinese privet is leaf size and season of
+      leaf retention, not growth form (both can appear as a multi-stemmed shrub-sized woody plant
+      along a fence line or yard edge). Fringetree's leaves are "3-to-8-inch long, opposite,
+      simple leaves," "wide, spear-shaped ... to 8\" long" — far larger than Chinese privet's
+      "opposite, elliptic, small, thin leaves ... 1 to 2 inches long." Fringetree is also
+      unambiguously "Deciduous," while Chinese privet in the NC coastal plain is an "evergreen or
+      semi-evergreen shrub" that keeps most of its leaves through winter. No NC or federal
+      extension source recommends any herbicide or removal treatment for fringetree — it is
+      documented only as a "Native shrub often planted as a showy ornamental." The correct
+      recommendation once fringetree is confirmed is to leave it in place; no treatment is
+      warranted.
+    citation:
+      source: >
+        NC State Extension Gardener Plant Toolbox — Chionanthus virginicus (Fringetree), for leaf
+        size, deciduous habit, and ornamental status; leaf-size and evergreen/semi-evergreen
+        comparison per NC State Extension Gardener Plant Toolbox — Ligustrum sinense (Chinese
+        Privet)
+      url: "https://plants.ces.ncsu.edu/plants/chionanthus-virginicus/"
+      publication_date: "2026-09-03"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: resprout_regrowth
+    answer: >
+      Fringetree is a slow-growing tree — it "grows about 6 to 10 inches each year" — and no NC
+      or federal source documents it forming dense colonizing thickets or resprouting
+      aggressively after cutting. This is the opposite of Chinese privet, which spreads
+      vegetatively (it "can move through suckers that push through disturbed soils") and
+      resprouts vigorously from any surviving root tissue after cutting. Because fringetree isn't
+      a spread risk, there is no cutting-triggers-regrowth trap to manage here — the applicable
+      guidance is simply not to cut it in the first place, since it isn't a target species.
+    citation:
+      source: >
+        NC State Extension Gardener Plant Toolbox — Chionanthus virginicus (Fringetree), for
+        fringetree's growth rate; suckering/resprout behavior contrast per NC Cooperative
+        Extension, Madison County Center — On the Lookout for Non-Native Invasive Plant Species:
+        Chinese Privet
+      url: "https://plants.ces.ncsu.edu/plants/chionanthus-virginicus/"
+      publication_date: "2026-09-03"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: timing_windows
+    answer: >
+      Bloom season is the clearest identification window. Fringetree "Flowers bloom from April to
+      May," producing "ivory to white clusters 4 to 8 in. long" of "delicately fragrant" flowers
+      with narrow, drooping, fringe-like petals — the Missouri Department of Conservation
+      describes them as appearing "in delicate drooping bundles along the twig ... petal lobes
+      usually 4 (to 6), narrow ... white with purple spots near the base." Chinese privet blooms
+      later, "in the late spring," with much smaller, unpleasant-smelling flowers — "Creamy white
+      fetid flowers" only "less than an inch large on 2- to 3-inch terminal panicles" — a fraction
+      of the size of fringetree's showy 4-8 inch panicles. Outside bloom season, winter is a
+      second reliable identification window: fringetree drops its leaves completely (deciduous),
+      while Chinese privet in this region keeps most of its foliage through winter
+      (evergreen/semi-evergreen). A bare-stemmed shrub or small tree in January is far more likely
+      to be fringetree than privet.
+    citation:
+      source: >
+        NC State Extension Gardener Plant Toolbox — Chionanthus virginicus (Fringetree), for
+        fringetree bloom timing and flower size; petal/panicle detail per Missouri Department of
+        Conservation — White Fringe Tree field guide; privet bloom timing and "fetid" flower
+        description per NC State Extension Gardener Plant Toolbox — Ligustrum sinense (Chinese
+        Privet)
+      url: "https://mdc.mo.gov/discover-nature/field-guide/white-fringe-tree"
+      publication_date: "2026-09-03"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: herbicide_legality
+    answer: >
+      No herbicide application is warranted or legal to recommend here, because fringetree is not
+      a regulated or extension-flagged invasive species in North Carolina — it is documented by NC
+      State Extension only as a "Native shrub often planted as a showy ornamental." Unlike Chinese
+      privet, for which NC Cooperative Extension publishes explicit herbicide rate and method
+      guidance, there is no corresponding control guidance for fringetree because there is nothing
+      to control. Recommending a triclopyr or glyphosate application against a correctly-identified
+      fringetree would mean directing a homeowner to kill a native tree with a product whose label
+      is written for target weeds and brush, not desirable ornamentals.
+    citation:
+      source: >
+        NC State Extension Gardener Plant Toolbox — Chionanthus virginicus (Fringetree), for
+        fringetree's native/ornamental status and absence of control guidance
+      url: "https://plants.ces.ncsu.edu/plants/chionanthus-virginicus/"
+      publication_date: "2026-09-03"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: followup_secondary_invasion
+    answer: >
+      Fringetree carries real ecological value rather than a secondary-invasion risk: its fruit is
+      "eaten by songbirds and small mammals," and the Missouri Department of Conservation lists
+      specific beneficiaries — "Fringe tree fruit is eaten by several songbirds, including the
+      northern cardinal, American robin, eastern bluebird, blue jay." No source documents
+      fringetree spreading aggressively or forming new colonies the way Chinese privet does from
+      bird-dispersed seed. There is no follow-up monitoring or re-treatment plan to make, because
+      no treatment should occur in the first place.
+    citation:
+      source: >
+        NC State Extension Gardener Plant Toolbox — Chionanthus virginicus (Fringetree), for
+        wildlife use of fringetree fruit; additional bird-species detail per Missouri Department
+        of Conservation — White Fringe Tree field guide
+      url: "https://plants.ces.ncsu.edu/plants/chionanthus-virginicus/"
+      publication_date: "2026-09-03"
+    jurisdiction_range:
+      flagged: false
+      note: null
+  - category: disposal_nontarget_risk
+    answer: >
+      No removal or disposal risk applies, because no cutting or herbicide treatment should be
+      performed on a correctly-identified fringetree in the first place — it is a native ornamental
+      tree, not a management target. If a homeowner remains unsure whether the plant in question is
+      fringetree or Chinese privet, the lowest-risk step is confirming the identification (leaf
+      size, deciduous habit, or bloom appearance in season) before any cutting or spraying happens,
+      rather than treating first and risking removal of a beneficial native tree by mistake.
+    citation:
+      source: "NC State Extension Gardener Plant Toolbox — Chionanthus virginicus (Fringetree)"
+      url: "https://plants.ces.ncsu.edu/plants/chionanthus-virginicus/"
+      publication_date: "2026-09-03"
+    jurisdiction_range:
+      flagged: false
+      note: null

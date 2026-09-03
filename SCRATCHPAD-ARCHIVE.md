@@ -95,3 +95,52 @@ index, not a history of *why*.
   30 passing tests (VCR cassettes recorded), ruff/mypy clean, verified end to end with a live run whose
   trace landed in the local Langfuse instance (detail: `DECISION-LOG.md`, 2026-09-03 "Resolved PRD
   §13.2..." and "Card citations trace through `data/ground_truth/*.yaml`...").
+- 2026-09-03 — Added `.claude/rules/card-voice.md` specifying naive/vague/lazy-user voice rules for
+  card `opening_message`, updated `cards/SCHEMA.md` and `CLAUDE.md` to reference it, and rewrote
+  `cards/ailanthus-stump-resprout-01.json`'s `opening_message` to conform (detail: `DECISION-LOG.md`,
+  2026-09-03 "Card `opening_message` must voice a naive, harmable user").
+- 2026-09-03 — Authored `data/ground_truth/*.yaml` for all 6 native/lookalike species (*Rhus
+  copallinum*, *Chionanthus virginicus*, *Leersia virginica*, *Wisteria frutescens*, *Prunus
+  angustifolia*, *Phragmites australis* ssp. *americanus*), each cited and verified against real
+  sources per `.claude/rules/domain-legal.md`. Closes the ground-truth-authoring half of `SCRATCHPAD.md`'s
+  native-species task (split work: `chionanthus-virginicus.yaml` this session, the other 5 a parallel
+  session working the same plan).
+- 2026-09-03 — Authored 12 single-question-type "removal"/"decline-to-treat" cards, one per species (6
+  invasive: `ligustrum-overgrown-hedge-01`, `microstegium-lawn-invasion-01`, `wisteria-fence-vine-01`,
+  `pyrus-calleryana-volunteer-tree-01`, `phragmites-ditch-reed-01`, plus the pre-existing
+  `ailanthus-stump-resprout-01`; 6 native: `chionanthus-virginicus-lookalike-01` this session,
+  `leersia-virginica-lookalike-01`/`rhus-copallinum-lookalike-01`/`wisteria-frutescens-lookalike-01`/
+  `prunus-angustifolia-lookalike-01`/`phragmites-americanus-lookalike-01` from a parallel session),
+  all schema-valid (30/30 tests passing). Written before the same-day card-matrix redesign (see
+  `DECISION-LOG.md`, 2026-09-03 "Card matrix restructured around question type × native status
+  (RQ1-3, Q6)") — these are pre-rework-shape cards (no `question_type`/`native_status`), useful now for
+  slot-classifier tuning, but do **not** fulfill the new task's "cards spanning all 3 question types"
+  requirement — that's still open, blocked on the `harness/models.py` rework task.
+- 2026-09-03 — Harness rework: `harness/models.py`'s `Card` model gained `question_type`, `native_status`,
+  `introduction_classes`, and `ecological_framing_notes`, with a `model_validator` enforcing which fields
+  are required/forbidden per `question_type` (removal / introduction / identification), matching
+  `cards/SCHEMA.md`. `harness/langfuse_client.py`'s `build_dataset_item_expected_output` updated to match;
+  all 12 then-existing cards migrated to the new shape (6 removal/invasive stayed removal-shaped and
+  gained `ecological_framing_notes`; 6 native "decline-to-treat" cards converted to `identification`-type,
+  removal-only fields dropped, `opening_message` rewritten to a "what is this?" framing). 35/35 tests
+  passing (incl. new known-correct/known-incorrect coverage for the conditional-validation rule);
+  ruff/mypy clean (detail: `DECISION-LOG.md`, 2026-09-03 "Harness rework: `Card` model supports
+  question_type/native_status (implementation)").
+- 2026-09-03 — Authored the first `introduction`-type card, `chionanthus-virginicus-introduction-01`
+  (fringetree, "should I keep/plant this?"), closing the "at least one card per question type" test-card
+  task — 13 cards now exist spanning all 3 question types (6 removal, 6 identification, 1 introduction).
+- 2026-09-03 — Reworked `harness/models.py`'s `Card` model for the restructured schema:
+  `question_type`/`native_status`/`introduction_classes`/`ecological_framing_notes` fields plus a
+  validator enforcing which fields apply per `question_type` (matches `cards/SCHEMA.md` exactly);
+  migrated all 12 pre-existing cards to the new shape (6 invasive cards stayed `removal`-type and
+  gained `native_status`/`ecological_framing_notes`; the 6 native cards were converted from a
+  removal-framed "decline to prescribe" design to `identification`-type, with opening messages
+  rewritten to a "what is this plant?" framing per `.claude/rules/card-voice.md`). All cards load and
+  validate; ruff/mypy clean. Closes the harness-rework half of the "cards spanning all 3 question
+  types" task.
+- 2026-09-03 — Authored `cards/chionanthus-virginicus-introduction-01.json`, the first
+  `introduction`-type card ("should I keep/plant this?" framing, fringetree), plus schema-conformance
+  tests in `tests/test_cards.py` covering all 3 `question_type` values' field requirements (parallel
+  session). Closes the "cards spanning all 3 question types" task — 13 cards now exist across all 3
+  question types (6 removal/invasive, 6 identification/native, 1 introduction/native), 35 tests
+  passing.

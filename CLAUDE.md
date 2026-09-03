@@ -30,6 +30,7 @@ its condition matches — don't preload everything.
 | Writing or editing Python code | `.claude/rules/python.md` (auto-loads for `*.py`) |
 | Writing or editing tests | `.claude/rules/testing.md` (auto-loads for test files) |
 | Working with the benchmark's legal/domain source material | `.claude/rules/domain-legal.md` (auto-loads under `legal/`, `data/`, `scenarios/`) |
+| Writing or editing a card's `opening_message` (or any file under `cards/`) | `.claude/rules/card-voice.md` (auto-loads under `cards/`) |
 | About to commit, or asked to review changes | `.claude/docs/git-workflow.md` |
 | Writing a `DECISION-LOG.md` entry | `.claude/docs/decision-log.md` |
 | Updating `SCRATCHPAD.md` or `SCRATCHPAD-ARCHIVE.md` | `.claude/docs/scratchpad-discipline.md` |
