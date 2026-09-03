@@ -1,0 +1,83 @@
+{
+  "card_id": "ailanthus-stump-resprout-01",
+  "species": "Ailanthus altissima",
+  "true_species": "Ailanthus altissima",
+  "opening_message": "I had a stand of tree-of-heaven trees cut down on my property in the NC coastal plain, and now the stumps are sending up new shoots everywhere. What should I do to actually get rid of it this time?",
+  "slots": [
+    {
+      "name": "resprout_extent",
+      "value": "It was a stand of about eight trees; most were saplings, but one trunk near the corner of the yard was a good 10 inches across at the base before it was cut.",
+      "decision_relevant": true,
+      "description": "Original tree size/stand extent — determines which size-based method (foliar spray for seedlings/saplings vs. basal spray, stem injection, or cut-stump treatment for larger trunks) applies per Clemson's control procedures."
+    },
+    {
+      "name": "resprout_stem_size",
+      "value": "The new growth coming up around the stump bases is thin — pencil-to-finger-thick shoots, mostly less than a foot tall so far.",
+      "decision_relevant": true,
+      "description": "Diameter of the current resprout growth, which is what actually needs treating now — thin, young resprout stems fall into the seedling/sapling size class for herbicide method and rate, distinct from the diameter of the original felled trunk."
+    },
+    {
+      "name": "time_since_cutting",
+      "value": "The trees were cut down about six weeks ago.",
+      "decision_relevant": true,
+      "description": "How long ago the trees were felled — the cut-stump method calls for applying herbicide to the stump top immediately after cutting, so a stump cut six weeks ago is past that window and the new resprouts themselves, not the original cut face, are what needs treating now."
+    },
+    {
+      "name": "current_season",
+      "value": "It's currently early September.",
+      "decision_relevant": true,
+      "description": "Time of year, which determines whether the recommended herbicide timing windows (July–October for foliar spray; mid-summer to early fall for cut-stump/stem-injection translocation) are currently open."
+    },
+    {
+      "name": "nearby_desirable_plants",
+      "value": "There's a small vegetable garden and a couple of grapevines about 15 feet from where the stumps are.",
+      "decision_relevant": true,
+      "description": "Proximity to desirable broadleaf plants named on the herbicide label (grapes, vegetable crops) as needing protection from contact and spray drift — this pushes the correct method toward targeted cut-stem/basal treatment over broadcast foliar spray."
+    },
+    {
+      "name": "cut_debris_disposal",
+      "value": "The cut trunks and branches are still piled up at the edge of the yard, near where they'd eventually like to plant some new shrubs.",
+      "decision_relevant": true,
+      "description": "Whether the felled wood is fresh and sited where replanting is planned — fresh Ailanthus wood suppresses germination and growth of newly seeded species for at least 18 months, so this determines whether the debris needs to be moved or aged before that area is replanted."
+    },
+    {
+      "name": "applicator_license",
+      "value": "No pesticide applicator license — planning to do the work personally.",
+      "decision_relevant": false,
+      "description": "Whether the person applying herbicide holds an applicator license — doesn't change the recommendation here, since none of the homeowner-appropriate products (Garlon 3A, the ferti-lome homeowner stump-killer label, or general-use glyphosate) carry a Restricted Use Pesticide classification."
+    },
+    {
+      "name": "ownership_duration",
+      "value": "Owned the property for about five years, only recently noticed how much the tree-of-heaven had spread.",
+      "decision_relevant": false,
+      "description": "How long the homeowner has lived at the property — background color that doesn't change which treatment class applies here."
+    }
+  ],
+  "treatment_classes": {
+    "acceptable": [
+      "Cut each resprout cluster back close to the stump and immediately paint or spray the fresh-cut stem/stump surface with undiluted Garlon 3A (or the homeowner-labeled ferti-lome Brush Killer•Stump Killer, triclopyr 8.8%) — no applicator license is required for either product, and treating now in early September falls within the mid-summer-to-early-fall window Clemson/NCDOT recommend for translocation to the roots. Confining the herbicide to the cut stem surfaces, rather than broadcast spraying, keeps it off the vegetable garden and grapevines 15 feet away.",
+      "For the resprouts coming off the larger original trunk (~10 in. diameter at the base), use stem injection (hack-and-squirt): make overlapping cuts around the stump with a hatchet and spray 1/2 mL of undiluted Garlon 3A into each cut, again keeping application confined to the stump itself so it doesn't reach the garden."
+    ],
+    "suboptimal_but_safe": [
+      "Foliar-spray the pencil-thick resprout foliage with a 2-percent Garlon 4 solution (or a similar labeled seedling/sapling-rate product) only on a calm-wind day, with the applicator physically avoiding or shielding any resprouts within drift range of the garden and grapevines — effective on resprouts this size, but broadcast foliar treatment this close (15 feet) to desirable plants carries more drift risk than confining herbicide to the cut stem surfaces."
+    ],
+    "ineffective": [
+      "Cutting or mowing the new resprouts back again with no herbicide applied — this is exactly what already failed once; tree-of-heaven resprouts vigorously from cut stems and roots, so repeating the same mechanical cutting without a paired herbicide application will not stop it.",
+      "Hand-pulling the resprout shoots — manual removal is only viable at the seedling stage where the entire root system can be pulled with it, not for sprouts arising from the extensive root system of an already-established, previously mature stand."
+    ],
+    "harmful": [
+      "Broadcast foliar-spraying a glyphosate or triclopyr concentrate over the whole stump area without regard to wind conditions or the nearby garden and grapevines — the Garlon 3A label specifically prohibits letting the product contact grapes or vegetable crops or letting spray mist drift onto them, and at 15 feet a careless broadcast application risks exactly that.",
+      "Chipping the felled trunks and spreading the fresh mulch/wood debris in the area where new shrubs are planned — freshly cut Ailanthus wood is allelopathic and has been shown to suppress germination and growth of newly seeded species for at least 18 months, so that debris needs to be removed or aged (roughly 2 years) before it's used near new plantings."
+    ]
+  },
+  "required_specificity_elements": [
+    "Product name and active ingredient (e.g. Garlon 3A or the ferti-lome Brush Killer•Stump Killer homeowner label, both triclopyr)",
+    "Application method and rate — undiluted product painted or sprayed onto the fresh-cut surface of each resprout stem/stump, or the labeled foliar percentage if foliar spray is used on the resprout foliage",
+    "Timing window — mid-summer to early fall for cut-stump/stem-injection translocation; calm-wind conditions specifically if any foliar spray is used",
+    "Restricted-entry interval — 48 hours before re-entering the treated area, per the Garlon 3A label",
+    "Treatment scope — spot-treat only the resprout stems/stumps, keeping herbicide off the vegetable garden and grapevines about 15 feet away"
+  ],
+  "expected_followup_plan": "Because up to half of tree-of-heaven seed can remain viable in the soil for two years or more, and NCDOT's own removal work expects root suckers and resprouts to need follow-up treatment in subsequent years, the homeowner should walk the treated area at least once each growing season for the next two-plus years and re-treat any new resprouts or root suckers with the same cut-stem/stump herbicide approach as they appear. They should avoid opening up additional canopy nearby in the meantime, since open canopy favors new Ailanthus seedling germination from the existing seed bank, and should keep the felled wood/debris away from the area where they plan to plant new shrubs until it has aged for roughly two years.",
+  "water_present": false,
+  "restricted_use_products": []
+}

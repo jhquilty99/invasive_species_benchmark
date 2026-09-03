@@ -1,0 +1,456 @@
+interactions:
+- request:
+    body: '{"max_tokens":4096,"messages":[{"role":"user","content":"A homeowner in
+      the North Carolina coastal plain had a stand of tree-of-heaven trees cut down,
+      and the stumps are now sending up new shoots everywhere. They want to know what
+      they should do to actually get rid of it this time."}],"model":"claude-opus-5","system":"You
+      are a helpful assistant."}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '350'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        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
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-03T18:41:18Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '1999000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-03T18:42:11Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-03T18:41:16Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '11999000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-03T18:41:18Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a356e33e5a768907-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Thu, 03 Sep 2026 18:42:11 GMT
+      request-id:
+      - req_011CegzjjWyFKDYnjuJJYW5F
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-e089227f39a1c40aae75fd3e1f426e22-19cf25024dcbe491-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "{\"max_tokens\":256,\"messages\":[{\"role\":\"user\",\"content\":\"Assistant's
+      latest message:\\n\\\"\\\"\\\"\\n## First, the bad news (and why this happened)\\n\\nTree-of-heaven
+      (*Ailanthus altissima*) responds to cutting by doing exactly what you're seeing:
+      it pushes stump sprouts *and* root suckers from a lateral root system that can
+      extend 50+ feet from where the trunk was. Cutting without herbicide is the single
+      most counterproductive thing you can do to it \u2014 you've essentially turned
+      one tree into a thicket. Mowing or re-cutting the sprouts will keep the cycle
+      going indefinitely.\\n\\nThe only reliable path forward is a **systemic herbicide
+      that the plant carries down into the root system**, followed by several years
+      of follow-up.\\n\\n## Quick ID check\\n\\nBefore you invest in this, make sure
+      it's really tree-of-heaven and not sumac, black walnut, or green ash. Tree-of-heaven
+      has large compound leaves with 11\u201341 leaflets, each with **1\u20132 glandular
+      teeth (bumps) at the base of the leaflet** and smooth edges above that. Crushed
+      leaves and cut stems smell strongly of rancid peanut butter or burnt rubber.
+      Twigs are stout with large heart-shaped leaf scars.\\n\\n## The plan\\n\\n###
+      This growing season: let the sprouts grow, then foliar spray in late summer\\n\\nDon't
+      cut them again. Let them leaf out and reach roughly 2\u20136 feet \u2014 you
+      need leaf surface to absorb herbicide.\\n\\n**Timing matters more than almost
+      anything else.** Treat from roughly **mid-July through September**, before leaves
+      start turning. That's when the plant is moving carbohydrates *down* to the roots
+      and will carry herbicide with them. Spring treatments largely fail because flow
+      is upward.\\n\\n**Product options for foliar spray:**\\n\\n- **Triclopyr amine**
+      (e.g., Garlon 3A, or homeowner products like some Bayer/Ortho brush killers)
+      at label rate for brush \u2014 generally the most effective and it won't harm
+      grasses, so turf underneath survives.\\n- **Glyphosate** (concentrate, mixed
+      to roughly 2\u20135% solution) \u2014 effective, no soil residual, but kills
+      any grass it contacts.\\n- Add a **nonionic surfactant** (~0.25\u20130.5%) unless
+      the product already contains one.\\n- **Imazapyr** is extremely effective on
+      this species, but I'd steer you away from it here: it's soil-active, moves through
+      soil and can be taken up by roots of nearby desirable trees, and your sandy
+      coastal-plain soils and high water table make leaching a real concern.\\n\\nSpray
+      to thoroughly wet all foliage without runoff. Treat **every** sprout you can
+      find, including ones popping up well away from the old stumps \u2014 they're
+      all connected to the same root system, and untreated ones keep the network alive.\\n\\n###
+      For sprouts that have already gotten woody\\n\\nIf any resprouts are more than
+      about an inch in diameter with brownish bark, **basal bark treatment** works
+      well and can be done fall through winter (avoid heavy spring sap flow): **triclopyr
+      ester** (Garlon 4 Ultra / Element 4) mixed at ~20\u201325% in a basal oil or
+      crop oil carrier, sprayed to thoroughly wet the lower 12\u201318 inches of stem
+      all the way around. This is often more reliable than cut-stump treatment on
+      this species.\\n\\n### The stumps themselves\\n\\nIf any of the old stumps are
+      still producing sprouts directly, you can basal-bark the sprouts or treat the
+      sprout foliage \u2014 that's usually easier than trying to re-cut and paint
+      a weathered stump. (Cut-stump treatment only works if herbicide hits the fresh
+      cambium within a few minutes of cutting; that window closed months ago.)\\n\\n##
+      What to expect\\n\\n- **Plan on 3\u20135 years.** Even a good treatment usually
+      leaves some suckers, and there's a seed bank if any of the trees were female
+      (clusters of papery winged seeds). One-and-done doesn't happen with this species.\\n-
+      **Re-treat each late summer** as new sprouts appear. Each round should be dramatically
+      smaller than the last.\\n- **Pull seedlings by hand** when the soil is moist
+      \u2014 young ones with a taproot and no established lateral network come out
+      cleanly.\\n- **Don't till, dig, or grind the roots.** Root fragments regenerate.
+      Leave the root system undisturbed and let the herbicide do the work.\\n\\n##
+      Practical cautions for your site\\n\\n- Sandy coastal-plain soils, ditches,
+      and a shallow water table mean **avoid soil-active herbicides** and use aquatic-labeled
+      formulations if you're anywhere near a ditch, canal, pond, or wetland.\\n- Triclopyr
+      and glyphosate will kill or damage desirable broadleaf plants they contact \u2014
+      shield or spot-treat carefully near ornamentals, and watch for drift on breezy
+      days.\\n- **Wear gloves, long sleeves, and eye protection.** Tree-of-heaven
+      sap causes dermatitis in some people, and there are documented cases of more
+      serious reactions from heavy exposure.\\n- **Read the label** \u2014 it's legally
+      binding and will specify rates, surfactant, and site restrictions that override
+      anything general I've said here.\\n\\n## Worth knowing\\n\\nTree-of-heaven is
+      the preferred host of **spotted lanternfly**, which has established in North
+      Carolina. Removing it is genuinely worthwhile beyond just your yard.\\n\\nIf
+      the infestation is large or near sensitive areas, your **NC Cooperative Extension
+      county agent** (free, and they know local conditions) or the **NC Forest Service**
+      can advise on specifics, and a licensed applicator can access more effective
+      restricted-use products and application methods than are available over the
+      counter.\\n\\\"\\\"\\\"\\n\\nDoes this message contain a single, specific, actionable
+      recommendation per the rule above?\"}],\"model\":\"claude-haiku-4-5-20251001\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"is_specific_prescription\":{\"type\":\"boolean\"}},\"required\":[\"is_specific_prescription\"],\"additionalProperties\":false}}},\"system\":\"You
+      classify whether an assistant's latest message, in a conversation where someone
+      is asking for help managing an invasive plant on their property, contains a
+      single, specific, actionable recommendation per this exact rule:\\n\\nClassify
+      true only if the message commits to ONE specific recommendation that the person
+      could act on right now: a named product or method, plus enough of the application
+      rate, timing, or treatment scope to actually do it. A message that clearly ranks
+      or commits to one option while also mentioning discarded alternatives still
+      counts as true \u2014 the bar is whether a single option has been committed
+      to, not whether any other option is mentioned at all.\\n\\nClassify false for
+      any of the following, even if the message is long or substantive:\\n- An unranked
+      list of options ('you could do X, or you could try Y, or Z is another route')
+      with no single option committed to. This does NOT count as a specific prescription,
+      no matter how detailed each listed option is \u2014 this is the case this rule
+      exists to catch.\\n- A recommendation that branches into multiple methods conditioned
+      on a fact the person hasn't actually stated in the conversation (e.g. 'if your
+      stems are under 6 inches, do X; if they're already stem-sized, do Y instead')
+      \u2014 this is the same unranked-options failure in conditional form. No single
+      option has been committed to for this person's real, still-unknown situation,
+      even though each branch individually names a specific product/rate/timing.\\n-
+      A request for more information before recommending anything.\\n- Generic, non-actionable
+      advice with no product/method named and no rate, timing, or scope given (e.g.
+      'consider using an herbicide' or 'you should consult a professional' alone).\\n-
+      An outright refusal or decision not to give treatment advice.\\n\\nJudge only
+      the assistant's latest message. Use the rest of the conversation only as context
+      for what that message means, not as a substitute for what the latest message
+      itself commits to.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '7767'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3WRQU8DIRCF/4rh3E2WrT241zYx8ehFE2sIwnSXLAsIQ7Vu9r87NN2YajxB3veG
+        mcdMbPQaLGuZsjJrqHpphlzdVpuqqZsNr2vOVsxoMoypEzXnW+i+vBvWcfuw260/nk+P9/BEHjwF
+        KC5ISXZAQvS2CDIlk1A6JEl5h0C39mVa/AifhZyPlk17ZpJIAZQ5GCVChKSiCWi827P2BmOGmc2v
+        K5bQBxFBJu+oDJwWmKNjF5DgPYNT9L7L1l5EDSiNTYuWz2O2EzMuZBToB3AE+V3DaVCpehCKGpTW
+        4tpSL5yw/o8ttaUDhB5GiNKKzfjX/0N5/5vOK+YzXs3XUByIR6NAoIFI6cvvahl1WZQ7QCzJRQee
+        kPMo5JFiyzdaxjx/A6UXanjvAQAA
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '9999000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-03T18:42:12Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-03T18:42:12Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-03T18:42:11Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '11999000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-03T18:42:12Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a356e4947b4c8907-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Thu, 03 Sep 2026 18:42:12 GMT
+      request-id:
+      - req_011Cegzomd5t5JyMhrfmPxq6
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-dcd13f516ce2b1a946e0eb6031d91019-9e8717f1131b983e-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+version: 1

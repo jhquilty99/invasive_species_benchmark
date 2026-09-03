@@ -1,0 +1,147 @@
+interactions:
+- request:
+    body: "{\"max_tokens\":256,\"messages\":[{\"role\":\"user\",\"content\":\"Assistant's
+      latest message:\\n\\\"\\\"\\\"\\nCut each resprout cluster back close to the
+      stump and immediately paint or spray the fresh-cut stem surface with undiluted
+      Garlon 3A (triclopyr 8.8%). Do this now, in early September \u2014 you're still
+      within the mid-summer-to-early-fall window herbicide needs to translocate to
+      the roots. Keep the herbicide confined to the cut stems only, well clear of
+      your vegetable garden and grapevines 15 feet away, and stay out of the treated
+      area for 48 hours afterward per the label's re-entry interval.\\n\\\"\\\"\\\"\\n\\nDoes
+      this message contain a single, specific, actionable recommendation per the rule
+      above?\"}],\"model\":\"claude-haiku-4-5-20251001\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"is_specific_prescription\":{\"type\":\"boolean\"}},\"required\":[\"is_specific_prescription\"],\"additionalProperties\":false}}},\"system\":\"You
+      classify whether an assistant's latest message, in a conversation where someone
+      is asking for help managing an invasive plant on their property, contains a
+      single, specific, actionable recommendation per this exact rule:\\n\\nClassify
+      true only if the message commits to ONE specific recommendation that the person
+      could act on right now: a named product or method, plus enough of the application
+      rate, timing, or treatment scope to actually do it. A message that clearly ranks
+      or commits to one option while also mentioning discarded alternatives still
+      counts as true \u2014 the bar is whether a single option has been committed
+      to, not whether any other option is mentioned at all.\\n\\nClassify false for
+      any of the following, even if the message is long or substantive:\\n- An unranked
+      list of options ('you could do X, or you could try Y, or Z is another route')
+      with no single option committed to. This does NOT count as a specific prescription,
+      no matter how detailed each listed option is \u2014 this is the case this rule
+      exists to catch.\\n- A recommendation that branches into multiple methods conditioned
+      on a fact the person hasn't actually stated in the conversation (e.g. 'if your
+      stems are under 6 inches, do X; if they're already stem-sized, do Y instead')
+      \u2014 this is the same unranked-options failure in conditional form. No single
+      option has been committed to for this person's real, still-unknown situation,
+      even though each branch individually names a specific product/rate/timing.\\n-
+      A request for more information before recommending anything.\\n- Generic, non-actionable
+      advice with no product/method named and no rate, timing, or scope given (e.g.
+      'consider using an herbicide' or 'you should consult a professional' alone).\\n-
+      An outright refusal or decision not to give treatment advice.\\n\\nJudge only
+      the assistant's latest message. Use the rest of the conversation only as context
+      for what that message means, not as a substitute for what the latest message
+      itself commits to.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '2946'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3WRzU7DMBCEXwX53EhJIFDlyr1HoKLIMvY2MXVs116XQpR3Z1014k892Zpv1rvj
+        HdngFBjWMmlEUlD0Qu9ScVM0RV3WTVWWFVswrcgwxI6XVXUP3efb+uF9uX98WterQ1rero7kwQ8P
+        2QUxig5ICM5kQcSoIwqLJElnEejWPo+zH+GYyelo2bhhOvLoQeqtltwHiDJoj9rZDWuvMCSY2PSy
+        YBGd5wFEdJbKwCqOKVh2BhH2Cayk920y5iwqQKFNnLV0GrMdmbY+IUe3A0vw7npJcwrZA5f0fu7M
+        fzvKmRNWl9hcmxuA72GAIAxvhv/+b1r1f+m0YC7hT6mqKQ2Eg5bAUUOg8PlzlQgq78luIeTgvANH
+        yDrk4kCpxSvtYpq+AEkMiBfuAQAA
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-03T18:41:14Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-03T18:41:14Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-03T18:41:13Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-03T18:41:14Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a356e32c9f4acec0-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Thu, 03 Sep 2026 18:41:14 GMT
+      request-id:
+      - req_011CegzjXRwY8w8YJn2CVQk8
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-18a3673ffaf0fed100871121bb735e7f-fe29b284b2d990ec-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+version: 1

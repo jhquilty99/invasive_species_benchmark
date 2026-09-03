@@ -31,3 +31,9 @@ paths:
   the claim it supports (inline in the `source` string, or a named secondary source in the prose) rather
   than picking one citation to represent the whole answer — the schema's single `citation` object per
   cell/item can't hold more than one, so this is the sanctioned way to keep every claim traceable.
+- PRD v4's case cards (`cards/*.json`) have no citation field of their own — their citation trail runs
+  through the same-species `data/ground_truth/<species-slug>.yaml` file instead, per
+  `cards/SCHEMA.md`'s "Sourcing" section and `DECISION-LOG.md`, 2026-09-03 "Card citations trace through
+  `data/ground_truth/*.yaml`, not a per-card citation field." Every specific claim a card makes must
+  still trace to a quote already in that species' ground-truth cells — this doesn't relax the "citation
+  must support the specific claim" rule above, it just names where a card's citation lives.
