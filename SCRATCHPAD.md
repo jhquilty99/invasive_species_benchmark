@@ -30,11 +30,13 @@ in a rule file or `DECISION-LOG.md`.
 - **Day 1 complete (2026-09-03):** harness scaffold, card schema, both PRD §13 open-question decisions,
   the Ailanthus test card, slot-gated simulated user, conversation loop, and Langfuse wiring are all built,
   tested (30 passing tests, VCR cassettes recorded), and verified end to end with a live run whose trace
-  landed in Langfuse. Two things worth knowing for Day 2: the slot classifier (now task 1 below) still
+  landed in Langfuse. Three things worth knowing for Day 2: the slot classifier (task 1 below) still
   needs tuning — a live run showed it occasionally gating on topic proximity rather than an explicit
-  question; and the stopping condition needed a fix mid-build for conditional/branching recommendations
-  (see `DECISION-LOG.md`, 2026-09-03 "Resolved PRD §13.2..."). Full detail: `DECISION-LOG.md`'s 2026-09-03
-  entries from "Resolved PRD §13.2..." onward.
+  question; the stopping condition needed a fix mid-build for conditional/branching recommendations (see
+  `DECISION-LOG.md`, 2026-09-03 "Resolved PRD §13.2..."); and the Langfuse trace that landed is a single
+  flat span with the whole transcript dumped as `output` (from a one-off script outside the repo, not the
+  harness itself) rather than real per-turn tracing — task 5 below. Full detail: `DECISION-LOG.md`'s
+  2026-09-03 entries from "Resolved PRD §13.2..." onward.
 - **Last touched:** 2026-09-03 (Day 1 build)
 
 ## Open tasks (ranked)
@@ -53,34 +55,42 @@ in a rule file or `DECISION-LOG.md`.
    labels (incl. `declined`); Q3-Q5 as judge scores 0-2 with an R1 `comment`. Implement Q1 and the
    derived metrics (turns to recommendation, premature-prescription rate, distractor questions asked,
    hit-max-turns rate) in code, never judged (R3).
-5. **[Gate — Fri Sep 5]** Harness + leakage check working end to end (tasks 1-4 done, on top of Day 1's
+5. **[Day 2]** Instrument per-turn Langfuse tracing in `harness/conversation.py` and
+   `harness/simulated_user.py`: every individual Anthropic call (model-under-test turn, slot classifier,
+   response generator, stopping-condition classifier) should land as its own nested span/generation under
+   the conversation's trace, not — as Day 1 shipped it — a single flat `output` blob covering the whole
+   transcript, dumped by a one-off script outside the repo rather than the harness itself. Not required for
+   the Fri Sep 5 gate below, but should land before task 11's full sweep (so every sweep run is properly
+   traced from the start) and definitely before task 12's human-annotation queue (annotators need to review
+   actual per-turn conversations, not a flat blob).
+6. **[Gate — Fri Sep 5]** Harness + leakage check working end to end (tasks 1-4 done, on top of Day 1's
    already-working harness). If not met, this is the day to cut card-count scope (PRD §8 rule 2), not later.
-6. **[Days 4-5]** Author the Ailanthus matrix: 12-16 cards varying stem size, extent, and season, holding
+7. **[Days 4-5]** Author the Ailanthus matrix: 12-16 cards varying stem size, extent, and season, holding
    species and correct-treatment-class logic constant per `cards/SCHEMA.md`.
-7. **[Days 6-7]** Author the lookalike arm: fresh ground truth for sumac, native wisteria (*Wisteria
+8. **[Days 6-7]** Author the lookalike arm: fresh ground truth for sumac, native wisteria (*Wisteria
    frutescens*), coral honeysuckle, and Virginia creeper — none have existing `data/ground_truth/*.yaml`
    files — then ~10 cards where the correct behaviour is declining to prescribe treatment. Apply whatever
    decision gets made on PRD §13.1 (own rubric vs. shared) once that's settled.
-8. **[Days 8-9]** Author the breadth set (privet, stiltgrass, wisteria, Callery pear, Phragmites), drawing
+9. **[Days 8-9]** Author the breadth set (privet, stiltgrass, wisteria, Callery pear, Phragmites), drawing
    directly on the existing `data/ground_truth/*.yaml` for all 5 species. Target 60-80 cards total across
    depth + lookalike + breadth.
-9. **[Gate — Thu Sep 11]** Card count in range, corpus frozen (PRD §8 rule 1) — no card changes after this
-   point for any reason.
-10. Pick the specific open-weight model and host (Together.ai/Groq/Fireworks/local) for the 4-6 model
-    line-up, and wire a model client for every provider in the line-up — needed before task 11.
-11. **[Days 10-11]** Full sweep across 4-6 models (incl. the open-weight model). Fix what breaks; re-run.
+10. **[Gate — Thu Sep 11]** Card count in range, corpus frozen (PRD §8 rule 1) — no card changes after this
+    point for any reason.
+11. Pick the specific open-weight model and host (Together.ai/Groq/Fireworks/local) for the 4-6 model
+    line-up, and wire a model client for every provider in the line-up — needed before task 12.
+12. **[Days 10-11]** Full sweep across 4-6 models (incl. the open-weight model). Fix what breaks; re-run.
     Confirm transcripts complete for every (model × card) pair. Log the pinned card-set version, judge
     prompt version, and exact model version strings in run metadata (R4 — non-negotiable, carries forward
     PRD §8 rule 5).
-12. **[Day 12]** Set up the Langfuse human-annotation queue; brief annotators; select the stratified ~50
+13. **[Day 12]** Set up the Langfuse human-annotation queue; brief annotators; select the stratified ~50
     sample (oversampled on gate failures and `harmful` Q2 classifications).
-13. **[Days 13-14]** Human annotation, blind to judge scores. Write and run the Krippendorff's alpha
+14. **[Days 13-14]** Human annotation, blind to judge scores. Write and run the Krippendorff's alpha
     computation per dimension (PRD §7).
-14. **[Days 15-16]** Write-up: motivation, method, gates/quality design, results, failure examples (rates
+15. **[Days 15-16]** Write-up: motivation, method, gates/quality design, results, failure examples (rates
     redacted per PRD §8 rule 3), limitations, generalization. Repo cleanup — assemble the PRD §12 release
     layout (`cards/`, `harness/`, `results/`, README with the schema documented standalone).
-15. **[Day 17]** Zenodo archive → DOI. Post to arXiv (cs.CL) and EcoEvoRxiv.
-16. Fix `outreach/EMAIL-TRACKER.md`'s Status/Date-sent columns to reflect the emails that were actually
+16. **[Day 17]** Zenodo archive → DOI. Post to arXiv (cs.CL) and EcoEvoRxiv.
+17. Fix `outreach/EMAIL-TRACKER.md`'s Status/Date-sent columns to reflect the emails that were actually
     sent (currently still shows "Not sent" for all real contacts). No dependency on anything above — pure
     housekeeping, lowest priority.
 
@@ -91,4 +101,6 @@ to now-archived files) — see `archive/study-a-single-turn/README.md` if they n
 
 ## Pending tests
 
-_None yet — no code to test._
+30 tests passing (`harness/` unit/integration tests, VCR cassettes recorded for the Anthropic-hitting
+ones — see `tests/cassettes/`). No dedicated tests yet for work not yet built: leakage check, gate/quality
+judges, per-turn Langfuse tracing (tasks 2-5 above).
