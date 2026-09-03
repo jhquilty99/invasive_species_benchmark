@@ -9,88 +9,103 @@ in a rule file or `DECISION-LOG.md`.
 
 ## Status
 
-- **Repo state:** `SCOPE.md` committed, locking PRD §2. `data/SCHEMA.md` defines the corpus/item file
-  formats. Ground-truth corpus (`data/ground_truth/*.yaml`, 6 species × 6 categories, 0 jurisdiction-range
-  flags) and the 40-item benchmark set (`data/items.jsonl`) are **committed and tagged `freeze-v1`
-  (commit `7d2f1b9`, 2026-09-02) — frozen, no further item changes for any reason.** The 20 abstention
-  items are deferred to a future release, preserved verbatim at `data/deferred/abstention-items.jsonl`.
-  Full build/re-verification/voice-cleanup history: `DECISION-LOG.md` (2026-08-31 through 2026-09-02
-  entries) and `SCRATCHPAD-ARCHIVE.md`. The per-item accuracy/harm checklist (`scoring/checklist.jsonl`,
-  40 items, 263 rows) is now authored, independently fidelity-checked against `data/items.jsonl` (one
-  omission and one over-reaching claim found and fixed — detail: DECISION-LOG.md, 2026-09-02 "Fidelity
-  check of scoring/checklist.jsonl against data/items.jsonl" entry), and `scoring/RUBRIC.md` extended to
-  match — not yet committed. A plain-language scorer's guide (`scoring/SCORER-GUIDE.md` — purpose,
-  materials, steps, definition of done; distinct from `RUBRIC.md`'s calibration-anchor content) is now also
-  authored — not yet committed (detail: DECISION-LOG.md, 2026-09-02 "Added a plain-language scorer's guide
-  separate from RUBRIC.md" entry). Task 1 below (expert-review packet) leads Week 2 now.
-- **Deadline confirmed:** earliest grad application is UC Berkeley MIDS, **Oct 23, 2026** — well past
-  the Sep 20 ship date, so the 3-week schedule keeps its full buffer. No replanning needed.
-- **API access confirmed:** OpenAI, Anthropic, Google all active. 4th model will be a small open-weight
-  model via a third-party host — exact model/host still TBD, deferred to PRD's Day 10-11 run setup.
+- **Methodology pivot (2026-09-03):** the project moved from PRD v3's single-turn, item-based design to
+  PRD v4's multi-turn, card-based design. `PRODUCT_REQUIREMENTS.md`, `SCOPE.md`, and `data/SCHEMA.md` are
+  rewritten to match. PRD v3's artifacts (`data/items.jsonl`, `data/deferred/abstention-items.jsonl`,
+  `scoring/checklist.jsonl`, `scoring/RUBRIC.md`, `scoring/SCORER-GUIDE.md`, and the xlsx/build/sync
+  scripts) are archived at `archive/study-a-single-turn/` via `git mv` — not deleted. `data/ground_truth/
+  *.yaml` (6 species, 6 categories each, 0 jurisdiction-range flags) stays active and is reused as source
+  material for the new case cards. Full rationale: `DECISION-LOG.md`, 2026-09-03 "Pivot to multi-turn
+  simulated-conversation methodology (PRD v4)".
+- **Deadline confirmed:** earliest grad application is UC Berkeley MIDS, **Oct 23, 2026** — well past the
+  ~Sep 20 target, so the schedule keeps its full buffer. No replanning needed.
+- **API access confirmed:** OpenAI, Anthropic, Google all active. One of the 4-6 models must be
+  open-weight — exact model/host still TBD.
 - **Outreach:** expert-validation emails reported sent (see `outreach/EMAIL-TRACKER.md`) — that file's
-  Status/Date-sent columns still need to be updated to match; not yet fixed.
-- **Task list:** pulled in the full Week 2 task set (PRD §4/§10 Days 8-15: rubric, scoring sheet, doc
-  bundles, run harness, runs, scoring) and reordered by dependency/PRD-day order. Rubric task (Days 8-9)
-  is done: `scoring/RUBRIC.md` (detail: DECISION-LOG.md, 2026-09-01 "Scoring rubric conventions locked"
-  entry).
-- **Scoring methodology changed:** primary scoring is now a per-item checklist (atomic ground-truth
-  claims + harm triggers + a catch-all flag for unanticipated wrong content), not the holistic
-  Accuracy/Harm scale alone. `scoring/RUBRIC.md`'s holistic scale is kept, not deleted — it's now the
-  instrument for a small convergent-validity side-check folded into the existing 20-item expert ask
-  (detail: DECISION-LOG.md, 2026-09-01 "Switched primary scoring method to a per-item checklist" entry).
-  Checklist authored 2026-09-02: `scoring/checklist.jsonl`, 263 rows across 40 items (below the ~300-430
-  planning estimate — content-driven, not padded; detail: DECISION-LOG.md, 2026-09-02 "Checklist schema
-  and authoring conventions locked" entry), then fidelity-checked against `data/items.jsonl` (detail:
-  DECISION-LOG.md, 2026-09-02 "Fidelity check of scoring/checklist.jsonl against data/items.jsonl" entry).
-- **Last touched:** 2026-09-02 (scorer's guide added)
+  Status/Date-sent columns still need to be updated to match; not yet fixed. (PRD v4 §7's "second expert
+  reviews the cards" ask, if a reply lands, is a separate follow-up from this outreach.)
+- **Task list:** replaced entirely with PRD v4 §10's 17-day schedule, then broken down (2026-09-03, same
+  day) from one bullet per day into the actual build steps each day bundles — the original "Day 1: build
+  the harness" line hid ~7 separate pieces of engineering. Ranked by dependency/day order. None of the
+  new-methodology work has started yet — everything below is Day 1 onward.
+- **Last touched:** 2026-09-03 (task breakdown)
 
 ## Open tasks (ranked)
 
-1. Prepare the expert-review packet for whenever an expert-validation reply lands (outreach sent
-   2026-08-31, tracker: `outreach/EMAIL-TRACKER.md`): ask reviewers to (a) critique `scoring/checklist.jsonl`'s
-   claim/trigger decomposition for face validity and (b) independently give a holistic Accuracy/Harm score
-   (per `scoring/RUBRIC.md`'s anchors) on the same ~20-item subset with no reference to the checklist, so
-   checklist-derived and holistic scores can be compared for agreement. Now genuinely buildable — the
-   checklist exists; PRD's existing Sep 15-16 slot still applies if the reply lands on the expected
-   Sep 7-14 window.
-2. **[Day 9]** Build the scoring sheet and the blinding/shuffle script — strips model identity and
-   shuffles response order so Days 13-15 scoring can be done blind (PRD §6 rule 4: human scoring primary).
-   Records `scoring/checklist.jsonl`'s per-claim and per-trigger results plus the catch-all note field per
-   response, not a single holistic value (detail: DECISION-LOG.md, 2026-09-01 "Switched primary scoring
-   method to a per-item checklist" and 2026-09-02 "Checklist schema and authoring conventions locked"
-   entries).
-3. **[Day 10]** Assemble per-species document bundles for Condition 2 (oracle grounding) from
-   `data/ground_truth/*.yaml`, per PRD §3.
-4. Decide the stack layout under `src/` (Python, dependency-managed via `uv` — see
-   `.claude/rules/python.md`) and add the first `pyproject.toml` / test scaffold. Needed before task 5
-   (the run harness) can be written — no longer deferrable now that runs are the next phase. Also needed
-   to declare `scoring/build_items_review_xlsx.py` and `scoring/sync_items_from_xlsx.py`'s `openpyxl`
-   dependency, which currently has no `pyproject.toml` to resolve against (flagged by the freeze-gate
-   commit's architecture review, DECISION-LOG.md 2026-09-02).
-5. **[Day 10]** Write the run harness: executes both conditions across all 4 models at temperature 0, and
-   **logs exact model version strings** (PRD §6 rule 5 — non-negotiable).
-6. Pick the specific open-weight model and host (Together.ai/Groq/Fireworks/local) for the 4th model
-   slot — PRD Day 10-11, needed before runs execute (task 7).
-7. **[Days 11-12 — Gate Fri Sep 11]** Execute runs: Condition 1 first (all 4 models, 2 runs each), verify
-   version-string logging; then Condition 2 (all 4 models, 2 runs each), spot-check outputs for
-   truncation or refusal loops. Gate: all model responses collected by Fri Sep 11 — if behind, drop
-   Condition 2 before dropping scoring time (PRD §10 dated gates).
-8. **[Days 13-15 — Gate Mon Sep 14]** Score all ~320 responses blind (shuffled, identity-stripped, per
-   task 2's script and the checklist): ~105 (Day 13), ~105 (Day 14), finish the remaining ~110
-   (Day 15). Gate: scoring complete by Mon Sep 14 — if behind, drop Model 4 entirely (3 models still
-   support every analysis per PRD §7).
-9. Fix `outreach/EMAIL-TRACKER.md`'s Status/Date-sent columns to reflect the emails that were actually
-   sent (currently still shows "Not sent" for all real contacts). No dependency on anything above —
-   pure housekeeping, lowest priority.
+1. **[Day 1]** Scaffold the Python project: `pyproject.toml` via `uv`, flat `harness/` package layout, deps
+   (`openevals`, Langfuse SDK, `pydantic`/`pydantic-settings`, `pytest`, `pytest-recording`, `ruff`, `mypy`)
+   — per `.claude/rules/python.md`'s locked conventions. Closes the long-open "no code yet" gap noted in
+   `DEVELOPMENT.md`.
+2. **[Day 1]** Write the case-card schema (`cards/SCHEMA.md` + a validator): species/true identity,
+   opening message, slots with a per-card decision-relevant-vs-distractor flag, the 4 treatment classes
+   (acceptable/suboptimal-but-safe/ineffective/harmful) enumerated for the situation, required specificity
+   elements, expected follow-up plan (PRD §5.1). Needed before any card — including the Day 1 test card —
+   can be authored.
+3. **[Day 1]** Decide the two PRD §13 open questions that gate harness design, before building the
+   stopping condition and Q2 judge: (a) §13.2 — does an unranked "you could do X or Y" list count as a
+   prescription? PRD's stated lean is no; confirm or override. (b) §13.3 — models that refuse outright need
+   a `declined` Q2 category; define it now so the classifier isn't retrofitted after the sweep. (§13.1
+   lookalike-arm rubric and §13.4 second-judge-model are lower-priority — can wait past Day 1.)
+4. **[Day 1]** Hand-author one test card against the schema from task 2 — the fixture the rest of Day 1's
+   harness work runs against end to end.
+5. **[Day 1]** Build the slot-gated simulated user (PRD §5.2): a turn-level classifier that determines
+   which slots the assistant actually asked about, feeding a response generator that's shown — and
+   instructed to reveal — only newly-asked slots. This is what makes elicitation measurement (Q1) meaningful
+   instead of a prompted persona volunteering information.
+6. **[Day 1]** Wire the conversation loop: `openevals.run_multiturn_simulation` + the slot-gated user from
+   task 5 + the stopping condition from task 3a, running end to end on the task 4 test card.
+7. **[Day 1]** Wire the Langfuse SDK into the harness against the already-running self-hosted instance
+   (`infra/langfuse/`): one dataset, one item per card (`input` = opening message/persona/slots,
+   `expected_output` = ground truth), a run per (model × prompt version), score configs named to match the
+   gate/quality dimensions so the UI cross-tabs across runs (PRD §6).
+8. **[Day 2]** Tune the slot classifier from task 5 against the test card until it reliably matches which
+   slots were actually asked about.
+9. **[Day 2]** Implement the R5 leakage check in code (not judged): no card slot value may appear in a user
+   turn that wasn't preceded by a matching elicitation. Pass it on the one-card harness.
+10. **[Day 2]** Write the 5 gate judge prompts (G1-G5 — identity verified, no spread-increasing action,
+    aquatic-appropriate formulation, no restricted-use product to an unlicensed applicator, no fabricated
+    citation), each a separate single-purpose judge call with the card in context (R2 — no combined rubric
+    call). Every prompt must instruct the judge to put its deciding evidence in the score's `comment` field
+    (R1 — non-negotiable).
+11. **[Day 2]** Write the quality-dimension judging: Q2 as a judge classification into the 4 treatment-class
+    labels (+ `declined` from task 3b); Q3-Q5 as judge scores 0-2 with an R1 `comment`. Implement Q1 and the
+    derived metrics (turns to recommendation, premature-prescription rate, distractor questions asked,
+    hit-max-turns rate) in code, never judged (R3).
+12. **[Gate — Fri Sep 5]** Harness + leakage check working end to end (tasks 1-11 done). If not met, this is
+    the day to cut card-count scope (PRD §8 rule 2), not later.
+13. **[Days 4-5]** Author the Ailanthus matrix: 12-16 cards varying stem size, extent, and season, holding
+    species and correct-treatment-class logic constant per the task 2 schema.
+14. **[Days 6-7]** Author the lookalike arm: fresh ground truth for sumac, native wisteria (*Wisteria
+    frutescens*), coral honeysuckle, and Virginia creeper — none have existing `data/ground_truth/*.yaml`
+    files — then ~10 cards where the correct behaviour is declining to prescribe treatment. Apply whatever
+    task 3-adjacent decision gets made on §13.1 (own rubric vs. shared) once that's settled.
+15. **[Days 8-9]** Author the breadth set (privet, stiltgrass, wisteria, Callery pear, Phragmites), drawing
+    directly on the existing `data/ground_truth/*.yaml` for all 5 species. Target 60-80 cards total across
+    depth + lookalike + breadth.
+16. **[Gate — Thu Sep 11]** Card count in range, corpus frozen (PRD §8 rule 1) — no card changes after this
+    point for any reason.
+17. Pick the specific open-weight model and host (Together.ai/Groq/Fireworks/local) for the 4-6 model
+    line-up, and wire a model client for every provider in the line-up — needed before task 18.
+18. **[Days 10-11]** Full sweep across 4-6 models (incl. the open-weight model). Fix what breaks; re-run.
+    Confirm transcripts complete for every (model × card) pair. Log the pinned card-set version, judge
+    prompt version, and exact model version strings in run metadata (R4 — non-negotiable, carries forward
+    PRD §8 rule 5).
+19. **[Day 12]** Set up the Langfuse human-annotation queue; brief annotators; select the stratified ~50
+    sample (oversampled on gate failures and `harmful` Q2 classifications).
+20. **[Days 13-14]** Human annotation, blind to judge scores. Write and run the Krippendorff's alpha
+    computation per dimension (PRD §7).
+21. **[Days 15-16]** Write-up: motivation, method, gates/quality design, results, failure examples (rates
+    redacted per PRD §8 rule 3), limitations, generalization. Repo cleanup — assemble the PRD §12 release
+    layout (`cards/`, `harness/`, `results/`, README with the schema documented standalone).
+22. **[Day 17]** Zenodo archive → DOI. Post to arXiv (cs.CL) and EcoEvoRxiv.
+23. Fix `outreach/EMAIL-TRACKER.md`'s Status/Date-sent columns to reflect the emails that were actually
+    sent (currently still shows "Not sent" for all real contacts). No dependency on anything above — pure
+    housekeeping, lowest priority.
 
 ## Open bugs
 
-_None._ (Three low-severity housekeeping notes from the freeze commit's architecture review, none
-blocking: `ailanthus-altissima.yaml#disposal_nontarget_risk` is a written, cited cell no item references
-— intentional per the documented 8/8/6/8/6/4 category allocation, not a bug; `scoring/build_items_review_xlsx.py`
-lacks the type hints `scoring/sync_items_from_xlsx.py` has, inconsistent with `.claude/rules/python.md`;
-`scoring/items-review.xlsx` is a regenerable binary artifact that's currently committed rather than
-gitignored. Detail: DECISION-LOG.md, 2026-09-02 "Freeze-gate re-verification complete" entry.)
+_None._ Three low-severity housekeeping notes from the PRD v3 freeze-gate review are now moot (they applied
+to now-archived files) — see `archive/study-a-single-turn/README.md` if they need revisiting.
 
 ## Pending tests
 

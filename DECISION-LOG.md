@@ -332,7 +332,7 @@ Did NOT resolve the "5 abstention reasons" phrasing in `SCRATCHPAD.md` task 2 as
 meant 5 items per reason across 4 reasons (`data/SCHEMA.md`'s enum), not 5 distinct reasons; no data
 changed, just restated correctly in the rubric.
 **Rule Updated:** N — flag for retro (a single scoring-convention decision, not yet a recurring pattern).
-**Status:** Active
+**Status:** Superseded by 2026-09-03 entry
 
 ## 2026-09-01 — Switched primary scoring method to a per-item checklist; holistic scale demoted to expert side-check
 
@@ -364,7 +364,7 @@ existing 2026-09-01 "Scoring rubric conventions locked" entry above — that ent
 this decision extends rather than reverses it, so no `Superseded` status on that entry.
 **Rule Updated:** N — flag for retro (one-off scoring-methodology decision, not yet a recurring
 pattern).
-**Status:** Active
+**Status:** Superseded by 2026-09-03 entry
 
 ## 2026-09-01 — Replaced the Phragmites NC-IPC citation with NC Forest Service Invasive Species Alert No. 6
 
@@ -1038,7 +1038,7 @@ decision for scoring material, same pattern as the 2026-09-01 rubric-conventions
 load-bearing conventions with the user before writing). If a third scoring-content schema decision comes
 up before task 3's scoring sheet is built, worth checking whether a single conventions doc should hold all
 three instead of three separate entries.
-**Status:** Active
+**Status:** Superseded by 2026-09-03 entry
 
 ## 2026-09-02 — Fidelity check of `scoring/checklist.jsonl` against `data/items.jsonl`
 
@@ -1151,4 +1151,145 @@ edit, and `C9` doesn't collide with any existing claim_id for that item).
 `SCRATCHPAD.md` task *number* and gone stale (see the "task 1 (new numbering)" callouts already in
 `SCRATCHPAD-ARCHIVE.md`). If a third instance shows up, worth a rule: reference documents should never
 cite `SCRATCHPAD.md` by task number, only by task description or a `DECISION-LOG.md` entry title/date.
+**Status:** Active
+
+## 2026-09-03 — Pivot to multi-turn simulated-conversation methodology (PRD v4)
+
+**Decision:** Superseded the single-turn, item-based benchmark design (PRD v3) with a multi-turn
+simulated-conversation design (PRD v4), merging a new PRD the user supplied into
+`PRODUCT_REQUIREMENTS.md`. Under the new design, each case is an expert-authored "card" (species, true
+identity, underspecified opening message, slots a real user could supply, per-card decision-relevance
+flags, four treatment classes, expected follow-up plan) run through a slot-gated simulated user
+(`openevals.run_multiturn_simulation`) rather than answered as a single static query. Scoring splits into
+binary safety gates (G1-G5, isolated judge calls, any failure zeros the case) and quality dimensions
+(Q1-Q5, judge-scored for reporting only), tracked in a self-hosted Langfuse instance.
+
+Four sub-decisions, each confirmed with the user before writing:
+1. **Corpus fate:** the single-turn study (PRD v3) is superseded, not continued in parallel.
+   `data/ground_truth/*.yaml` (species research + citations) stays active and is reused as source material
+   for authoring the new cards. Everything downstream of the old single-turn item schema —
+   `data/items.jsonl`, `data/deferred/abstention-items.jsonl`, `scoring/checklist.jsonl`,
+   `scoring/RUBRIC.md`, `scoring/SCORER-GUIDE.md`, and the xlsx/build/sync scripts — moved to
+   `archive/study-a-single-turn/` via `git mv` (history preserved), per this repo's "defer, don't discard"
+   convention. This supersedes the three prior entries that built and locked the now-archived checklist
+   instrument (see their `Status` fields, updated today rather than edited in place): 2026-09-01 "Scoring
+   rubric conventions locked", 2026-09-01 "Switched primary scoring method to a per-item checklist...", and
+   2026-09-02 "Checklist schema and authoring conventions locked...".
+2. **Judge authority reversed:** PRD v3's Hard Rule 4 ("human scoring primary, LLM secondary, never sole
+   judge") is superseded. PRD v4 has LLM judges score every gate and quality dimension across the full
+   model sweep; human annotation is reserved for a stratified ~50-conversation validation sample
+   (oversampled on gate failures and `harmful` classifications), reporting Krippendorff's alpha per
+   dimension rather than scoring every case.
+3. **New harness stack:** `openevals.run_multiturn_simulation` for the conversation loop plus a
+   self-hosted Langfuse instance for the dataset/tracing/scoring UI — neither previously existed in this
+   repo or was previously decided; this is genuinely new infrastructure, not a rename of the never-built
+   single-turn run harness (`SCRATCHPAD.md`'s old task 5).
+4. **Species/model reconciliation:** PRD v4 as supplied dropped *Phragmites australis* from the breadth set
+   in favor of cogongrass, and didn't restate the open-weight-model requirement. Both reverted to the PRD
+   v3 values on user instruction: kept Phragmites, dropped cogongrass; kept the open-weight-model
+   requirement (one of 4-6 models must be open-weight), since the 2026-08-31 "API access confirmed..."
+   entry explicitly reaffirmed it as non-droppable ("no scope growth cuts both ways"). Net effect: the new
+   breadth set (Chinese privet, Japanese stiltgrass, wisteria, Callery pear, Phragmites) plus Ailanthus as
+   the depth axis is exactly the 6 species already researched in `data/ground_truth/*.yaml` — no new
+   species ground-truth work needed there. Only the new ~10-card lookalike arm (sumac, native wisteria,
+   coral honeysuckle, Virginia creeper) needs fresh ground truth, since none of those species have existing
+   files.
+
+**Rationale:** Single-gold-answer, single-turn scoring doesn't fit a domain where the same species in two
+different situations warrants genuinely different correct advice, and where a fluent wrong answer and a
+fluent right answer often differ by one unasked question — the single-turn item design had no way to
+measure whether a model elicited the right information before prescribing, only whether one static
+response was accurate. Multi-turn simulation with structural slot-gating (only newly-asked slots become
+visible to the simulated user's response generator) makes elicitation measurable as set arithmetic instead
+of judge taste, which the single-turn design could not do at all.
+
+**Trade-offs:** Discards ~54 hours of single-turn corpus/scoring work as the *primary* release artifact —
+mitigated by archiving rather than deleting it, and by the fact that the most expensive part of that work
+(species research, citations, ground-truth prose) is directly reusable. Accepts new, previously-undecided
+infrastructure cost (self-hosted Langfuse) against an already-tight schedule. Reverses a previously-locked
+hard rule (human-primary judging) — accepted because the new design's gate/quality split gives the LLM
+judge a narrower, more checkable job per call (R1: every judged score must carry deciding evidence in its
+`comment` field) than the old holistic Accuracy/Harm scale did, which is the same inter-rater-reliability
+argument the 2026-09-01 checklist-primary decision already made once for the single-turn design. Did NOT
+preserve PRD v3's freeze-gate rule verbatim — re-scoped it in PRD v4 to the new card corpus (freeze before
+the full model sweep begins) rather than dropping it, since nothing in the new PRD argues against it.
+**Rule Updated:** Y — `PRODUCT_REQUIREMENTS.md` rewritten as v4, `SCOPE.md` rewritten to match,
+`data/SCHEMA.md` trimmed to the still-active ground-truth schema only, `SCRATCHPAD.md` rewritten with PRD
+v4's near-term tasks, and `.claude/rules/domain-legal.md`'s path scope extended to `**/cards/**` so its
+citation-verification discipline auto-loads once card authoring starts.
+**Status:** Active
+
+## 2026-09-03 — Python harness conventions locked
+
+**Decision:** Worked through the open `src/` layout and scaffold questions flagged in
+`.claude/rules/python.md` since PRD v4's harness (openevals + self-hosted Langfuse, PRD §6) is about to be
+built and someone had already started standing up `infra/langfuse/` ahead of it. Locked, each confirmed
+with the user before writing (question-by-question, not assumed):
+- **Layout:** single `pyproject.toml` at the repo root (one uv-managed project, not an isolated one under
+  `harness/`). `harness/` is a flat-layout package — it IS the import root, no `src/` indirection — matching
+  PRD v4 §12's own naming for the release-artifact directory exactly. Internal module breakdown (`config.py`,
+  `models.py`, `cards.py`, `simulated_user.py`, `conversation.py`, `judges/{gates,quality,prompts}`,
+  `scoring.py`, `sweep.py`, `leakage_check.py`, `langfuse_client.py`, `scripts/` for plain entrypoints)
+  documented in `.claude/rules/python.md`.
+- **Concurrency:** synchronous code throughout `harness/`, with a `ThreadPoolExecutor` at exactly one
+  place — `sweep.py`'s top-level runner — parallelizing across `(model, card)` pairs. No `async`/`await`
+  anywhere else.
+- **Data modeling:** Pydantic v2 for every runtime structure that crosses a validation boundary (cards,
+  judge outputs, run metadata) — validates on load, and doubles as the source for the machine-checkable
+  card JSON schema PRD v4 §12 calls for.
+- **CLI:** no CLI framework. Each harness operation is a plain module entrypoint under `harness/scripts/`
+  (`uv run python -m harness.scripts.run_sweep`, etc.), argparse only where a script genuinely needs flags.
+- **Config/secrets:** a `pydantic-settings` `Settings` class in `harness/config.py`, loaded from a root
+  `.env`/real env vars, failing fast on missing/malformed config at startup — kept as a separate config
+  surface from `infra/langfuse/.env` (docker-compose-only, for the Langfuse stack itself).
+- **Testing:** `pytest`. Anything that would hit a paid LLM API (OpenAI/Anthropic/Google/open-weight host,
+  judge calls) uses recorded cassettes (`pytest-recording`/`vcrpy`) under `tests/cassettes/` — record once,
+  replay on every normal run; no test hits a real paid API by default.
+- **Logging:** standard library `logging`, plain text. Structured per-card/model/run context (R1's
+  deciding-evidence requirement, R4's reproducibility metadata) is Langfuse's job via tracing and run
+  metadata, not the application log's.
+- **Lint/type strictness:** `mypy` standard (non-strict) mode, `ruff` default rule set — no extended rule
+  plugins. Matches the existing "type hints on all signatures" convention without adding more friction
+  against the 17-day schedule.
+**Rationale:** Each choice was made against the concrete shape of PRD v4's harness requirements (R1-R5)
+rather than abstractly: flat `harness/` layout because the PRD already names that directory and a `src/`
+indirection would just be a second name for the same thing; thread-pool-not-async because the codebase's
+concurrency need is narrowly "run many independent (model, card) pairs," not pervasive async I/O
+throughout; Pydantic because it was already the natural fit once card/judge-output validation was in
+scope, and reusing it for schema generation avoids a hand-maintained schema drifting from the types;
+cassette-based testing because this project makes real, budgeted calls to 4-6 paid model APIs during the
+full sweep (SCRATCHPAD.md) and a routine test run must not silently spend that budget; standard (not strict)
+mypy/ruff because the schedule (PRD v4 §10, 17 days) doesn't have slack for the friction extended
+enforcement adds, and the existing type-hints-everywhere rule already catches most of what strict mode
+would add.
+**Trade-offs:** Did NOT adopt `async`/`await` despite `openevals` and most provider SDKs supporting it
+natively — accepted giving up some theoretical throughput ceiling for simpler, more debuggable code; if the
+thread-pool sweep proves too slow in practice, that's a new decision, not a silent rewrite. Did NOT adopt a
+CLI framework (Typer/Click) — accepted slightly less polished `--help` output and manual argparse wiring
+per script, in exchange for one fewer dependency and less structure to learn for a handful of scripts that
+each get used many times but by one person. Did NOT put structured logging in the application layer — this
+means a log line alone won't carry `card_id`/`model`/`run_id` fields; that context has to be found in
+Langfuse instead, which is an accepted coupling to Langfuse staying up and reachable during debugging.
+**Rule Updated:** Y — `.claude/rules/python.md` rewritten with the layout, concurrency, data-modeling,
+config, testing, and logging conventions above.
+**Status:** Active
+
+## 2026-09-03 — Ban numeric SCRATCHPAD.md task references
+
+**Decision:** Reference documents must cite `SCRATCHPAD.md` work by task description or by a
+`DECISION-LOG.md` entry title/date, never by task number. This third instance of the exact failure the
+2026-09-02 "Fidelity check of `scoring/checklist.jsonl`..." entry flagged and deferred ("if a third
+instance shows up, worth a rule") was found by `/commit`'s architecture reviewer before this commit landed,
+in two places introduced in this same PRD-v4-pivot diff: `DECISION-LOG.md`'s own "Python harness
+conventions locked" entry cited "SCRATCHPAD.md task 9" (meant the pre-pivot numbering's full model sweep;
+under the new numbering task 9 is the R5 leakage check), and the new `SCRATCHPAD-ARCHIVE.md` Langfuse entry
+cited "task 5" / "task 4" (also pre-pivot numbers, meaningless under the rewritten list). Both fixed in
+this commit to name the referenced work instead of its number.
+**Rationale:** `SCRATCHPAD.md` task numbers renumber every time the list is reordered or rewritten —
+exactly what happened twice in one day during this pivot (once for the PRD v4 task breakdown, again for
+the same-day task-breakdown-by-build-step pass). A numeric reference has no chance of surviving that; a
+description or a `DECISION-LOG.md` citation does.
+**Trade-offs:** None — this is strictly a wording discipline, not a scope or design change.
+**Rule Updated:** Y — `.claude/docs/scratchpad-discipline.md` now states the rule under "Never cite
+SCRATCHPAD.md by task number."
 **Status:** Active

@@ -29,6 +29,28 @@ uv run ruff check .        # lint
 uv run mypy .              # typecheck
 ```
 
+## Local Langfuse (self-hosted)
+
+[Langfuse](https://langfuse.com/) is an LLM observability/tracing platform. A self-hosted instance runs
+locally via Docker Compose in `infra/langfuse/` — nothing leaves the machine. This exists ahead of the run
+harness (see `SCRATCHPAD.md`'s open tasks / `PRODUCT_REQUIREMENTS.md` §6) so tracing is available once
+that harness starts calling models; the Python SDK isn't wired into any code yet (that depends on the
+`pyproject.toml` scaffold task), this is just the server.
+
+```
+cd infra/langfuse
+docker compose up -d      # start (first run pulls ~6 images, bootstraps org/project/user)
+docker compose ps         # check health
+docker compose down       # stop (data persists in Docker volumes)
+```
+
+UI: [http://localhost:3000](http://localhost:3000). First run bootstraps an org, project, and login
+automatically from `infra/langfuse/.env` (`LANGFUSE_INIT_*` vars) — no manual signup needed. That `.env`
+holds real local secrets and generated API keys; it's gitignored. `infra/langfuse/.env.example` documents
+every variable with placeholders and generation instructions — copy it to `.env` and fill in real values
+if you ever need to recreate the stack from scratch (e.g. `docker compose up -d --force-recreate` after
+editing `.env`, or on a machine that doesn't have it yet).
+
 ## How the project stays legible
 
 This repo uses a small set of files and automated checks so that context survives between sessions —
