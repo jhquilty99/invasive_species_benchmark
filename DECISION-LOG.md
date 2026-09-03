@@ -1360,4 +1360,25 @@ test card's claims against the yaml beyond what its authoring pass already did �
 directly from `data/ground_truth/ailanthus-altissima.yaml`'s cells per its own instructions.
 **Rule Updated:** Y — `.claude/rules/domain-legal.md` now states this explicitly.
 **Status:** Active
+
+## 2026-09-03 — `/commit` runs the scratchpad audit before every commit, not just at session start
+
+**Decision:** `.claude/commands/commit.md` and `.claude/docs/git-workflow.md` both now require running
+`.claude/hooks/scratchpad-audit.sh` as a step before finalizing any commit, archiving anything it flags
+the same way an already-identified closed task is archived — plus a by-hand check for two things the
+audit's git-log heuristic can't catch: a task this session's own work finished without saying so in a
+commit message, and a new follow-up task this session's work surfaced but never added to
+`SCRATCHPAD.md`.
+**Rationale:** User-requested, prompted by a live example this session: the Day 1 harness commit shipped
+with a real gap (no per-turn Langfuse tracing) that only got written down as a follow-up task after the
+user asked about it in a later turn, not as part of the commit that introduced the gap. The audit script
+already exists and already runs at `SessionStart` — reusing it at commit time (the other natural point
+work gets marked "done") catches drift closer to when it's introduced, and running it before the commit
+means a stale/incomplete `SCRATCHPAD.md` never gets to be "the previous commit's problem."
+**Trade-offs:** Did NOT turn this into a blocking hook (e.g. a `PreToolUse` gate on `git commit` that
+refuses to run until the audit is clean) — the audit is heuristic (a keyword match against recent commit
+subjects) and can false-flag, so a hard block would sometimes stop a legitimate commit over nothing; a
+documented step Claude follows, the same trust level the existing reviewer-parallel-review step already
+runs at, is the proportionate response. Revisit as a real hook if this step gets skipped in practice.
+**Rule Updated:** Y — `.claude/commands/commit.md` and `.claude/docs/git-workflow.md` both updated.
 **Status:** Active

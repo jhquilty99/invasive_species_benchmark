@@ -1,6 +1,6 @@
 ---
 description: Run the parallel specialist reviewers over the pending diff, address findings, then commit.
-allowed-tools: Bash(git:*), Agent, Read, Grep, Glob, Edit
+allowed-tools: Bash(git:*), Bash(bash .claude/hooks/scratchpad-audit.sh), Agent, Read, Grep, Glob, Edit
 ---
 
 Follow `.claude/docs/git-workflow.md`.
@@ -22,5 +22,10 @@ Follow `.claude/docs/git-workflow.md`.
 6. If this commit closes any `SCRATCHPAD.md` task, archive it now per `.claude/docs/scratchpad-discipline.md`
    — append the one-line entry, and remove the task's detail block from `SCRATCHPAD.md` as part of this
    same commit.
-7. Stage and commit. Confirm the commit message with the user before running `git commit` unless they've
+7. Separately, double-check nothing *else* in `SCRATCHPAD.md` is stale: run `.claude/hooks/scratchpad-audit.sh`
+   and archive anything it flags, the same way as step 6. Its git-log heuristic won't catch everything,
+   though — also check by hand whether this session's own work quietly finished a task without saying so in
+   a commit message, or surfaced a new follow-up task that hasn't been added to `SCRATCHPAD.md` yet. Fix
+   both before committing, not after.
+8. Stage and commit. Confirm the commit message with the user before running `git commit` unless they've
    already approved the exact message.

@@ -21,8 +21,17 @@ Findings that cross domains (e.g. an architecture finding that's really a root-c
 second pass touching both reviewers. Findings clearly out of scope for a reviewer auto-skip rather than
 getting force-fit into that reviewer's report.
 
-## After the reviewers
+## After the reviewers, before the commit
 
-Address findings, then commit. Write the `DECISION-LOG.md` entry (see `.claude/docs/decision-log.md`) for
-anything non-trivial that came out of the review, and archive any `SCRATCHPAD.md` tasks the commit closes
-(see `.claude/docs/scratchpad-discipline.md`).
+Address findings. Write the `DECISION-LOG.md` entry (see `.claude/docs/decision-log.md`) for anything
+non-trivial that came out of the review, and archive any `SCRATCHPAD.md` tasks the commit closes (see
+`.claude/docs/scratchpad-discipline.md`).
+
+Then verify `SCRATCHPAD.md` is accurate — don't rely on remembering to archive, check. Run
+`.claude/hooks/scratchpad-audit.sh` (the same script the SessionStart hook and `/scratchpad-audit` run)
+and archive anything it flags the same way. The audit's git-log heuristic only catches tasks that look
+closed by a commit subject — it won't catch a task this session's own work finished without saying so in
+the message, or a new follow-up task this session's work surfaced but never wrote down; check both by hand
+too, not just by running the script.
+
+Only then commit.
