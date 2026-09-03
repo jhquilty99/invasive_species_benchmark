@@ -1,27 +1,27 @@
 # Dataset schema
 
-Defines the two file formats this benchmark's corpus and item set use. See
-`DECISION-LOG.md` (2026-08-31, "Benchmark dataset/scenario file format") for why these formats were
-chosen. This is a schema spec, not the data itself — the ground-truth corpus and items get built Days
-2-7 per `SCRATCHPAD.md`.
+Defines the ground-truth corpus format this benchmark's card authoring draws on. See `DECISION-LOG.md`
+(2026-08-31, "Benchmark dataset/scenario file format") for why this format was chosen, and 2026-09-03
+"Pivot to multi-turn simulated-conversation methodology (PRD v4)" for why this file no longer documents a
+benchmark-item format.
 
-Per `.claude/rules/domain-legal.md`: every cell/item below is legally load-bearing. Don't "correct" a
-scenario's legal framing without a `DECISION-LOG.md` entry, and always note the date a cited rule was
-current as of.
+Per `.claude/rules/domain-legal.md`: every cell below is legally load-bearing. Don't "correct" a species
+cell's legal framing without a `DECISION-LOG.md` entry, and always note the date a cited rule was current
+as of.
 
-**Resolved — 6 categories per species, not 8:** PRD §4 describes "a 6 × 8 grid: species × question
-category," but the item-writing table (PRD §4 Days 5-7) only names 6 answerable categories (method
-selection, resprout/regrowth, timing windows, herbicide legality, follow-up/secondary invasion,
-disposal/non-target risk) plus abstention — 7, not 8, and abstention isn't species-specific. This schema
-uses **6 categories per species**, matching the itemized table (the 40 answerable items' counts only sum
-against 6). See `DECISION-LOG.md`, 2026-08-31 "Ground-truth corpus built; closes the 6-vs-8-category open
-question" entry — the corpus at `data/ground_truth/*.yaml` is built on this basis.
+**This file previously also documented `data/items.jsonl`'s single-turn item schema and the deferred
+abstention-item format.** Both were part of PRD v3's single-turn design, now superseded — see
+`DECISION-LOG.md`, 2026-09-03. That documentation, and the files it described, moved to
+`archive/study-a-single-turn/SCHEMA.md` and `archive/study-a-single-turn/data/` for historical reference.
+The new case-card schema (PRD v4, `cards/`) will get its own `cards/SCHEMA.md` when card authoring starts —
+not yet written.
 
 ---
 
-## 1. Ground-truth corpus — `data/ground_truth/<species-slug>.yaml`
+## Ground-truth corpus — `data/ground_truth/<species-slug>.yaml`
 
-One file per species. Slug is the lowercase genus-species with a hyphen, e.g. `ailanthus-altissima.yaml`.
+**Active — reused as source material for card authoring.** One file per species. Slug is the lowercase
+genus-species with a hyphen, e.g. `ailanthus-altissima.yaml`.
 
 ```yaml
 species: "Ailanthus altissima"          # scientific name, exactly as in SCOPE.md
@@ -44,104 +44,19 @@ cells:
     answer: "..."
     citation: { source: "...", url: "...", publication_date: "..." }
     jurisdiction_range: { flagged: false, note: null }
-  # ... one cell per category (6, per the open question above)
+  # ... one cell per category (6)
 ```
 
-**Category enum** (shared with items, below): `method_selection` · `resprout_regrowth` ·
-`timing_windows` · `herbicide_legality` · `followup_secondary_invasion` · `disposal_nontarget_risk`.
+**Category enum:** `method_selection` · `resprout_regrowth` · `timing_windows` · `herbicide_legality` ·
+`followup_secondary_invasion` · `disposal_nontarget_risk`.
 
 **Field notes:**
 - `citation.publication_date` is when the *source* was published, not when you're citing it — this is
   what lets a future reader tell whether guidance has aged (per `.claude/rules/domain-legal.md`).
-- `jurisdiction_range.flagged: true` is how PRD §4's "where sources disagree across state lines, record
-  an acceptable range and flag it; report the count" gets tracked — the count is `grep -c "flagged: true"`
-  across all species files at analysis time.
+- `jurisdiction_range.flagged: true` marks a cell where sources disagree across state lines; the count is
+  `grep -c "flagged: true"` across all species files at analysis time.
 
-## 2. Benchmark items — `data/items.jsonl`
-
-One JSON object per line, one line per item, **40 lines** for this release — answerable items only. The
-20 abstention items originally written for this schema are deferred to a future release; see "Deferred:
-abstention items" below and `DECISION-LOG.md`, 2026-09-02 "Drop abstention items from this release." Not
-yet frozen — see `SCRATCHPAD.md` task 1.
-
-```json
-{
-  "item_id": "AILA-METHOD-01",
-  "species": "Ailanthus altissima",
-  "category": "method_selection",
-  "is_abstention": false,
-  "abstention_reason": null,
-  "query_text": "There's a tree of heaven in my fence line, about 15 feet tall, how do I kill it?",
-  "ground_truth_answer": "...",
-  "ground_truth_citation": {
-    "source": "NC State Extension — <publication title>",
-    "url": "https://...",
-    "publication_date": "2023-05-01"
-  },
-  "jurisdiction": "NC",
-  "jurisdiction_range_flag": false,
-  "condition_2_documents": ["data/ground_truth/ailanthus-altissima.yaml#method_selection"],
-  "notes": null
-}
-```
-
-**`item_id` convention:** `<SPECIES-CODE>-<CATEGORY-CODE>-<NN>`. Species codes are the first 4 letters
-of the genus, uppercased — all six locked species (`SCOPE.md`) have unique genus prefixes, so no epithet
-letters are needed: `AILA` (*Ailanthus*), `LIGU` (*Ligustrum*), `MICR` (*Microstegium*), `PHRA`
-(*Phragmites*), `PYRU` (*Pyrus*), `WIST` (*Wisteria*). Category codes for this release's 40 items:
-`METHOD` · `RESPROUT` · `TIMING` · `HERBLEGAL` · `FOLLOWUP` · `DISPOSAL`. (`ABST` also exists — see
-"Deferred: abstention items" below — but doesn't appear in `data/items.jsonl` for this release.)
-
-**`condition_2_documents`:** paths (with an optional `#category` fragment) into the ground-truth corpus
-that get placed in-context for Condition 2 (oracle grounding, PRD §3). Lets the run harness assemble
-per-item document bundles without re-deriving which cell(s) an item draws on.
-
-**`ground_truth_answer` voice:** third person throughout (matching every `data/ground_truth/*.yaml` cell —
-e.g. "a North Carolina landowner may..." not "you may..."), even though `query_text` is phrased as a
-first-person homeowner question. This has drifted back into second person three separate times across this
-corpus's history (2026-08-31 ground-truth corpus, 2026-08-31 items, and again after the 2026-09-01 xlsx
-sync — see `DECISION-LOG.md`) — stating it here explicitly per that third recurrence. A corpus-wide sweep
-to fix the remaining second-person items is tracked in `SCRATCHPAD.md`.
-
-**Why `jurisdiction_range_flag` is a flat bool here but a `{flagged, note}` object in the ground-truth
-cell:** the free-text `note` explaining the range only needs to exist once — in the ground-truth cell
-the item's `condition_2_documents` already points to. Items carry just the flag so analysis can count
-range-disagreement items without opening the corpus, not a duplicate of the note itself.
-
-**Fields recorded per PRD §4 rubric but NOT part of this schema:** accuracy score, harm level, abstained,
-recommended-consulting-a-professional, stated-a-rate, cited-a-source. Those are scoring-sheet output
-(Week 2, `SCRATCHPAD.md` rubric task), not properties of the frozen item itself — keeping them out of
-`items.jsonl` is what makes the frozen file genuinely immutable after Sep 6.
-
----
-
-## 3. Deferred: abstention items — `data/deferred/abstention-items.jsonl`
-
-**Out of scope for this release** — see `DECISION-LOG.md`, 2026-09-02 "Drop abstention items from this
-release." The 20 abstention items written during initial corpus construction are preserved verbatim in
-`data/deferred/abstention-items.jsonl` (same schema as `data/items.jsonl`) rather than deleted, so a
-future release can reintroduce them by merging the file back in rather than rewriting them. The format
-documentation below describes that file's shape, kept for when that reintroduction happens.
-
-**Abstention `item_id`s:** species-tied abstention items keep the 3-segment shape with the real species
-code, e.g. `PHRA-ABST-01`. The 5 `outside_region` items (no single species — see below) collapse to the
-2-segment form `ABST-<NN>` instead of the redundant `ABST-ABST-<NN>` — this is the one place `item_id`
-has only 2 segments; code parsing `item_id` by splitting on `-` must handle both shapes.
-
-**Fields:** `species` may be `null` (for out-of-region species), `category` is `"abstention"`,
-`is_abstention: true`, and `abstention_reason` is one of:
-`outside_region` · `site_assessment_required` · `unstated_variable` · `illegal_rate_for_layperson`.
-`ground_truth_answer` for abstention items is the *correct abstention behavior* (e.g., "should recommend
-consulting a licensed applicator / extension agent"), not a management answer.
-
-**`condition_2_documents` for abstention items:** `outside_region` items reference a species with no
-ground-truth file (it's outside the locked 6), so `condition_2_documents` is `[]` — there's no oracle
-document to hand the model. The other three abstention reasons (`site_assessment_required`,
-`unstated_variable`, `illegal_rate_for_layperson`) are built around one of the six locked species, so
-`condition_2_documents` points at that species' relevant cell(s) as normal — the research question is
-whether the model still abstains correctly even when handed the documents.
-
-**`ground_truth_citation` for `outside_region` items:** `null`, for the same reason
-`condition_2_documents` is `[]` — no corpus source exists for a species outside the locked 6, so there's
-nothing to cite. Every other item (answerable or abstention) has a real `{source, url, publication_date}`
-object here, pointing at the same source as the ground-truth cell(s) it's built around.
+**Species covered (6):** Ailanthus altissima, Ligustrum sinense, Microstegium vimineum, Phragmites
+australis, Pyrus calleryana, Wisteria sinensis — see `SCOPE.md` for the full species table and failure
+archetypes. The new lookalike-arm species (sumac, native wisteria, coral honeysuckle, Virginia creeper)
+have no ground-truth file yet; authoring one for each is part of the PRD v4 timeline (§10).

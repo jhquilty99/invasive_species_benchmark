@@ -6,7 +6,8 @@ paths:
 
 # Testing conventions
 
-- `pytest` is the test runner. Test files: `test_*.py` under `tests/`, mirroring the `src/` layout.
+- `pytest` is the test runner. Test files: `test_*.py` under `tests/`, mirroring the flat `harness/`
+  package layout (see `.claude/rules/python.md`).
 - A benchmark scoring/grading function gets a test asserting on at least one known-correct and one
   known-incorrect example input — this domain has real legal stakes, so silent scoring drift is the
   costliest failure mode here.

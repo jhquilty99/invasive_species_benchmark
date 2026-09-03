@@ -33,6 +33,15 @@ batching — a bulk cleanup of 15+ stale entries is the exact symptom this syste
 Keep `SCRATCHPAD.md`'s open task list ranked by priority, not by creation order. Re-rank when priorities
 change instead of leaving a stale order.
 
+## Never cite SCRATCHPAD.md by task number
+
+Task numbers renumber every time the list is reordered or rewritten — a reference like "task 5" or
+"(new numbering)" goes stale the moment the list changes again, often within the same diff that introduced
+the reference. Cite by task description or by a `DECISION-LOG.md` entry title/date instead. This rule
+exists because the same failure showed up three times (`scoring/RUBRIC.md` §5, a `SCRATCHPAD-ARCHIVE.md`
+entry, and a `DECISION-LOG.md` entry — see `DECISION-LOG.md`, 2026-09-03 "Ban numeric SCRATCHPAD.md task
+references") before it was written down.
+
 ## Scoped trackers outside SCRATCHPAD.md
 
 `outreach/EMAIL-TRACKER.md` is a deliberate, narrow exception to "the tracker is `SCRATCHPAD.md`": it

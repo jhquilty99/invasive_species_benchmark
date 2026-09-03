@@ -3,6 +3,7 @@ paths:
   - "**/legal/**"
   - "**/data/**"
   - "**/scenarios/**"
+  - "**/cards/**"
 ---
 
 # Domain: legally constrained management advice

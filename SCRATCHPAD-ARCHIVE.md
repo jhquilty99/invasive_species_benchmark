@@ -79,3 +79,12 @@ index, not a history of *why*.
   definition of done) separate from `scoring/RUBRIC.md`'s calibration-anchor content; `PRODUCT_REQUIREMENTS.md`
   §4/§10 updated to name it as part of the Day 9 rubric deliverable (detail: DECISION-LOG.md, 2026-09-02
   "Added a plain-language scorer's guide separate from RUBRIC.md" entry). Not yet committed.
+- 2026-09-03 — Merged the new multi-turn-methodology PRD into `PRODUCT_REQUIREMENTS.md` (now v4);
+  archived PRD v3's single-turn artifacts (`data/items.jsonl`, `data/deferred/abstention-items.jsonl`,
+  `scoring/checklist.jsonl`, `scoring/RUBRIC.md`, `scoring/SCORER-GUIDE.md`, xlsx/build/sync scripts) to
+  `archive/study-a-single-turn/` via `git mv`; updated `SCOPE.md`, `data/SCHEMA.md`, `SCRATCHPAD.md`, and
+  `.claude/rules/domain-legal.md` to match (detail: DECISION-LOG.md, 2026-09-03 "Pivot to multi-turn
+  simulated-conversation methodology (PRD v4)" entry).
+- 2026-09-03 — Stood up a local self-hosted Langfuse instance (`infra/langfuse/`, Docker Compose, v4.28.0)
+  ahead of the run harness; verified all 6 services healthy and the bootstrapped project/API key work
+  end-to-end. SDK wiring into the harness itself deferred until the `pyproject.toml` scaffold exists.
