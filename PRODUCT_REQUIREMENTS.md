@@ -129,6 +129,11 @@ Write items as realistic queries: *"There's a tree of heaven in my fence line, a
 
 Write anchors for every level *before* scoring anything.
 
+Deliverable also includes a plain-language scorer's guide (`scoring/SCORER-GUIDE.md`) alongside the rubric
+itself — purpose, materials, steps, and definition of done, written for the person actually scoring
+responses Days 13-15, distinct from the rubric's calibration-anchor content aimed at whoever builds/tunes
+the instrument.
+
 **Days 10–12 — Runs**
 
 - **Condition 1:** system prompt establishing unlicensed-layperson context, no documents. (Dropped the bare zero-shot condition — the persona-prompted version is more realistic and more favorable to the model, which makes any failures more damning.)
@@ -260,7 +265,7 @@ Weekday targets assume ~2 hrs; weekend targets ~4–5 hrs. Adjust the split, not
 | Day | Date | Task | Hrs |
 |---|---|---|---|
 | 8 | **Mon Sep 7** *(Labor Day)* | Write the accuracy and harm rubrics with anchor examples for every level. Free day — use it if available. | 3 |
-| 9 | Tue Sep 8 | Finish anchors. Build the scoring sheet and the blinding/shuffle script. | 2 |
+| 9 | Tue Sep 8 | Finish anchors. Build the scoring sheet and the blinding/shuffle script; write the scorer's guide. | 2 |
 | 10 | Wed Sep 9 | Assemble per-species document bundles for Condition 2. Write the run harness. | 2 |
 | 11 | Thu Sep 10 | Execute runs: Condition 1, all 4 models, 2 runs. Verify logging captures version strings. | 2 |
 | 12 | Fri Sep 11 | Execute runs: Condition 2, all 4 models, 2 runs. Spot-check outputs for truncation or refusal loops. | 2 |

@@ -71,3 +71,11 @@ index, not a history of *why*.
 - 2026-09-02 — `SCRATCHPAD.md` task 1 closed: committed `data/items.jsonl` + `data/ground_truth/*.yaml`
   (plus the accumulated Days 1-2 changes that had never been committed) and tagged the commit `freeze-v1`
   (commit `7d2f1b9`). The 40-item benchmark corpus is now frozen — no further item changes for any reason.
+- 2026-09-02 — `SCRATCHPAD.md` task 1 (new numbering) closed: authored `scoring/checklist.jsonl` (40
+  items, 260 rows of weighted atomic claims + item-specific harm triggers) and extended `scoring/RUBRIC.md`
+  with the schema/weighting/harm-trigger conventions (detail: DECISION-LOG.md, 2026-09-02 "Checklist
+  schema and authoring conventions locked" entry). Not yet committed.
+- 2026-09-02 — Authored `scoring/SCORER-GUIDE.md`, a plain-language scorer SOP (purpose/materials/steps/
+  definition of done) separate from `scoring/RUBRIC.md`'s calibration-anchor content; `PRODUCT_REQUIREMENTS.md`
+  §4/§10 updated to name it as part of the Day 9 rubric deliverable (detail: DECISION-LOG.md, 2026-09-02
+  "Added a plain-language scorer's guide separate from RUBRIC.md" entry). Not yet committed.
