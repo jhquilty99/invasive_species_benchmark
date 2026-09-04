@@ -10,12 +10,20 @@ real API key records them — this mirrors `test_simulated_user.py`'s current st
 
 from pathlib import Path
 from typing import Any
+from unittest.mock import MagicMock
 
 import anthropic
 import pytest
 
 from harness.cards import load_card
-from harness.conversation import is_specific_prescription, run_conversation
+from harness.conversation import (
+    is_species_identified,
+    is_specific_introduction_recommendation,
+    is_specific_prescription,
+    is_terminal_response,
+    run_conversation,
+)
+from harness.models import Card, NativeStatus, QuestionType, Slot
 
 CARDS_DIR = Path(__file__).parent.parent / "cards"
 
@@ -86,6 +94,171 @@ def test_is_specific_prescription_false_for_a_request_for_more_information(
     assert result is False
 
 
+# --- is_specific_introduction_recommendation: the `introduction`-card stopping classifier -------
+
+SPECIFIC_KEEP_RECOMMENDATION = (
+    "Keep it — that's a native fringetree, not an invasive species, and it's a great low-maintenance "
+    "small tree that supports local pollinators. No need to remove or replace it."
+)
+
+HEDGED_KEEP_OR_REMOVE_OPTIONS = (
+    "You could keep it if you like the look, or you could remove it and plant something else if "
+    "you'd rather have more sun in that corner — really depends on what you want out of that spot."
+)
+
+
+@pytest.mark.vcr()
+def test_is_specific_introduction_recommendation_true_for_a_committed_keep_recommendation(
+    anthropic_test_client: anthropic.Anthropic,
+) -> None:
+    result = is_specific_introduction_recommendation(
+        SPECIFIC_KEEP_RECOMMENDATION, client=anthropic_test_client
+    )
+
+    assert result is True
+
+
+@pytest.mark.vcr()
+def test_is_specific_introduction_recommendation_false_for_hedged_keep_or_remove_options(
+    anthropic_test_client: anthropic.Anthropic,
+) -> None:
+    result = is_specific_introduction_recommendation(
+        HEDGED_KEEP_OR_REMOVE_OPTIONS, client=anthropic_test_client
+    )
+
+    assert result is False
+
+
+# --- is_species_identified: the `identification`-card stopping classifier -----------------------
+
+COMMITTED_IDENTIFICATION = (
+    "Based on the opposite leaves, four-petaled white flowers, and fringe-like bloom shape, this is "
+    "fringetree (Chionanthus virginicus) — a native small tree, not an invasive species."
+)
+
+HEDGED_CANDIDATE_LIST = (
+    "This could be a few different things — it might be fringetree, or possibly a privet if the "
+    "leaves are opposite and glossy, or even a young ash if the leaflets are compound. Hard to say "
+    "without a closer look."
+)
+
+
+@pytest.mark.vcr()
+def test_is_species_identified_true_for_a_committed_identification(
+    anthropic_test_client: anthropic.Anthropic,
+) -> None:
+    result = is_species_identified(
+        COMMITTED_IDENTIFICATION, client=anthropic_test_client
+    )
+
+    assert result is True
+
+
+@pytest.mark.vcr()
+def test_is_species_identified_false_for_a_hedged_candidate_list(
+    anthropic_test_client: anthropic.Anthropic,
+) -> None:
+    result = is_species_identified(HEDGED_CANDIDATE_LIST, client=anthropic_test_client)
+
+    assert result is False
+
+
+# --- is_terminal_response: question_type dispatch, no API calls needed to test the routing ------
+
+
+def _minimal_card(question_type: QuestionType) -> Card:
+    slots = [
+        Slot(
+            name="leaf_arrangement",
+            value="Opposite leaves.",
+            decision_relevant=True,
+            description="Whether leaves are opposite or alternate.",
+        )
+    ]
+    ecological_framing_notes = "Fringetree is a native larval host with no spread risk."
+
+    if question_type == QuestionType.REMOVAL:
+        return Card(
+            card_id="TEST-DISPATCH",
+            species="Chionanthus virginicus",
+            true_species="Chionanthus virginicus",
+            native_status=NativeStatus.NATIVE,
+            opening_message="What is this plant?",
+            slots=slots,
+            ecological_framing_notes=ecological_framing_notes,
+            question_type=QuestionType.REMOVAL,
+            treatment_classes={},
+            required_specificity_elements=["product"],
+            expected_followup_plan="Monitor.",
+            water_present=False,
+            restricted_use_products=[],
+        )
+    if question_type == QuestionType.INTRODUCTION:
+        return Card(
+            card_id="TEST-DISPATCH",
+            species="Chionanthus virginicus",
+            true_species="Chionanthus virginicus",
+            native_status=NativeStatus.NATIVE,
+            opening_message="What is this plant?",
+            slots=slots,
+            ecological_framing_notes=ecological_framing_notes,
+            question_type=QuestionType.INTRODUCTION,
+            introduction_classes={},
+        )
+    return Card(
+        card_id="TEST-DISPATCH",
+        species="Chionanthus virginicus",
+        true_species="Chionanthus virginicus",
+        native_status=NativeStatus.NATIVE,
+        opening_message="What is this plant?",
+        slots=slots,
+        ecological_framing_notes=ecological_framing_notes,
+        question_type=QuestionType.IDENTIFICATION,
+    )
+
+
+def test_is_terminal_response_dispatches_removal_to_is_specific_prescription(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    mock = MagicMock(return_value=True)
+    monkeypatch.setattr("harness.conversation.is_specific_prescription", mock)
+
+    result = is_terminal_response(_minimal_card(QuestionType.REMOVAL), "some message")
+
+    assert result is True
+    mock.assert_called_once()
+
+
+def test_is_terminal_response_dispatches_introduction_to_introduction_classifier(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    mock = MagicMock(return_value=True)
+    monkeypatch.setattr(
+        "harness.conversation.is_specific_introduction_recommendation", mock
+    )
+
+    result = is_terminal_response(
+        _minimal_card(QuestionType.INTRODUCTION), "some message"
+    )
+
+    assert result is True
+    mock.assert_called_once()
+
+
+def test_is_terminal_response_dispatches_identification_to_is_species_identified(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    mock = MagicMock(return_value=True)
+    monkeypatch.setattr("harness.conversation.is_species_identified", mock)
+
+    result = is_terminal_response(
+        _minimal_card(QuestionType.IDENTIFICATION), "some message"
+    )
+
+    assert result is True
+    mock.assert_called_once()
+
+
 # --- Full loop: real card, short max_turns to keep the cassette small ---------------------------
 
 
@@ -103,7 +276,28 @@ def test_run_conversation_completes_with_the_real_ailanthus_card(
 
     result = run_conversation(card, client=anthropic_test_client, max_turns=3)
 
-    trajectory = result["trajectory"]
+    trajectory = result.trajectory
+    assert trajectory[0]["role"] == "user"
+    assert trajectory[0]["content"] == card.opening_message
+    assert len(trajectory) <= 3 * 2
+    for i, message in enumerate(trajectory):
+        expected_role = "user" if i % 2 == 0 else "assistant"
+        assert message["role"] == expected_role
+    assert result.trace_id is None  # no langfuse_client passed
+
+
+@pytest.mark.vcr()
+def test_run_conversation_completes_with_the_real_identification_card(
+    anthropic_test_client: anthropic.Anthropic,
+) -> None:
+    """Same shape-only smoke test as the removal card above, but for an `identification`-type card —
+    exercises the new `is_species_identified` stopping-condition path end to end, not just the
+    `removal` classifier the harness originally shipped with."""
+    card = load_card(CARDS_DIR / "chionanthus-virginicus-lookalike-01.json")
+
+    result = run_conversation(card, client=anthropic_test_client, max_turns=3)
+
+    trajectory = result.trajectory
     assert trajectory[0]["role"] == "user"
     assert trajectory[0]["content"] == card.opening_message
     assert len(trajectory) <= 3 * 2

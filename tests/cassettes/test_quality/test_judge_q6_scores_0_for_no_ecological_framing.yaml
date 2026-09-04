@@ -1,0 +1,136 @@
+interactions:
+- request:
+    body: "{\"max_tokens\":1024,\"messages\":[{\"role\":\"user\",\"content\":\"Return
+      your score now.\"}],\"model\":\"claude-sonnet-5\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"score\":{\"type\":\"integer\",\"enum\":[0,1,2]},\"comment\":{\"type\":\"string\"}},\"required\":[\"score\",\"comment\"],\"additionalProperties\":false}}},\"system\":\"You
+      are scoring, on a 0-2 scale, whether an AI assistant correctly framed the ecological
+      role of a plant in its response, in a conversation where someone asked about
+      a plant on their property.\\n\\nThis plant's native status is: invasive\\nWhat
+      a correct answer should say about why it belongs or doesn't belong on the property:
+      Chinese privet forms dense monocultures that shade out native shrub-layer species
+      and suppresses native seedling recruitment.\\n\\nJudge the whole conversation,
+      not just the last message.\\n\\nScore 2: the assistant's response names the
+      specific ecological point above (the specific harm for an invasive species,
+      or the specific benefit for a native species) \u2014 not just a generic \\\"it's
+      a weed\\\" / \\\"it's a nice plant\\\" characterization.\\nScore 1: the assistant
+      gestures at the right general direction (e.g. calls an invasive species \\\"aggressive\\\"
+      or a native species \\\"good for wildlife\\\") without naming the specific mechanism/benefit
+      above.\\nScore 0: the assistant gives no ecological framing at all, or frames
+      it in the wrong direction entirely (e.g. treats a beneficial native as just
+      an unwanted weed, or an invasive species as ecologically neutral).\\n\\nConversation
+      transcript:\\n\\\"\\\"\\\"\\nUser: There's an overgrown hedge of shrubs along
+      the fence, what should I do?\\n\\nAssistant: That's just an overgrown weedy
+      bush. Cut-stump treat it with triclopyr.\\n\\\"\\\"\\\"\\n\\nReturn the score
+      and, in the comment, quote what ecological framing (if any) the assistant gave.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '1833'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3VT22obMRD9lUEvScA2cSEp9WvoQ2n7ZgilLosiza7U6LLVjJJsjP+9I7txbhQW
+        duecM6OZs6OtitliUCtlgq4W55RTQp5fqJnyVuBIQ3e+XF6hW8cfn6+pfzDfry8/PTx+819Fw9OI
+        TYVEekABSg4N0ESeWCcWyOTEKF+rn9snPeNDY/avldpuFJlccKNW57ON6GMUvUQbtXYIx1pgvYWU
+        GbwV3vcT5AJJRwQW2Ria5PTK+YQkYfF3yGegGXQIM8kr+3zPMAgDOk2AJoc8eKMD9EVHn4YFfGHI
+        KUxAWsQna6f5hOB3JSmTIN9hGUq+T3CPaCe4qeQWcFV5TlzjCFxQzpMj7j07ibwJeZzK4gTWzhPI
+        o2HAhEJIMxS9jCa9GKeLNizwo2af0yE9ZWg+tDj3+xFpRON7yRV9hNM+l9YziBsycMwpmxq4FiRR
+        Sx/ktEXIlcUkbueQK/VmHvSE5VBLlDpZoDqOkkVHnQwXWuWCplTPrY2z2V4qTb1wTcaVhWlK6bA5
+        euuTXWzUTu1+zRRxHruDRP4yJttJc0n9Iwj/VExG1iFV+UEH0CJrH+gJq/utWm2VT2PljvOtjKpW
+        Hz+cy1pp47AzzXGxqHutOPJC2/9xT7ntABwdRiw6dBfxvf6ZXbq37G6mxOKX0PLi8g32PJdcAVlQ
+        sWl4VYGw3HmDHXss4lVbd6uLbbcw9ViaT92AWagh5Bsd1G73F7O+Cfe7AwAA
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-04T00:35:46Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-04T00:35:48Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-04T00:35:45Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-04T00:35:46Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a358ea7dfe7e7c67-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Fri, 04 Sep 2026 00:35:48 GMT
+      request-id:
+      - req_011CehTmXEV1HzkCWvuTqBrZ
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-cd5fa9e3b11ec1a1664b19adf557f9db-2ce7ba3aa03a12a9-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+version: 1

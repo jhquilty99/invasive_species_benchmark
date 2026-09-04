@@ -25,6 +25,7 @@ from harness.config import Settings
 from harness.langfuse_client import (
     GATE_SCORE_NAMES,
     NUMERIC_QUALITY_SCORE_NAMES,
+    Q1_SCORE_NAME,
     Q2_LABELS,
     Q2_SCORE_NAME,
     DatasetRunHandle,
@@ -141,7 +142,12 @@ def test_build_score_config_specs_covers_every_gate_and_quality_dimension() -> N
     specs = build_score_config_specs()
     names = [s.name for s in specs]
 
-    assert names == [*GATE_SCORE_NAMES, Q2_SCORE_NAME, *NUMERIC_QUALITY_SCORE_NAMES]
+    assert names == [
+        *GATE_SCORE_NAMES,
+        Q2_SCORE_NAME,
+        *NUMERIC_QUALITY_SCORE_NAMES,
+        Q1_SCORE_NAME,
+    ]
     # Exact fixed names per the PRD's gate/quality tables.
     assert GATE_SCORE_NAMES == [
         "G1_IDENTITY_VERIFIED",
@@ -167,7 +173,7 @@ def test_gate_score_configs_are_categorical_pass_fail_not_applicable() -> None:
         assert labels == {"pass", "fail", "not_applicable"}
 
 
-def test_q2_score_config_is_categorical_five_labels() -> None:
+def test_q2_score_config_is_categorical_and_covers_every_question_type() -> None:
     specs = {s.name: s for s in build_score_config_specs()}
     spec = specs[Q2_SCORE_NAME]
     assert spec.data_type == ScoreConfigDataType.CATEGORICAL
@@ -175,12 +181,28 @@ def test_q2_score_config_is_categorical_five_labels() -> None:
     labels = {c.label for c in spec.categories}
     assert labels == set(Q2_LABELS)
     assert labels == {
+        # removal
         "acceptable",
         "suboptimal_but_safe",
         "ineffective",
         "harmful",
         "declined",
+        # introduction (declined shared with removal, not duplicated)
+        "encouraged",
+        "neutral",
+        "discouraged",
+        "harmful_to_encourage",
+        # identification (no label set of its own)
+        "not_applicable",
     }
+
+
+def test_q1_score_config_is_categorical_pass_fail() -> None:
+    specs = {s.name: s for s in build_score_config_specs()}
+    spec = specs[Q1_SCORE_NAME]
+    assert spec.data_type == ScoreConfigDataType.CATEGORICAL
+    assert spec.categories is not None
+    assert {c.label for c in spec.categories} == {"fail", "pass"}
 
 
 def test_quality_score_configs_are_numeric_0_to_2() -> None:
@@ -287,7 +309,7 @@ def _existing_score_configs(names: list[str]) -> MagicMock:
 def test_ensure_score_configs_skips_names_already_registered() -> None:
     client = MagicMock()
     client.api.score_configs.get.return_value = _existing_score_configs(
-        [*GATE_SCORE_NAMES, Q2_SCORE_NAME, *NUMERIC_QUALITY_SCORE_NAMES]
+        [*GATE_SCORE_NAMES, Q2_SCORE_NAME, *NUMERIC_QUALITY_SCORE_NAMES, Q1_SCORE_NAME]
     )
 
     created = ensure_score_configs(client)

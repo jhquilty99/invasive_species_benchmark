@@ -1586,3 +1586,205 @@ source of bugs.
 Optional-bag-vs-discriminated-union choice; if a future card-model or judge-output-model change hits the
 same choice again, `.claude/rules/python.md`'s "Data modeling" section should get a default answer.
 **Status:** Active
+
+## 2026-09-03 — First-pass LLM-as-judge validation, wired through Langfuse
+
+**Decision:** Built the gate judges (`harness/judges/gates.py`, G1-G5), quality judges
+(`harness/judges/quality.py`, Q2/Q3/Q5/Q6), and code-computed Q1 + derived metrics
+(`harness/scoring.py`) that `SCRATCHPAD.md`'s open tasks called for, plus real per-conversation and
+per-turn Langfuse tracing (`harness/_tracing.py`, wired into `harness/conversation.py` and
+`harness/simulated_user.py`) and an end-to-end runner (`harness/scripts/run_validation.py`) — enough
+to run all 13 existing cards through conversation → gates → quality → Langfuse once, on one
+model-under-test, to sanity-check the whole approach before authoring the remaining 41 cards. Four
+sub-decisions, each confirmed with the user or forced by something discovered mid-build:
+
+1. **Type-aware stopping condition.** The existing `is_specific_prescription` classifier only
+   recognizes a treatment recommendation, so `introduction`/`identification` cards (7 of 13) would have
+   silently run to `max_turns` every time. Added `is_specific_introduction_recommendation` and
+   `is_species_identified` as siblings, plus `is_terminal_response(card, ...)` to dispatch by
+   `question_type` — used both by the live stopping condition and by `scoring.py`'s post-hoc
+   re-derivation. User confirmed this over the cheaper "let non-removal cards hit max_turns" and
+   "removal cards only this pass" options.
+2. **Resolves `PRODUCT_REQUIREMENTS.md` §13.5's open question:** Q1 (decision-relevant slots elicited
+   before the terminal turn) now applies to `identification` cards too, via the same mechanism as
+   `removal` — the elicitation window is every assistant turn before the type-appropriate terminal turn
+   (or the whole conversation if `max_turns` was hit with no terminal turn ever produced).
+3. **Real per-turn Langfuse tracing lands now, not later.** `SCRATCHPAD.md` had this as a separate
+   deferred task ("before the human-annotation queue, not required for the Fri Sep 5 gate"). User
+   confirmed spending the extra wiring time now over a single flat span per conversation, since redoing
+   it later would be pure waste.
+4. **`identification` cards score Q2 `not_applicable`.** PRD v4 §5.3's own open-question note
+   sketched a possible third label set ("identification correctness") but never defined one, and
+   gate G1 (identity verified) already carries that signal per the PRD's own RQ1 explanation.
+   Structural `not_applicable`, same mechanism `removal`/`introduction` already use for off-type cards,
+   rather than inventing an unspecified label set to fill the gap.
+
+Judges use `DEFAULT_JUDGE_MODEL = "claude-sonnet-5"` (`harness/judges/_common.py`), deliberately
+different from both `DEFAULT_MODEL_UNDER_TEST` (`claude-opus-5`, the thing being graded) and
+`DEFAULT_INFRA_MODEL` (`claude-haiku-4-5`, cheap harness plumbing) — a judge run shouldn't grade the
+default model-under-test with an instance of itself. `QualityScore.score` and `Q2Classification.label`
+were widened to accept a `Literal["not_applicable"]` alongside their judged value (mirroring
+`GateResult`'s existing `GateOutcome.NOT_APPLICABLE`), since PRD v4 §5.3 needs that state for Q2/Q3/Q5
+on off-type cards and the original `QualityScore` model (from the "Card matrix restructured" entry
+above) had explicitly deferred modeling it. `harness/langfuse_client.py` gained `Q1_SCORE_NAME` (Q1 is
+computed in code but still worth a categorical pass/fail score for Langfuse UI visibility) and its
+`Q2_LABELS` became the union of the removal and introduction label sets plus `not_applicable`, so one
+score config covers every question type instead of three.
+**Rationale:** The user wanted the fastest path to seeing the full card → conversation → judge →
+Langfuse loop working end to end, specifically through real Langfuse (not a local file dump), to
+validate the card/gate/quality design before sinking time into the remaining 41 cards or a multi-model
+sweep. The two gaps above (stopping condition, tracing granularity) were surfaced during planning, not
+assumed away, and the user chose the more-correct option for both given the loop is meant to be reused.
+**Trade-offs:** Deliberately did NOT build Q4 (regulatory grounding) — it needs a
+`data/ground_truth/*.yaml` lookup mechanism none of the other dimensions need, and `SCRATCHPAD.md`'s
+own quality-judging task description omitted it, so it stays a real gap rather than a rushed
+approximation. Did NOT touch the slot-classifier-tuning or R5-leakage-check tasks — unrelated to
+proving the judge loop works. Did NOT run the actual live validation sweep myself (no Docker access in
+this environment) — `harness/scripts/run_validation.py` is written and unit/cassette-tested, but the
+user needs to run it against a live local Langfuse instance. Noticed, but deliberately did NOT fix, a
+pre-existing unrelated mypy error in `tests/test_cards.py:81` (indexing `Card.treatment_classes`
+without a `None`-check) — out of scope for this diff, flagged here so it doesn't get lost.
+**Rule Updated:** N — flag for retro. This is the second Pydantic model (after `Card` itself) to need a
+"most fields are judged, some are structurally not_applicable" shape; if a third one comes up,
+`.claude/rules/python.md` should get a default pattern for it instead of each judge output model
+reinventing the `Literal["not_applicable"]` union independently.
+**Status:** Active
+
+## 2026-09-03 — Live validation run: one real bug fixed, one local-infra bug found and deferred
+
+**Decision:** Ran `harness/scripts/run_validation.py` for real against all 13 cards
+(`claude-opus-5`, local Langfuse). First attempt crashed on card 2 with a `JSONDecodeError` (`Unterminated
+string`) — `harness/judges/_common.py`'s `run_structured_judge_call` had `max_tokens=1024`, and
+`DEFAULT_JUDGE_MODEL` (`claude-sonnet-5`) uses extended thinking by default, the same failure mode
+`conversation.py` already documents for `claude-opus-5` as model-under-test: thinking ate most of the
+budget, leaving too little for the judge to finish its JSON output on a real (long) transcript, where
+the test suite's short synthetic transcripts never triggered it. Fixed by raising the default to 4096.
+Second run completed cleanly (exit 0), all 116 gate/quality/Q1 scores landed. Separately, the run
+exposed that the local Langfuse `langfuse-worker` container's queue infrastructure was failing every
+job type with Redis socket timeouts, so no trace/span/observation data or dataset-run-item links were
+ever ingested for this run, even though direct score-writes (a different code path) worked fine.
+Restarting the worker container did not fix it — a bare `span.update()` + `client.flush()` smoke test
+afterward still produced zero rows in ClickHouse's `traces` table. Recovered the full per-card results
+anyway by querying ClickHouse's `scores` table directly and reconstructing the trace→card mapping from
+processing-order timestamps (cards are always judged in the same alphabetical order `harness/cards.py`
+loads them in) — cross-checked against the run's own log output and each score's `comment` text
+(species names mentioned) to confirm the reconstruction was correct before trusting it.
+**Rationale:** The `max_tokens` fix is a straightforward bug fix once diagnosed. For the Langfuse
+ingestion issue: debugging someone else's local Docker/Redis stack in depth wasn't the point of this
+pass (validating the judge approach), and the scores — the actual signal needed for that — were
+provably intact and recoverable, so pivoting to a direct ClickHouse query got the validation result
+without burning more time chasing infra.
+**Trade-offs:** Deliberately did NOT dig further into *why* the worker's Redis connection was failing
+(stale connection pool, a resource limit, something else) — flagged as an open task
+(`SCRATCHPAD.md`) rather than fixed, since it needs someone to actually watch the worker container
+live against a fresh trigger to diagnose, which is a different kind of work than this session's. Did
+NOT re-run the validation sweep a third time after restarting the worker to see if a *future* run's
+traces would ingest correctly — confirmed via the smoke test that they still wouldn't, so a third
+full 13-card run would have cost real time/API spend to demonstrate the same negative result the cheap
+smoke test already showed.
+**Headline result** (for whoever picks up the next task): G1 (identity verified) failed on 9 of 13
+cards (69%), exactly matching the derived premature-prescription rate — the model-under-test
+(`claude-opus-5`) very often answers removal/introduction/identification questions without ever
+committing to which species it's talking about. That's a real, gate-judge-backed finding (each fail's
+`comment` quotes the specific evidence), not noise — worth keeping in mind when authoring the
+remaining 41 cards and when this run's card-set gets superseded by the frozen 54-card sweep.
+**Rule Updated:** N — flag for retro. The `max_tokens`-too-low-for-extended-thinking failure mode has
+now hit two different call sites (`conversation.py`'s model-under-test, `judges/_common.py`'s judge
+calls) independently discovered rather than generalized from the first. If a third call site hits it,
+`.claude/rules/python.md` should get an explicit default (e.g. "any Anthropic call using a
+thinking-capable model needs `max_tokens >= 4096`") instead of relying on each site's author
+remembering the earlier fix.
+**Status:** Active
+
+## 2026-09-03 — `/commit` review of the judge/tracing/validation diff
+
+**Decision:** Acting on the architecture and copy reviewers' findings over the pending diff (gate/
+quality judges, Q1/scoring, per-turn Langfuse tracing, `run_validation.py`, and the two entries above):
+(1) `harness/scripts/run_validation.py`'s three score-attaching helpers typed `langfuse_client` as
+`object` with a `# type: ignore[arg-type]` at every `attach_score` call site — retyped to `Langfuse`
+(trivially importable, no cycle) and dropped the now-unneeded ignores. (2) `Q2Label.DECLINED` and
+`IntroductionQ2Label.DECLINED` are both `str` enums sharing the value `"declined"`, so
+`Q2Classification.model_validate({"label": "declined", ...})` always resolves to `Q2Label` (the first
+union member) regardless of the source card's `question_type` — harmless today since nothing
+round-trips `Q2Classification` through a dict, but a real trap for a future consumer; documented the
+sharp edge directly on the model rather than fixing something not yet broken. (3) `conversation.py`'s
+`is_specific_prescription`/`is_specific_introduction_recommendation`/`is_species_identified` each
+hand-rolled the same structured-output Anthropic call the diff had already factored out for the judges
+(`judges/_common.py`'s `run_structured_judge_call`) — pulled the shared primitive down one level into
+a new `harness/_structured_calls.py` (`run_structured_call`), which both `judges/_common.py` and the
+three `conversation.py` classifiers now delegate to, rather than having `conversation.py` (core
+harness) depend on `judges/` (the evaluation layer built on top of it). (4) G2's prompt
+(`harness/judges/prompts/gates.py`) fed the judge a card's full `ineffective`/`harmful` action lists
+and failed on any match — but those lists can include non-spread concerns (e.g. water contamination,
+which G3 already covers), so a G2 failure didn't reliably mean "spread risk" as the gate's own name
+promises; narrowed the FAIL criterion to spread-risk specifically, keeping the lists as reference
+context rather than a blanket fail-list. (5) `Q2_INTRODUCTION`'s `declined` category
+(`harness/judges/prompts/quality.py`) lacked the edge-case examples `Q2_REMOVAL`'s parallel `declined`
+category has, despite the two prompts being designed to mirror each other; added matching examples.
+(6) `_removal_not_applicable`'s shared not-applicable comment text (`harness/judges/gates.py`) claimed
+"this gate only applies to a prescribed treatment" — true for G2-G4, not really why G5 (fabricated
+citation) is removal-scoped, which is a PRD design choice, not an inherent property of citations;
+reworded to cite the PRD scoping decision instead of asserting a causal reason that doesn't hold for
+every gate it's shared across.
+**Rationale:** All six were real, in-scope findings against code/prompts this diff itself introduced —
+not unrelated cleanup. (4)-(6) changed judge prompt text, so the cassettes exercising those specific
+prompts (`test_gates.py`'s two G2 tests plus `test_run_all_gates_returns_all_five_gates_for_a_removal_card`,
+`test_quality.py`'s two Q2-introduction tests plus `test_run_all_quality_returns_all_four_dimensions_for_a_removal_card`)
+were deleted and re-recorded against the real API — all 83 tests still pass, confirming the reworded
+prompts still produce the same pass/fail/label verdicts on the existing synthetic fixtures.
+**Trade-offs:** Did NOT fix the `Q2Label`/`IntroductionQ2Label` value-collision itself (e.g. by
+renaming one, or restructuring `Q2Classification.label` to avoid the ambiguity) — nothing exercises the
+failure path today, and a schema change here would ripple into `harness/langfuse_client.py`'s
+`Q2_LABELS` list and every judge/test touching `Q2Classification`, for a problem that's currently only
+theoretical. Documented instead; revisit if a real consumer starts deserializing `Q2Classification`
+from stored data. Did NOT expand this into a broader "every Anthropic call site in the repo should use
+`run_structured_call`" pass — `simulated_user.py`'s `classify_asked_slots` and `generate_user_response`,
+and `conversation.py`'s `make_model_under_test`, weren't touched, since they either don't return
+schema-constrained JSON or are outside what these two reviewers were asked to look at; a broader
+consistency pass is a separate task if it turns out to matter.
+**Rule Updated:** N — flag for retro. This is the second time in one session a judge/classifier prompt
+turned out to be scoped more broadly than the gate/dimension's own name promised (see also the
+`max_tokens` finding two entries up, a different kind of "prompt behavior didn't match the docstring's
+claim" issue) — if a third prompt-scope mismatch shows up, `.claude/docs/git-workflow.md` or
+`.claude/rules/testing.md` should get an explicit "read the prompt against the gate's name/definition,
+not just for grammar" step for the copy reviewer's lane.
+**Status:** Active
+
+## 2026-09-03 — Second `/commit` review pass over the same diff (post-context-clear)
+
+**Decision:** Re-ran the architecture and copy reviewers over the still-pending judge/tracing/
+validation diff (the previous entry's fixes were already staged; this pass ran because the session
+had cleared and `/commit` was invoked fresh). Acted on three new findings: (1) `harness/conversation.py`
+had `is_specific_prescription`/`is_specific_introduction_recommendation`/`is_species_identified` each
+hand-rolling the same client-construction/schema/`run_structured_call` boilerplate, differing only in
+system prompt, JSON field name, and question text — extracted a private `_classify_boolean` helper all
+three now delegate to, keeping the three public functions (and their existing per-function tests)
+unchanged in name and signature. (2) `harness/langfuse_client.py`'s `Q2_SCORE_NAME` score-config
+`description` still said "five labels", stale since `Q2_LABELS` was widened to 10 (removal ∪
+introduction ∪ `not_applicable`) in the entry two above this one — reworded to describe the scope
+(removal/introduction/not_applicable) rather than a label count that will keep drifting. (3)
+`harness/judges/gates.py`'s `judge_g3_aquatic_formulation` used `card.water_present` directly without
+the `assert ... is not None  # guaranteed: question_type == removal here` type-narrowing comment its
+sibling gates (G2, G4) both have for their own removal-only fields — added the matching assert,
+confirmed against `Card`'s `_check_question_type_fields` validator that `water_present` is in fact one
+of the five fields required non-`None` on every `removal` card. The architecture reviewer's fourth
+finding (`Q2Classification.label`'s `Q2Label`/`IntroductionQ2Label` value collision on `"declined"`) is
+the same one already raised and deliberately deferred in the entry two above this one — re-confirmed as
+still-open-but-intentional, not re-fixed.
+**Rationale:** All three were concrete, low-risk, in-scope findings against this diff's own code — the
+classifier duplication was exactly the pattern this diff had already consolidated once for the judges
+(`harness/judges/_common.py`) and once for the raw Anthropic call (`harness/_structured_calls.py`), so
+leaving three copies of it in `conversation.py` was an inconsistency within the diff itself, not a
+separate cleanup. All 83 tests, ruff, and mypy stayed clean after the changes — no cassette
+re-recording needed since none of the three fixes touched judge/classifier prompt text or behavior,
+only structure and two doc strings.
+**Trade-offs:** Deliberately did NOT touch the `Q2Label`/`IntroductionQ2Label` collision again — nothing
+new changed its risk profile since the prior entry's decision to defer it. Did NOT extend
+`_classify_boolean` to also cover `harness/judges/_common.py`'s judge-call helper — that helper already
+has its own shared abstraction (`run_structured_judge_call`) with a different shape (returns a full
+Pydantic model, not a single bool field), so merging the two would trade a real duplication for a
+worse, more general abstraction serving two genuinely different call shapes.
+**Rule Updated:** N — nothing here recurred a third time; still tracking the two "flag for retro" notes
+from the entries above (the `not_applicable`-union Pydantic pattern, and prompt-scope-vs-name
+mismatches).
+**Status:** Active

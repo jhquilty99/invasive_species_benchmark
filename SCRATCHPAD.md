@@ -57,10 +57,32 @@ in a rule file or `DECISION-LOG.md`.
 - **First `introduction`-type card authored (2026-09-03):** `cards/chionanthus-virginicus-introduction-01.json`
   — fringetree, "should I keep/plant this?" framing, using `introduction_classes`. 13 cards now exist
   spanning all 3 question types (6 removal/invasive, 6 identification/native, 1 introduction/native); all
-  13 load and validate (verified via `harness.cards.load_cards`). 35 tests passing; ruff/mypy clean. What's
-  still open: the Q2/Q6/gate judges themselves aren't written yet (quality-judging and gate-judge tasks
-  below), so none of this is scored end-to-end yet.
-- **Last touched:** 2026-09-03 (first introduction-type card authored; all 3 question types now covered)
+  13 load and validate (verified via `harness.cards.load_cards`).
+- **First-pass LLM-as-judge validation, wired through Langfuse (2026-09-03):** gate judges
+  (`harness/judges/gates.py`, G1-G5), quality judges (`harness/judges/quality.py`, Q2/Q3/Q5/Q6), and
+  Q1 + derived metrics (`harness/scoring.py`) are all built and tested. Real per-turn Langfuse tracing
+  landed too (`harness/_tracing.py`, wired into `conversation.py`/`simulated_user.py`), closing that
+  task ahead of schedule. Along the way: added type-aware stopping classifiers for
+  `introduction`/`identification` cards (the old one only recognized a treatment recommendation),
+  which also resolved `PRODUCT_REQUIREMENTS.md` §13.5's open question (Q1 now applies to
+  `identification` cards). Q4 (regulatory grounding) is still not built — deferred, not forgotten.
+  Full detail: `DECISION-LOG.md`, 2026-09-03 "First-pass LLM-as-judge validation, wired through
+  Langfuse".
+- **Live validation run complete (2026-09-03):** `harness/scripts/run_validation.py` ran all 13 cards
+  against `claude-opus-5` for real. Fixed a real bug found along the way: judge calls at
+  `max_tokens=1024` were getting truncated mid-JSON (`claude-sonnet-5`'s extended thinking eating the
+  budget, same failure mode already documented for `claude-opus-5` as model-under-test) — bumped to
+  4096 in `harness/judges/_common.py`. All 116 gate/quality/Q1 scores landed correctly in Langfuse's
+  ClickHouse `scores` table. **Found and partially worked around a separate local-infra bug**: the
+  `langfuse-worker` container was failing every queue job with Redis socket timeouts, so trace/span
+  data and dataset-run-item linking never got ingested (confirmed via a bare `span+flush()` smoke test
+  after restarting the worker — still didn't land), even though direct score-writes were unaffected.
+  Restarting the worker did not fix live ingestion either — needs real investigation, not blocking
+  since the scores themselves are the primary signal. Headline result: G1 (identity verified) failed
+  on 9/13 cards (69%), matching the derived premature-prescription rate exactly — the model-under-test
+  very often gives removal/introduction/identification answers without ever committing to which
+  species it's talking about, which is exactly the RQ1 gap this benchmark is designed to catch.
+- **Last touched:** 2026-09-03 (first-pass judge + Langfuse validation build, live run complete)
 
 ## Open tasks (ranked)
 
@@ -69,67 +91,62 @@ in a rule file or `DECISION-LOG.md`.
    topic proximity rather than an explicit question.
 2. **[Day 2]** Implement the R5 leakage check in code (not judged): no card slot value may appear in a user
    turn that wasn't preceded by a matching elicitation. Pass it on the test-card harness.
-3. **[Day 2]** Write the gate judge prompts (G1-G5 — identity verified, no spread-increasing action,
-   aquatic-appropriate formulation, no restricted-use product to an unlicensed applicator, no fabricated
-   citation), each a separate single-purpose judge call with the card in context (R2 — no combined rubric
-   call), with G2-G5 scoring `not_applicable` outside removal cards per the `Card` model's `question_type`
-   field (already implemented — see the Status note above). Every prompt must instruct the judge to put
-   its deciding evidence in the score's `comment` field (R1 — non-negotiable).
-4. **[Day 2]** Write the quality-dimension judging: Q2 as a judge classification, type-conditional per
-   the `Card` model (5 treatment-class labels incl. `declined` for removal cards; a parallel 5-label
-   encourage/discourage set for introduction cards; identification correctness for identification cards);
-   Q3/Q5 as judge scores 0-2 with an R1 `comment` (removal cards only, `not_applicable` otherwise); the
-   new Q6 (ecological framing, 0-2, all question types, scored against each card's
-   `ecological_framing_notes`). Implement Q1 and the derived metrics (turns to recommendation,
-   premature-prescription rate, distractor questions asked, hit-max-turns rate) in code, never judged
-   (R3) — pending the open question on whether Q1 applies to identification cards at all
-   (`PRODUCT_REQUIREMENTS.md` §13.5).
-5. **[Day 2]** Instrument per-turn Langfuse tracing in `harness/conversation.py` and
-   `harness/simulated_user.py`: every individual Anthropic call (model-under-test turn, slot classifier,
-   response generator, stopping-condition classifier) should land as its own nested span/generation under
-   the conversation's trace, not — as Day 1 shipped it — a single flat `output` blob covering the whole
-   transcript, dumped by a one-off script outside the repo rather than the harness itself. Not required for
-   the Fri Sep 5 gate below, but should land before the full sweep task (so every sweep run is properly
-   traced from the start) and definitely before the human-annotation queue task (annotators need to review
-   actual per-turn conversations, not a flat blob).
-6. **[Gate — Fri Sep 5]** Harness + leakage check working end to end (the slot-classifier, leakage-check,
-   gate-judge, and quality-judging tasks above all done, on top of Day 1's already-working harness). If not
-   met, this is the day to cut card-count scope (PRD §8 rule 2), not later.
-7. **[Days 6-9]** Author the remaining 54-card matrix: 30 removal cards total (6 invasive species × 5
+3. Fix the local Langfuse stack's trace/span ingestion: the `langfuse-worker` container was failing
+   every queue job with Redis socket timeouts during the 2026-09-03 live run, so no trace, observation,
+   or dataset-run-item data landed (scores did, since those write directly rather than through the
+   worker's queue). Restarting the worker did not fix it — a bare span-create-then-flush smoke test
+   still didn't land afterward. Needs real investigation (Redis connectivity from the worker container,
+   possibly a stale connection pool or a `docker compose down && up -d` full reset) before per-turn
+   traces are actually browsable in the Langfuse UI for any future run.
+4. **[Gate — Fri Sep 5]** Harness + leakage check working end to end. Gate judges, quality judges,
+   per-turn Langfuse tracing, and a live 13-card validation run are all done (see the Status note
+   above); still blocked on the slot-classifier and R5-leakage-check tasks above. If not met, this is
+   the day to cut card-count scope (PRD §8 rule 2), not later.
+5. Build the Q4 (regulatory grounding) judge — deferred out of the first-pass validation build since it
+   needs a `data/ground_truth/*.yaml` lookup mechanism none of the other dimensions need. Not blocking the
+   Fri Sep 5 gate (PRD table doesn't restrict it to removal-only, but it wasn't in this task's original
+   scope either); pick this up before the full sweep so every sweep run has a complete quality dimension
+   set.
+6. **[Days 6-9]** Author the remaining 54-card matrix: 30 removal cards total (6 invasive species × 5
    condition variations — 6 already exist as one-per-species starting cards, 24 more needed), 12
    introduction cards total (6 invasive + 6 native — 1 exists, 11 more needed), 12 identification cards
    total (same 12 species — 6 already exist as the migrated native cards, 6 more needed for the invasive
    species), drawing on existing `data/ground_truth/*.yaml` for all 12 species (invasive and native ground
    truth both complete).
-8. **[Gate — Thu Sep 11]** 54 cards complete, corpus frozen (PRD §8 rule 1) — no card changes after this
+7. **[Gate — Thu Sep 11]** 54 cards complete, corpus frozen (PRD §8 rule 1) — no card changes after this
    point for any reason.
-9. Pick the specific open-weight model and host (Together.ai/Groq/Fireworks/local) for the 4-6 model
+8. Pick the specific open-weight model and host (Together.ai/Groq/Fireworks/local) for the 4-6 model
    line-up, and wire a model client for every provider in the line-up — needed before the full sweep task.
-10. **[Days 10-11]** Full sweep across 4-6 models (incl. the open-weight model). Fix what breaks; re-run.
+9. **[Days 10-11]** Full sweep across 4-6 models (incl. the open-weight model). Fix what breaks; re-run.
     Confirm transcripts complete for every (model × card) pair. Log the pinned card-set version, judge
     prompt version, and exact model version strings in run metadata (R4 — non-negotiable, carries forward
     PRD §8 rule 5).
-11. **[Day 12]** Set up the Langfuse human-annotation queue; brief annotators; select the stratified ~50
+10. **[Day 12]** Set up the Langfuse human-annotation queue; brief annotators; select the stratified ~50
     sample (oversampled on gate failures and `harmful` Q2 classifications, stratified across all 3
     question types).
-12. **[Days 13-14]** Human annotation, blind to judge scores. Write and run the Krippendorff's alpha
+11. **[Days 13-14]** Human annotation, blind to judge scores. Write and run the Krippendorff's alpha
     computation per dimension, including Q6 (PRD §7).
-13. **[Days 15-16]** Write-up: motivation, method, gates/quality design, results, failure examples (rates
+12. **[Days 15-16]** Write-up: motivation, method, gates/quality design, results, failure examples (rates
     redacted per PRD §8 rule 3), limitations, generalization. Repo cleanup — assemble the PRD §12 release
     layout (`cards/`, `harness/`, `results/`, README with the schema documented standalone).
-14. **[Day 17]** Zenodo archive → DOI. Post to arXiv (cs.CL) and EcoEvoRxiv.
-15. Fix `outreach/EMAIL-TRACKER.md`'s Status/Date-sent columns to reflect the emails that were actually
+13. **[Day 17]** Zenodo archive → DOI. Post to arXiv (cs.CL) and EcoEvoRxiv.
+14. Fix `outreach/EMAIL-TRACKER.md`'s Status/Date-sent columns to reflect the emails that were actually
     sent (currently still shows "Not sent" for all real contacts). No dependency on anything above — pure
     housekeeping, lowest priority.
 
 ## Open bugs
 
-_None._ Three low-severity housekeeping notes from the PRD v3 freeze-gate review are now moot (they applied
+Pre-existing, unrelated to the current build: `tests/test_cards.py:81` indexes
+`Card.treatment_classes` without a `None`-check, which mypy correctly flags — noticed 2026-09-03 while
+building the judges, not caused by that work, and low-severity enough not to block it. Fix opportunistically.
+
+Three low-severity housekeeping notes from the PRD v3 freeze-gate review are otherwise moot (they applied
 to now-archived files) — see `archive/study-a-single-turn/README.md` if they need revisiting.
 
 ## Pending tests
 
-35 tests passing (`harness/` unit/integration tests, VCR cassettes recorded for the Anthropic-hitting
-ones — see `tests/cassettes/`). All 13 `cards/*.json` files load and validate against the updated `Card`
-model (verified 2026-09-03 via `harness.cards.load_cards`); ruff/mypy clean. No dedicated tests yet for
-work not yet built: leakage check, gate/quality judges (incl. the new Q6), per-turn Langfuse tracing.
+83 tests passing (`harness/` unit/integration tests, VCR cassettes recorded for the Anthropic-hitting
+ones — see `tests/cassettes/`), including new coverage for the gate judges, quality judges, Q1/derived
+metrics, and the two new stopping-condition classifiers. All 13 `cards/*.json` files load and validate
+against the `Card` model; ruff/mypy clean except the pre-existing `test_cards.py:81` finding noted above.
+No dedicated tests yet for the R5 leakage check (not built) or Q4 (not built, deferred).

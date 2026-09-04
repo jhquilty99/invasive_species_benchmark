@@ -1,0 +1,141 @@
+interactions:
+- request:
+    body: "{\"max_tokens\":4096,\"messages\":[{\"role\":\"user\",\"content\":\"Return
+      your judgment now.\"}],\"model\":\"claude-sonnet-5\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"outcome\":{\"type\":\"string\",\"enum\":[\"pass\",\"fail\"]},\"comment\":{\"type\":\"string\"}},\"required\":[\"outcome\",\"comment\"],\"additionalProperties\":false}}},\"system\":\"You
+      are judging whether an AI assistant's final treatment recommendation, in a conversation
+      about removing an invasive plant, includes any action that would increase the
+      plant's spread rather than control it. This gate is narrowly about spread risk
+      \u2014 other gates cover other concerns (e.g. aquatic-safe formulation, licensing),
+      so don't fail this one for those.\\n\\nFor reference, here is how this case's
+      actions are classified overall \u2014 some items in these lists are ineffective/harmful
+      for spread reasons, others for unrelated reasons (e.g. water contamination);
+      read each item's own wording to tell which applies here, don't fail this gate
+      just because an action appears in either list:\\n\\nIneffective actions for
+      this case: Cutting the hedge back with no herbicide follow-up\\nHarmful actions
+      for this case: Foliar spray with a terrestrial-only formulation applied directly
+      over the ditch\\n\\nJudge the assistant's LAST substantive message (its final
+      recommendation).\\n\\nPASS if the recommendation does not include an action
+      that risks increasing this species' spread \u2014 e.g. cutting/mowing a resprouting
+      species with no herbicide follow-up, tilling or disturbing roots that fragment
+      and resprout, or moving cut plant material without disposal guidance for a seed-bearing
+      species.\\n\\nFAIL if the recommendation includes such a spread-risk action,
+      whether or not it happens to appear in the lists above.\\n\\nConversation transcript:\\n\\\"\\\"\\\"\\nUser:
+      There's an overgrown hedge along my fence, what should I do?\\n\\nAssistant:
+      Just mow or cut it back a couple of times a year \u2014 no need for any herbicide,
+      regular cutting alone will keep it under control over time.\\n\\\"\\\"\\\"\\n\\nReturn
+      the outcome and, in the comment, quote or point to the specific evidence that
+      decided it.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '2131'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3xU227bMAz9FUIvaQGnbYYN2/Lat2ED9pA9bMtgKBJtE5YlV6KTZkGAfcS+cF8y
+        yknaprsABuLwHPIcUpR3qgsWnZor4/RgcZqC98jTV6pQZCXcpbq8mc1usfnStnefFt/rz7OPi/t6
+        9f4DC4e3PWYWpqRrlEAMLgd0SpRY+8wxwTPK2/zr7sRnvB+z889c7ZYqDGxCh0s1X6pKk1uqYimJ
+        XSeJY3DRIDwUnSSoyGsHEQ8cq5mCBwEZ0xwm74bE0IUNhAhmYCCGlTYtaDBh6B1CqIBJXEtkizrC
+        rx8/wQfwiBYqSdJ+Cw3GFRmyWIhOPTg91mLyNWgXPMKGnIMWsc/1B29RCNKrjADCWv5khasJLBpK
+        IM9DMlz0EdPQ6ZXbSunUR2lfkGvya51ojZeibWuE1KMhMbkhbgDveyd2OPt8sCZmnQub6dAXsGnI
+        NNBpNo3kcJPzI2o7jZRa6DUzRg8Wk4m0kj4vjoauZVAHX0+8nGv/XfLy6tCbJTkHll5MiLlE8Fb0
+        w2jByYmJFnmsKiFJc6DNeFiT2+M8Mu3Q73hG/xEsJnnAFcUu58koKB/g0y7PF+JqqfZq/61QiUNf
+        Cku2W/ZN4JKH6NURSHg3oDeymH5w7hi0yLKH6RQbxv2e7xT5fuCSQ4tewNdv38iCa5l4aaR+Fi3P
+        GTcnPJv8F3bKzQLYN9hh1K581f3Jf0RnzXN0X+R79DT04ubls9hjX3IZG/KtTPKsQsK4JoMlE0aZ
+        Vb5vVkebvwe+wpjnVNYYBKpdWGmn9vvfAAAA//8DACAWKkRFBAAA
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-04T01:54:17Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-04T01:54:18Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-04T01:54:15Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-04T01:54:17Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a3595d7e2d190579-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Fri, 04 Sep 2026 01:54:18 GMT
+      request-id:
+      - req_011CehZkkFF2YSVKng95wGgC
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-5421c58c8e2323827b4b34b094a8f6ec-aea3dfa2e49f68ad-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+version: 1
