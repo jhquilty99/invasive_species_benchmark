@@ -1,0 +1,139 @@
+interactions:
+- request:
+    body: "{\"max_tokens\":256,\"messages\":[{\"role\":\"user\",\"content\":\"Assistant's
+      latest message:\\n\\\"\\\"\\\"\\nKeep it \u2014 that's a native fringetree,
+      not an invasive species, and it's a great low-maintenance small tree that supports
+      local pollinators. No need to remove or replace it.\\n\\\"\\\"\\\"\\n\\nDoes
+      this message contain a single, specific, committed keep/remove recommendation
+      per the rule above?\"}],\"model\":\"claude-haiku-4-5-20251001\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"is_specific_recommendation\":{\"type\":\"boolean\"}},\"required\":[\"is_specific_recommendation\"],\"additionalProperties\":false}}},\"system\":\"You
+      classify whether an assistant's latest message, in a conversation where someone
+      is asking whether to plant or keep a plant on their property, contains a single,
+      specific, committed recommendation on whether to plant/keep it or remove/avoid
+      it.\\n\\nClassify true only if the message commits to ONE clear recommendation
+      the person could act on right now \u2014 'keep/plant it' or 'remove it' (or
+      'replace it with X'), stated as this message's actual position, not just one
+      option among several. A message that clearly commits to one position while also
+      mentioning a caveat or a discarded alternative still counts as true \u2014 the
+      bar is whether a single position has been committed to, not whether anything
+      else is mentioned.\\n\\nClassify false for any of the following, even if the
+      message is long or substantive:\\n- An unranked list of options ('you could
+      keep it, or you could remove it and plant something else') with no single position
+      committed to.\\n- A recommendation that branches on a fact the person hasn't
+      actually stated (e.g. 'if you want low-maintenance, remove it; if you don't
+      mind the upkeep, keep it') \u2014 no single position has been committed to for
+      this person's real, still-unknown situation.\\n- A request for more information
+      before recommending anything.\\n- Generic, non-committal advice with no clear
+      keep-or-remove position (e.g. 'it depends on your preferences' or 'consider
+      consulting a nursery' alone).\\n- An outright refusal or decision not to give
+      a recommendation.\\n\\nJudge only the assistant's latest message. Use the rest
+      of the conversation only as context for what that message means, not as a substitute
+      for what the latest message itself commits to.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '2326'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3WRy07DMBBFfwXNupHiivLIlh1sQUWlyDL2NLHq2MEeV1RR/p1x1YiXWNm6545n
+        rmeEPhh00IB2KhusOmX3ubqsVtWyXq5EXQtYgDVs6FMrayHusHt822yub9vn8LR+uDmGYX3PHjoO
+        WFyYkmqRhRhcEVRKNpHyxJIOnpBvzcs4+wk/CjkdDYxbsEmmAbXdWS0j6tD36I0iG/wWmguKGSeY
+        XheQKAxsUCl4LmSPpBw9nEHC94xecwefnTuLBklZl2YtnwZtRrB+yCQp7NEzvKoFT6p0h1Lz+6Wz
+        /OmoZ87Y/Mfm2tIAhw57jMrJVf/X/0VF95tOCwiZvktiyWkwHqxGSRYjhy/fa1Q0ZVN+h7EEly0G
+        Rj6QVAdOrd54G9P0CX66Jo/wAQAA
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-04T00:33:30Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-04T00:33:30Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-04T00:33:29Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-04T00:33:30Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a358e72d19dd8302-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Fri, 04 Sep 2026 00:33:30 GMT
+      request-id:
+      - req_011CehTbXU6QLkv2wQeey5gE
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-ab0d87ea402811ae5f02c71d780b398b-9f4a60bd50e202cc-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+version: 1

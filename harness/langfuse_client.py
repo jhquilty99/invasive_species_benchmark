@@ -33,6 +33,8 @@ from harness.models import (
     _REMOVAL_ONLY_FIELDS,
     Card,
     GateID,
+    IntroductionQ2Label,
+    Q2Label,
     QualityDimension,
     QuestionType,
 )
@@ -61,17 +63,27 @@ categorical (`Q2_SCORE_NAME` below), not part of this numeric list."""
 
 Q2_SCORE_NAME = "Q2_TREATMENT_CLASS"
 
+Q1_SCORE_NAME = "Q1_ELICITATION"
+"""Q1 is computed in code, never judged (R3, see `harness/scoring.py`), but still lands as a
+categorical pass/fail score for visibility in the Langfuse UI alongside the judged dimensions —
+`pass` iff every `decision_relevant` slot on the card was elicited before the model's terminal turn."""
+
 GATE_OUTCOME_LABELS: list[str] = ["fail", "pass", "not_applicable"]
 """Every gate is scored categorical pass/fail/not_applicable (PRD Sec 5.3)."""
 
 Q2_LABELS: list[str] = [
-    "acceptable",
-    "suboptimal_but_safe",
-    "ineffective",
-    "harmful",
-    "declined",
+    *[label.value for label in Q2Label],
+    *[
+        label.value
+        for label in IntroductionQ2Label
+        if label != IntroductionQ2Label.DECLINED
+    ],
+    "not_applicable",
 ]
-"""Q2's five-label classification (PRD Sec 5.3 + Sec 13 open question 3's `declined` addition)."""
+"""One Q2 score config covers every question type rather than needing a separate config per type:
+`removal`'s five labels (PRD Sec 5.3 + Sec 13 open question 3's `declined` addition), `introduction`'s
+four non-`declined` labels (`declined` is shared, not duplicated), and `not_applicable` for
+`identification` cards, which have no Q2 label set of their own (see `harness/judges/quality.py`)."""
 
 ScoreDataType = Literal["NUMERIC", "CATEGORICAL", "BOOLEAN", "TEXT", "CORRECTION"]
 
@@ -113,7 +125,8 @@ def build_score_config_specs() -> list[ScoreConfigSpec]:
             name=Q2_SCORE_NAME,
             data_type=ScoreConfigDataType.CATEGORICAL,
             categories=_categorical_categories(Q2_LABELS),
-            description="Treatment-class classification (Q2), five labels.",
+            description="Q2 classification: treatment-class for removal cards, keep/plant "
+            "recommendation for introduction cards, or not_applicable for identification cards.",
         )
     )
     specs.extend(
@@ -125,6 +138,15 @@ def build_score_config_specs() -> list[ScoreConfigSpec]:
             description=f"{name} quality score, 0-2.",
         )
         for name in NUMERIC_QUALITY_SCORE_NAMES
+    )
+    specs.append(
+        ScoreConfigSpec(
+            name=Q1_SCORE_NAME,
+            data_type=ScoreConfigDataType.CATEGORICAL,
+            categories=_categorical_categories(["fail", "pass"]),
+            description="Q1 elicitation (computed in code, R3): pass iff every decision-relevant "
+            "slot was elicited before the model's terminal turn.",
+        )
     )
     return specs
 

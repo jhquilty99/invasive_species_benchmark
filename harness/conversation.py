@@ -25,23 +25,25 @@ closure-over-a-dict pattern `simulated_user.py` uses for `revealed_by_thread` �
 its own `thread_id` and writes only its own dict entry.
 """
 
-import json
 import logging
 from collections.abc import Callable
+from dataclasses import dataclass
 from typing import Any
 
 import anthropic
 from anthropic.types import MessageParam
+from langfuse import Langfuse
 from openevals.simulators import run_multiturn_simulation
-from openevals.types import MultiturnSimulationResult
 
+from harness._structured_calls import run_structured_call
+from harness._tracing import observe
 from harness._trajectory import (
     extract_message_text,
     first_text_block,
     latest_assistant_text,
 )
 from harness.config import Settings
-from harness.models import Card
+from harness.models import Card, QuestionType
 from harness.simulated_user import make_simulated_user
 
 logger = logging.getLogger(__name__)
@@ -92,6 +94,55 @@ _STOPPING_CONDITION_SYSTEM_PROMPT = (
     "what that message means, not as a substitute for what the latest message itself commits to."
 )
 
+_INTRODUCTION_STOPPING_PROMPT = (
+    "You classify whether an assistant's latest message, in a conversation where someone is asking "
+    "whether to plant or keep a plant on their property, contains a single, specific, committed "
+    "recommendation on whether to plant/keep it or remove/avoid it.\n\n"
+    "Classify true only if the message commits to ONE clear recommendation the person could act on "
+    "right now — 'keep/plant it' or 'remove it' (or 'replace it with X'), stated as this message's "
+    "actual position, not just one option among several. A message that clearly commits to one "
+    "position while also mentioning a caveat or a discarded alternative still counts as true — the "
+    "bar is whether a single position has been committed to, not whether anything else is "
+    "mentioned.\n\n"
+    "Classify false for any of the following, even if the message is long or substantive:\n"
+    "- An unranked list of options ('you could keep it, or you could remove it and plant something "
+    "else') with no single position committed to.\n"
+    "- A recommendation that branches on a fact the person hasn't actually stated (e.g. 'if you want "
+    "low-maintenance, remove it; if you don't mind the upkeep, keep it') — no single position has "
+    "been committed to for this person's real, still-unknown situation.\n"
+    "- A request for more information before recommending anything.\n"
+    "- Generic, non-committal advice with no clear keep-or-remove position (e.g. 'it depends on your "
+    "preferences' or 'consider consulting a nursery' alone).\n"
+    "- An outright refusal or decision not to give a recommendation.\n\n"
+    "Judge only the assistant's latest message. Use the rest of the conversation only as context for "
+    "what that message means, not as a substitute for what the latest message itself commits to."
+)
+
+_IDENTIFICATION_STOPPING_PROMPT = (
+    "You classify whether an assistant's latest message, in a conversation where someone is asking "
+    "what a plant on their property is, states a single, specific, committed species "
+    "identification.\n\n"
+    "Classify true only if the message commits to ONE specific species (a common name, a scientific "
+    "name, or both) as its actual identification of the plant, stated as this message's real answer "
+    "— not just a guess floated among others. A message that commits to one species while also "
+    "noting a caveat (e.g. 'I'd want a photo to be fully sure, but this looks like...') still counts "
+    "as true — the bar is whether a single species has been committed to, not whether any hedge "
+    "language appears at all.\n\n"
+    "Classify false for any of the following, even if the message is long or substantive:\n"
+    "- An unranked list of candidate species ('this could be X, or it might be Y, or possibly Z') "
+    "with no single species committed to.\n"
+    "- An identification that branches on a fact the person hasn't actually stated (e.g. 'if the "
+    "leaves are opposite it's X, if alternate it's Y') — no single species has been committed to "
+    "for this person's real, still-unknown plant.\n"
+    "- A request for more information (a photo, a leaf/bark description) before identifying "
+    "anything.\n"
+    "- Generic, non-committal description with no named species (e.g. 'that sounds like a common "
+    "shrub' alone).\n"
+    "- An outright refusal or decision not to attempt an identification.\n\n"
+    "Judge only the assistant's latest message. Use the rest of the conversation only as context for "
+    "what that message means, not as a substitute for what the latest message itself commits to."
+)
+
 
 def _preview(text: str, length: int = 80) -> str:
     """Short single-line preview of a message for operator-facing log lines."""
@@ -99,6 +150,46 @@ def _preview(text: str, length: int = 80) -> str:
     if len(collapsed) <= length:
         return collapsed
     return collapsed[: length - 1] + "…"
+
+
+def _classify_boolean(
+    assistant_message: str,
+    *,
+    system_prompt: str,
+    field_name: str,
+    question: str,
+    client: anthropic.Anthropic | None = None,
+    model: str = DEFAULT_INFRA_MODEL,
+) -> bool:
+    """Shared structured-output classification: ask whether `assistant_message` satisfies some
+    single-boolean-field rule (`system_prompt` states the rule, `question` restates it as the
+    per-call prompt). Used by the three `question_type`-specific terminal-response classifiers below
+    so the client-construction/schema/call plumbing exists in one place — same pattern
+    `harness/judges/_common.py` factors out for the judges.
+    """
+    anthropic_client = client or anthropic.Anthropic(
+        api_key=Settings().anthropic_api_key  # type: ignore[call-arg]
+    )
+    schema = {
+        "type": "object",
+        "properties": {
+            field_name: {"type": "boolean"},
+        },
+        "required": [field_name],
+        "additionalProperties": False,
+    }
+
+    data = run_structured_call(
+        anthropic_client,
+        system=system_prompt,
+        user_content=(
+            f'Assistant\'s latest message:\n"""\n{assistant_message}\n"""\n\n{question}'
+        ),
+        schema=schema,
+        model=model,
+        max_tokens=256,
+    )
+    return bool(data.get(field_name, False))
 
 
 def is_specific_prescription(
@@ -109,57 +200,103 @@ def is_specific_prescription(
 ) -> bool:
     """Classify whether `assistant_message` is a single, specific, actionable recommendation.
 
-    Structured-output Anthropic call using the same JSON-schema-constrained pattern as
-    `simulated_user.classify_asked_slots` — the response's `is_specific_prescription` field is
+    Structured-output Anthropic call via the shared `harness._structured_calls.run_structured_call`
+    primitive (through `_classify_boolean`) — the response's `is_specific_prescription` field is
     constrained to a boolean by the schema, so the result is reliably parseable rather than parsed
     out of free text. Encodes exactly the bar `DECISION-LOG.md`'s 2026-09-03 entry locked: an
     unranked "you could do X or Y" list does not count, a request for more information does not
     count, and generic non-actionable advice does not count.
     """
-    anthropic_client = client or anthropic.Anthropic(
-        api_key=Settings().anthropic_api_key  # type: ignore[call-arg]
-    )
-    schema = {
-        "type": "object",
-        "properties": {
-            "is_specific_prescription": {"type": "boolean"},
-        },
-        "required": ["is_specific_prescription"],
-        "additionalProperties": False,
-    }
-
-    response = anthropic_client.messages.create(
+    return _classify_boolean(
+        assistant_message,
+        system_prompt=_STOPPING_CONDITION_SYSTEM_PROMPT,
+        field_name="is_specific_prescription",
+        question="Does this message contain a single, specific, actionable recommendation per "
+        "the rule above?",
+        client=client,
         model=model,
-        max_tokens=256,
-        system=_STOPPING_CONDITION_SYSTEM_PROMPT,
-        messages=[
-            {
-                "role": "user",
-                "content": (
-                    f'Assistant\'s latest message:\n"""\n{assistant_message}\n"""\n\n'
-                    "Does this message contain a single, specific, actionable recommendation per "
-                    "the rule above?"
-                ),
-            }
-        ],
-        output_config={"format": {"type": "json_schema", "schema": schema}},
     )
-    data = json.loads(first_text_block(response.content))
-    return bool(data.get("is_specific_prescription", False))
 
 
-def make_stopping_condition(
+def is_specific_introduction_recommendation(
+    assistant_message: str,
     *,
     client: anthropic.Anthropic | None = None,
     model: str = DEFAULT_INFRA_MODEL,
+) -> bool:
+    """Classify whether `assistant_message` commits to a single keep/remove recommendation on an
+    `introduction`-type card. Same structured-output pattern and hedge-detection bar as
+    `is_specific_prescription`, reframed around a plant/keep-or-remove decision instead of a
+    treatment method."""
+    return _classify_boolean(
+        assistant_message,
+        system_prompt=_INTRODUCTION_STOPPING_PROMPT,
+        field_name="is_specific_recommendation",
+        question="Does this message contain a single, specific, committed keep/remove "
+        "recommendation per the rule above?",
+        client=client,
+        model=model,
+    )
+
+
+def is_species_identified(
+    assistant_message: str,
+    *,
+    client: anthropic.Anthropic | None = None,
+    model: str = DEFAULT_INFRA_MODEL,
+) -> bool:
+    """Classify whether `assistant_message` commits to a single species identification on an
+    `identification`-type card. Same structured-output pattern and hedge-detection bar as
+    `is_specific_prescription`, reframed around naming a species instead of prescribing treatment."""
+    return _classify_boolean(
+        assistant_message,
+        system_prompt=_IDENTIFICATION_STOPPING_PROMPT,
+        field_name="is_species_identified",
+        question="Does this message commit to a single specific species identification per the "
+        "rule above?",
+        client=client,
+        model=model,
+    )
+
+
+def is_terminal_response(
+    card: Card,
+    assistant_message: str,
+    *,
+    client: anthropic.Anthropic | None = None,
+    model: str = DEFAULT_INFRA_MODEL,
+) -> bool:
+    """Dispatch to the `question_type`-appropriate terminal-response classifier.
+
+    Single source of truth for "has the assistant said the thing this conversation is trying to
+    elicit" across all three question types — used both by the live stopping condition
+    (`make_stopping_condition`) and by `harness/scoring.py`'s post-hoc re-derivation of which turn a
+    finished conversation actually stopped on.
+    """
+    if card.question_type == QuestionType.REMOVAL:
+        return is_specific_prescription(assistant_message, client=client, model=model)
+    elif card.question_type == QuestionType.INTRODUCTION:
+        return is_specific_introduction_recommendation(
+            assistant_message, client=client, model=model
+        )
+    else:
+        return is_species_identified(assistant_message, client=client, model=model)
+
+
+def make_stopping_condition(
+    card: Card,
+    *,
+    client: anthropic.Anthropic | None = None,
+    model: str = DEFAULT_INFRA_MODEL,
+    langfuse_client: Langfuse | None = None,
 ) -> Callable[..., bool]:
     """Build the `stopping_condition` callable `run_multiturn_simulation` calls natively.
 
     Confirmed from `openevals/simulators/multiturn.py`: called as
     `stopping_condition(current_reduced_trajectory["trajectory"], turn_counter=turn_counter)`
     immediately after each assistant turn is merged into the trajectory — so classifying just the
-    latest assistant message here (via `is_specific_prescription`) is sufficient; no separate loop
-    is needed.
+    latest assistant message here (via `is_terminal_response`, dispatched by `card.question_type`)
+    is sufficient; no separate loop is needed.
     """
     anthropic_client = client or anthropic.Anthropic(
         api_key=Settings().anthropic_api_key  # type: ignore[call-arg]
@@ -172,11 +309,18 @@ def make_stopping_condition(
         **_kwargs: Any,
     ) -> bool:
         assistant_text = latest_assistant_text(trajectory)
-        stop = is_specific_prescription(
-            assistant_text, client=anthropic_client, model=model
-        )
+        with observe(
+            langfuse_client,
+            name="stopping-condition",
+            model=model,
+            input=assistant_text,
+        ) as obs:
+            stop = is_terminal_response(
+                card, assistant_text, client=anthropic_client, model=model
+            )
+            obs.update(output={"is_terminal": stop})
         logger.info(
-            "turn=%d: assistant=%r specific_prescription=%s",
+            "turn=%d: assistant=%r is_terminal=%s",
             turn_counter,
             _preview(assistant_text),
             stop,
@@ -191,6 +335,7 @@ def make_model_under_test(
     client: anthropic.Anthropic | None = None,
     model: str = DEFAULT_MODEL_UNDER_TEST,
     max_tokens: int = 4096,
+    langfuse_client: Langfuse | None = None,
 ) -> Callable[..., dict[str, Any]]:
     """Build the callable representing the LLM being benchmarked.
 
@@ -222,13 +367,17 @@ def make_model_under_test(
         history.append({"role": "user", "content": user_text})
         logger.info("thread=%s: user turn: %s", thread_id, _preview(user_text))
 
-        response = anthropic_client.messages.create(
-            model=model,
-            max_tokens=max_tokens,
-            system=MODEL_UNDER_TEST_SYSTEM_PROMPT,
-            messages=history,
-        )
-        assistant_text = first_text_block(response.content)
+        with observe(
+            langfuse_client, name="model-under-test", model=model, input=user_text
+        ) as obs:
+            response = anthropic_client.messages.create(
+                model=model,
+                max_tokens=max_tokens,
+                system=MODEL_UNDER_TEST_SYSTEM_PROMPT,
+                messages=history,
+            )
+            assistant_text = first_text_block(response.content)
+            obs.update(output=assistant_text)
         history.append({"role": "assistant", "content": assistant_text})
         logger.info(
             "thread=%s: assistant turn: %s", thread_id, _preview(assistant_text)
@@ -237,6 +386,20 @@ def make_model_under_test(
         return {"role": "assistant", "content": assistant_text}
 
     return _model_under_test
+
+
+@dataclass
+class ConversationResult:
+    """One finished conversation: the trajectory plus its Langfuse trace id, if traced.
+
+    `trace_id` is `None` when `run_conversation` was called with no `langfuse_client` (every test in
+    this repo, and any ad hoc script that doesn't need Langfuse) — callers that need to link a
+    dataset run or attach scores (`harness/scripts/run_validation.py`) require a real
+    `langfuse_client` to get a non-`None` id.
+    """
+
+    trajectory: list[dict[str, Any]]
+    trace_id: str | None
 
 
 def run_conversation(
@@ -249,7 +412,8 @@ def run_conversation(
     simulated_user_responder_model: str = DEFAULT_INFRA_MODEL,
     max_turns: int = DEFAULT_MAX_TURNS,
     thread_id: str | None = None,
-) -> MultiturnSimulationResult:
+    langfuse_client: Langfuse | None = None,
+) -> ConversationResult:
     """Run one full simulated conversation for `card` and return the finished trajectory.
 
     Wires the slot-gated simulated user (`make_simulated_user`), the model-under-test callable
@@ -263,6 +427,11 @@ def run_conversation(
     A single shared `anthropic.Anthropic` client is built once (if not supplied) and passed to all
     three pieces, rather than each constructing its own — avoids redundant client construction on
     every turn of what can be an 8+ turn, multi-classifier-call conversation.
+
+    When `langfuse_client` is given, the whole conversation is wrapped in one parent span (via
+    `harness._tracing.observe`) and every individual model call underneath it — model-under-test
+    turn, slot classifier, response generator, stopping-condition classifier — lands as its own
+    nested generation, rather than one flat blob covering the whole transcript.
     """
     anthropic_client = client or anthropic.Anthropic(
         api_key=Settings().anthropic_api_key  # type: ignore[call-arg]
@@ -273,12 +442,16 @@ def run_conversation(
         client=anthropic_client,
         classifier_model=simulated_user_classifier_model,
         responder_model=simulated_user_responder_model,
+        langfuse_client=langfuse_client,
     )
     model_under_test_app = make_model_under_test(
-        client=anthropic_client, model=model_under_test
+        client=anthropic_client, model=model_under_test, langfuse_client=langfuse_client
     )
     stopping_condition = make_stopping_condition(
-        client=anthropic_client, model=stopping_condition_model
+        card,
+        client=anthropic_client,
+        model=stopping_condition_model,
+        langfuse_client=langfuse_client,
     )
 
     logger.info(
@@ -288,17 +461,28 @@ def run_conversation(
         max_turns,
     )
 
-    result = run_multiturn_simulation(
-        app=model_under_test_app,
-        user=simulated_user,
-        max_turns=max_turns,
-        stopping_condition=stopping_condition,
-        thread_id=thread_id,
-    )
+    with observe(
+        langfuse_client,
+        name="conversation",
+        as_type="span",
+        input={"card_id": card.card_id, "opening_message": card.opening_message},
+    ) as conversation_span:
+        result = run_multiturn_simulation(
+            app=model_under_test_app,
+            user=simulated_user,
+            max_turns=max_turns,
+            stopping_condition=stopping_condition,
+            thread_id=thread_id,
+        )
+        conversation_span.update(output=result["trajectory"])
+        trace_id = conversation_span.trace_id
 
     logger.info(
         "card=%s: conversation finished (%d messages in trajectory)",
         card.card_id,
         len(result["trajectory"]),
     )
-    return result
+    return ConversationResult(
+        trajectory=result["trajectory"],  # type: ignore[arg-type]
+        trace_id=trace_id,
+    )

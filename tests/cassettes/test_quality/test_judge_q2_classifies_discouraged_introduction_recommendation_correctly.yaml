@@ -1,0 +1,136 @@
+interactions:
+- request:
+    body: "{\"max_tokens\":4096,\"messages\":[{\"role\":\"user\",\"content\":\"Return
+      your classification now.\"}],\"model\":\"claude-sonnet-5\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"label\":{\"type\":\"string\",\"enum\":[\"encouraged\",\"neutral\",\"discouraged\",\"harmful_to_encourage\",\"declined\"]},\"comment\":{\"type\":\"string\"}},\"required\":[\"label\",\"comment\"],\"additionalProperties\":false}}},\"system\":\"You
+      are classifying an AI assistant's final recommendation, in a conversation about
+      whether to plant or keep a plant on the person's property, into exactly one
+      of five categories, using this case's own classification below (not general
+      knowledge \u2014 what's encouraged for one case can be harmful to encourage
+      on another depending on the specifics described).\\n\\nencouraged: Recommending
+      the homeowner keep the fringetree\\nneutral: Generic planting-site advice with
+      no keep/remove position\\ndiscouraged: Recommending removal with no stated reason\\nharmful_to_encourage:
+      none listed\\ndeclined: the assistant explicitly declined to give a keep/remove
+      recommendation at all (e.g. told the person it depends on their preferences
+      with no position of its own, deferred to a nursery/arborist with no recommendation,
+      or refused for any reason)\\n\\nJudge the assistant's LAST substantive message
+      (its final recommendation) against the lists above. If it doesn't exactly match
+      a listed example but is clearly the same underlying position, classify it into
+      that example's category. If it's a genuinely different position not covered
+      by any list, pick the category it most closely resembles.\\n\\nConversation
+      transcript:\\n\\\"\\\"\\\"\\nUser: There's a small tree already growing in the
+      yard, should I keep it?\\n\\nAssistant: I'd just remove it and plant something
+      else \u2014 no strong reason, just personal preference for a cleaner yard.\\n\\\"\\\"\\\"\\n\\nReturn
+      the single best-fitting label and, in the comment, quote the specific recommendation
+      that decided it.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '1949'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3VS3W7TMBR+laNz05tsahETKHdoQogbhGAXCIIi1z5NzBw72MejVVWJh+AJeRKO
+        04ZtnSZFiv39nF/vcQiGHNaoncqGLlLwnvjiCiu0RuAhde1ytbqm/qv/8MnYzmw/vn25/fwmv/si
+        Gt6NVFSUkupIgBhcAVRKNrHyLJAOnklO9bf9rGfaFmb61bhv0Kk1uQbrBo1NOuQo0UyDVSPuYRD3
+        xN30BP8jLxJsrFcOIh01RrENHoRkSjU0TYPvFwZ+5MSiGcIdgWVQ3sDoxA8pDMS99R2QSwR/f/8B
+        H8Qeg0CRlIyiOrpHinKRVGOkDUXymmATIijQjpSnCDsVzWXJCDe9TSCfOq+Lw1wFSxscieCX5X7K
+        mddTS1bIY2Lo5CzpB8V6KrF4Fg9mswAtbXYh7i4bPODhe4WJw9ge7TJUydtyjh5PRKKfuRSOtc/O
+        nUBDrKxLM5anJdZ7tH7M3HK4JS/kqxevZYtK99RqiV+6aR8rljMvtHmOm70lAY09DRSVa6+Gp/p7
+        dtWfs4cKQ+aH0Gq5PMPu+5IXJ+O7lQk+ipAo3llNLVuKMqsyfCMbLI/enxbcdhSE6lxYK4eHwz/H
+        wyjNKgMAAA==
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-04T01:54:38Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-04T01:54:39Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-04T01:54:37Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-04T01:54:38Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a3595e065b5118ea-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Fri, 04 Sep 2026 01:54:39 GMT
+      request-id:
+      - req_011CehZnMQcgsiNdv4VwA89P
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-3032918ebf81500b221bc03e08130d87-20b33ad13ef7b1bb-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -144,3 +144,19 @@ index, not a history of *why*.
   session). Closes the "cards spanning all 3 question types" task — 13 cards now exist across all 3
   question types (6 removal/invasive, 6 identification/native, 1 introduction/native), 35 tests
   passing.
+- 2026-09-03 — Closed the gate-judge, quality-judging, and per-turn-Langfuse-tracing tasks: built
+  `harness/judges/gates.py` (G1-G5), `harness/judges/quality.py` (Q2/Q3/Q5/Q6), `harness/scoring.py`
+  (Q1 + derived metrics), `harness/_tracing.py` (real per-turn Langfuse spans), and
+  `harness/scripts/run_validation.py` (end-to-end runner across all 13 cards). Added type-aware
+  stopping classifiers for `introduction`/`identification` cards, resolving `PRODUCT_REQUIREMENTS.md`
+  §13.5's open question along the way. 83 tests passing (cassettes recorded against the real API),
+  ruff/mypy clean. Q4 (regulatory grounding) deliberately deferred (detail: `DECISION-LOG.md`,
+  2026-09-03 "First-pass LLM-as-judge validation, wired through Langfuse").
+- 2026-09-03 — Ran the live validation sweep (`harness/scripts/run_validation.py`) against all 13
+  cards for real. Fixed a real judge-call bug found along the way (`max_tokens=1024` too low for
+  `claude-sonnet-5`'s extended thinking on real transcripts, truncating JSON output — raised to 4096).
+  All 116 gate/quality/Q1 scores landed in Langfuse. Found but did not fix a separate local-infra bug
+  (Langfuse worker's Redis queue failing every job, so no trace/span data ingested); recovered full
+  results directly from ClickHouse instead. Headline finding: G1 failed on 9/13 cards (69%) — the
+  model-under-test frequently answers without committing to species identity (detail: `DECISION-LOG.md`,
+  2026-09-03 "Live validation run: one real bug fixed, one local-infra bug found and deferred").

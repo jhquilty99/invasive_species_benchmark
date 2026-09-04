@@ -29,7 +29,9 @@ from collections.abc import Callable
 from typing import Any
 
 import anthropic
+from langfuse import Langfuse
 
+from harness._tracing import observe
 from harness._trajectory import (
     first_text_block,
     latest_assistant_text,
@@ -164,6 +166,7 @@ def make_simulated_user(
     client: anthropic.Anthropic | None = None,
     classifier_model: str = DEFAULT_MODEL,
     responder_model: str = DEFAULT_MODEL,
+    langfuse_client: Langfuse | None = None,
 ) -> Callable[..., dict[str, Any]]:
     """Build the slot-gated simulated-user callable for one card.
 
@@ -197,9 +200,16 @@ def make_simulated_user(
         revealed = revealed_by_thread.setdefault(thread_id, set())
         assistant_text = latest_assistant_text(trajectory)
 
-        asked_names = classify_asked_slots(
-            anthropic_client, assistant_text, card.slots, model=classifier_model
-        )
+        with observe(
+            langfuse_client,
+            name="slot-classifier",
+            model=classifier_model,
+            input=assistant_text,
+        ) as classifier_obs:
+            asked_names = classify_asked_slots(
+                anthropic_client, assistant_text, card.slots, model=classifier_model
+            )
+            classifier_obs.update(output={"asked_slot_names": asked_names})
         newly_asked_names = [name for name in asked_names if name not in revealed]
         logger.info(
             "card=%s thread=%s turn=%d: classified_asked=%s newly_asked=%s",
@@ -215,12 +225,19 @@ def make_simulated_user(
         ]
         revealed.update(newly_asked_names)
 
-        content = generate_user_response(
-            anthropic_client,
-            assistant_text,
-            newly_revealed_slots,
+        with observe(
+            langfuse_client,
+            name="simulated-user-response",
             model=responder_model,
-        )
+            input=assistant_text,
+        ) as responder_obs:
+            content = generate_user_response(
+                anthropic_client,
+                assistant_text,
+                newly_revealed_slots,
+                model=responder_model,
+            )
+            responder_obs.update(output=content)
         return {"role": "user", "content": content}
 
     return _simulated_user

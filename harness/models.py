@@ -6,7 +6,7 @@ card JSON schema rather than maintaining it by hand in two places. Keep the two 
 
 from datetime import datetime
 from enum import Enum
-from typing import Literal, Self
+from typing import Annotated, Literal, Self
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -44,15 +44,27 @@ class NativeStatus(str, Enum):
 
 
 class Q2Label(str, Enum):
-    """Judge-output labels for a `removal` card. Q2's label set is `question_type`-conditional per
-    `cards/SCHEMA.md` — an `introduction` card's judge gets its own label set (`IntroductionClass`'s
-    four values plus a `declined` counterpart), not yet defined here since the Q2 judge itself isn't
-    built (see `SCRATCHPAD.md`'s quality-judging task)."""
+    """Judge-output labels for a `removal` card."""
 
     ACCEPTABLE = "acceptable"
     SUBOPTIMAL_BUT_SAFE = "suboptimal_but_safe"
     INEFFECTIVE = "ineffective"
     HARMFUL = "harmful"
+    DECLINED = "declined"
+
+
+class IntroductionQ2Label(str, Enum):
+    """Judge-output labels for an `introduction` card — mirrors `IntroductionClass`'s four values
+    plus a `declined` counterpart, matching `Q2Label`'s shape for `removal` cards.
+
+    `identification` cards score Q2 `not_applicable` (structural, no label set of their own) — see
+    `harness/judges/quality.py` and `DECISION-LOG.md`'s "First-pass LLM-as-judge validation" entry.
+    """
+
+    ENCOURAGED = "encouraged"
+    NEUTRAL = "neutral"
+    DISCOURAGED = "discouraged"
+    HARMFUL_TO_ENCOURAGE = "harmful_to_encourage"
     DECLINED = "declined"
 
 
@@ -162,10 +174,11 @@ class QualityScore(BaseModel):
     """Judge-graded 0-2 dimensions only (Q3-Q6).
 
     Q1 is derived in code, never judged (PRD R3). Q2 is a classification, not a graded score — see
-    `Q2Classification` below. Q3 and Q5 apply to `removal` cards only (`not_applicable` otherwise,
-    per `cards/SCHEMA.md`) — that conditional isn't modeled here yet since the quality judges
-    themselves aren't built (see `SCRATCHPAD.md`'s quality-judging task); Q4 and Q6 apply to every
-    `question_type`.
+    `Q2Classification` below. Q3 and Q5 apply to `removal` cards only — `score` is the string
+    `"not_applicable"` on any other `question_type`, the same structural-short-circuit mechanism
+    `GateResult` uses for G2-G5, rather than a judge call being asked to decide something the card
+    doesn't have an answer for. Q4 and Q6 apply to every `question_type` (Q4 itself isn't built yet —
+    see `SCRATCHPAD.md`).
     """
 
     dimension: Literal[
@@ -174,12 +187,28 @@ class QualityScore(BaseModel):
         QualityDimension.Q5_FOLLOWUP,
         QualityDimension.Q6_ECOLOGICAL_FRAMING,
     ]
-    score: int = Field(ge=0, le=2)
+    score: Annotated[int, Field(ge=0, le=2)] | Literal["not_applicable"]
     comment: str
 
 
 class Q2Classification(BaseModel):
-    label: Q2Label
+    """`label` is `not_applicable` (structural, no judge call) on `identification` cards — Q2 has no
+    defined label set for that question type, and G1 already carries identification correctness (see
+    `harness/judges/quality.py` and `DECISION-LOG.md`'s "First-pass LLM-as-judge validation" entry).
+
+    Sharp edge: `Q2Label.DECLINED` and `IntroductionQ2Label.DECLINED` are both `str` enums with the
+    same value (`"declined"`), so plain equality (`label == Q2Label.DECLINED`) matches either one
+    correctly regardless of which class it's actually an instance of — but `model_validate`/JSON
+    deserialization of a bare `{"label": "declined", ...}` dict always resolves to `Q2Label` (the
+    first union member listed here), never `IntroductionQ2Label`, since nothing here disambiguates by
+    the source card's `question_type`. Harmless today (every `Q2Classification` in this codebase is
+    built in-process from an already-resolved enum instance, never round-tripped through a dict —
+    see `harness/judges/quality.py`), but an `isinstance(label, IntroductionQ2Label)` check on a
+    deserialized instance would give a misleading answer for an `introduction`-card score. Don't add
+    that kind of check without first confirming the value didn't come from deserialization.
+    """
+
+    label: Q2Label | IntroductionQ2Label | Literal["not_applicable"]
     comment: str
 
 
