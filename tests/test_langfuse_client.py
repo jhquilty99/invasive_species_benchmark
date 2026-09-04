@@ -28,6 +28,7 @@ from harness.langfuse_client import (
     Q1_SCORE_NAME,
     Q2_LABELS,
     Q2_SCORE_NAME,
+    REFERRAL_CORRECT_SCORE_NAME,
     DatasetRunHandle,
     attach_score,
     build_dataset_item_expected_output,
@@ -147,6 +148,7 @@ def test_build_score_config_specs_covers_every_gate_and_quality_dimension() -> N
         Q2_SCORE_NAME,
         *NUMERIC_QUALITY_SCORE_NAMES,
         Q1_SCORE_NAME,
+        REFERRAL_CORRECT_SCORE_NAME,
     ]
     # Exact fixed names per the PRD's gate/quality tables.
     assert GATE_SCORE_NAMES == [
@@ -155,6 +157,7 @@ def test_build_score_config_specs_covers_every_gate_and_quality_dimension() -> N
         "G3_AQUATIC_FORMULATION",
         "G4_RESTRICTED_USE_LICENSING",
         "G5_NO_FABRICATED_CITATION",
+        "G6_HARMFUL_ACTION_WARNING",
     ]
     assert NUMERIC_QUALITY_SCORE_NAMES == [
         "Q3_ACTIONABILITY",
@@ -309,7 +312,13 @@ def _existing_score_configs(names: list[str]) -> MagicMock:
 def test_ensure_score_configs_skips_names_already_registered() -> None:
     client = MagicMock()
     client.api.score_configs.get.return_value = _existing_score_configs(
-        [*GATE_SCORE_NAMES, Q2_SCORE_NAME, *NUMERIC_QUALITY_SCORE_NAMES, Q1_SCORE_NAME]
+        [
+            *GATE_SCORE_NAMES,
+            Q2_SCORE_NAME,
+            *NUMERIC_QUALITY_SCORE_NAMES,
+            Q1_SCORE_NAME,
+            REFERRAL_CORRECT_SCORE_NAME,
+        ]
     )
 
     created = ensure_score_configs(client)
@@ -377,6 +386,7 @@ def test_start_dataset_run_builds_name_and_metadata() -> None:
         metadata={
             "model_id": "claude-sonnet-5-20260101",
             "prompt_version": "v1",
+            "arm": "standard",
             "card_set_version": "freeze-v1",
         },
     )
@@ -386,6 +396,27 @@ def test_start_dataset_run_omits_card_set_version_when_not_given() -> None:
     run = start_dataset_run("gpt-x", "v2")
     assert "card_set_version" not in run.metadata
     assert run.run_name == "gpt-x__v2"
+
+
+# --- dataset runs: oracle-contrast arm (RQ1) --------------------------------------------------
+
+
+def test_start_dataset_run_defaults_to_standard_arm() -> None:
+    run = start_dataset_run("model-a", "v1")
+    assert run.metadata["arm"] == "standard"
+    assert run.run_name == "model-a__v1"  # unchanged from before `arm` existed
+
+
+def test_start_dataset_run_oracle_arm_gets_a_distinct_run_name_and_metadata() -> None:
+    run = start_dataset_run("model-a", "v1", arm="oracle")
+    assert run.run_name == "model-a__v1__oracle"
+    assert run.metadata["arm"] == "oracle"
+
+
+def test_start_dataset_run_standard_and_oracle_arms_never_collide_on_run_name() -> None:
+    standard = start_dataset_run("model-a", "v1")
+    oracle = start_dataset_run("model-a", "v1", arm="oracle")
+    assert standard.run_name != oracle.run_name
 
 
 def test_link_trace_to_dataset_run_calls_dataset_run_items_api() -> None:

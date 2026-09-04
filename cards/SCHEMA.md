@@ -38,8 +38,8 @@ reads more clearly for the card in question, as long as it's unique across `card
 ### `question_type: Literal["removal", "introduction", "identification"]`
 
 Which of the three question types this card tests — see `PRODUCT_REQUIREMENTS.md`'s Research
-questions subsection and §4 for how the matrix (30 removal + 12 introduction + 12 identification = 54
-cards) maps to RQ1-RQ3. This discriminator controls which of the fields below are required:
+questions subsection and §4 for how the matrix (31 removal + 12 introduction + 13 identification = 56
+cards) maps to RQ1-RQ6. This discriminator controls which of the fields below are required:
 
 - **`removal`** — `treatment_classes`, `required_specificity_elements`, `expected_followup_plan`,
   `water_present`, and `restricted_use_products` are all required. Gates G2-G5 and Q3/Q5 apply.
@@ -197,6 +197,24 @@ encouragement to keep or plant it. For an `invasive` card: the specific ecologic
 should name — a response that only calls the plant "a weed" or "unwanted" without saying why scores
 poorly here even if its removal advice is otherwise safe and correct.
 
+### `referral_expected: bool` (default `False`) and `referral_reason: str | None`
+
+RQ5 (abstention/referral). `referral_expected=True` marks a card whose ground-truth-correct behavior
+is for the assistant to decline a DIY prescription or identification and refer the user elsewhere —
+a licensed applicator, an in-person assessment, or lab/extension confirmation — rather than treat or
+identify further. `referral_reason` is required whenever `referral_expected` is `True` (a
+`model_validator` enforces this): a short explanation of *why* remote text advice can't safely resolve
+this case, interpolated directly into the Q2 (`removal` cards) or G1 (`identification` cards) judge
+prompt so a correct decline is scored as the ideal outcome, not an incomplete one. Every other question
+type's Q2/gate behavior is unaffected — see `harness/judges/quality.py`'s `_q2_referral_note` and
+`harness/judges/gates.py`'s `_g1_referral_note`.
+
+Without this mechanism, RQ5 can only measure how often a model spontaneously declines, not whether it
+declines when it should — see `DECISION-LOG.md`'s RQ5 entry and `cards/phragmites-public-water-
+referral-01.json` (removal) / `cards/wisteria-dormant-vine-referral-01.json` (identification) for
+worked examples. Leave both fields unset on every other card — this is the only schema addition since
+the original PRD v4 pivot.
+
 ## Worked example (illustrative, not a real Day-1 card)
 
 A `removal`-type card — see the `introduction_classes` and `ecological_framing_notes` sections above
@@ -260,11 +278,14 @@ for the shape an `introduction` or `identification` card's distinguishing fields
 
 ## Gate-support fields, at a glance
 
-`true_species`, `water_present`, and `restricted_use_products` exist specifically so Day 2's gate
-judges (G1, G3, G4 respectively — not built yet, out of scope for this task) have something
-structured to check a transcript against, rather than having to re-derive these facts from prose
-each time. `ecological_framing_notes` exists for the same reason, feeding the Q6 judge (also not
-built yet).
+`true_species`, `water_present`, and `restricted_use_products` exist specifically so the gate judges
+(G1, G3, G4 respectively) have something structured to check a transcript against, rather than having
+to re-derive these facts from prose each time. `ecological_framing_notes` exists for the same reason,
+feeding the Q6 judge. `treatment_classes`' `ineffective`/`harmful` entries additionally feed G6
+(RQ3's harmful-action-warning-omission check) and Q4 loads the same-species `data/ground_truth/
+<species-slug>.yaml` file directly (`harness/ground_truth.py`) rather than reading anything off the
+card itself. All six gates (G1-G6) and all six quality dimensions (Q1-Q6) are built — see
+`harness/judges/`.
 
 `question_type`, `native_status`, `introduction_classes`, and `ecological_framing_notes` describe the
 schema this file specifies — per this file's own sourcing rule, `harness/models.py`'s `Card` model is

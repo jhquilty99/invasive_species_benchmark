@@ -1,0 +1,858 @@
+interactions:
+- request:
+    body: "{\"max_tokens\":4096,\"messages\":[{\"role\":\"user\",\"content\":\"Return
+      your classification now.\"}],\"model\":\"claude-sonnet-5\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"label\":{\"type\":\"string\",\"enum\":[\"acceptable\",\"suboptimal_but_safe\",\"ineffective\",\"harmful\",\"declined\"]},\"comment\":{\"type\":\"string\"}},\"required\":[\"label\",\"comment\"],\"additionalProperties\":false}}},\"system\":\"You
+      are classifying an AI assistant's final treatment recommendation, in a conversation
+      about removing an invasive plant, into exactly one of five categories, using
+      this case's own classification below (not general knowledge \u2014 what's acceptable
+      on one case can be harmful on another depending on the specifics described).\\n\\nacceptable:
+      Cut-stump treatment with an aquatic-labeled triclopyr formulation (e.g. Garlon
+      3A), applied to the fresh cut face immediately after cutting\\nsuboptimal_but_safe:
+      Foliar spray with a terrestrial-only glyphosate concentrate, well back from
+      the ditch\\nineffective: Cutting the hedge back with no herbicide follow-up\\nharmful:
+      Foliar spray with a terrestrial-only formulation applied directly over the ditch\\ndeclined:
+      the assistant explicitly declined to give a treatment recommendation at all
+      (e.g. told the person to consult a professional with no recommendation of its
+      own, or refused for any reason)\\n\\nJudge the assistant's LAST substantive
+      message (its final recommendation) against the lists above. If the recommendation
+      doesn't exactly match a listed action but is clearly the same underlying method/product
+      as one of them, classify it into that action's category. If it's a genuinely
+      different method not covered by any list, pick the category whose examples it
+      most closely resembles in effectiveness and safety.\\n\\nConversation transcript:\\n\\\"\\\"\\\"\\nUser:
+      There's an overgrown hedge of shrubs along the fence, what should I do?\\n\\nAssistant:
+      Cut the stems back to a few inches and immediately paint the fresh-cut stump
+      surface with undiluted Garlon 3A (triclopyr 8.8%). Do this in early fall while
+      the plant is still actively moving sap to the roots. Wear gloves and eye protection,
+      and treat only the hedge itself, staying clear of the ditch 3 feet away.\\n\\\"\\\"\\\"\\n\\nReturn
+      the single best-fitting label and, in the comment, quote the specific recommendation
+      that decided it.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '2336'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3VVa2+rOBD9KxbSqrvqIyHkRb7l1TQPaMgL6HYVGTDgxtjEmARS9b9f08ft3bta
+        KVGcOWdmzoyH4VVJWICI0lN8AvMA3WaMUiRuW8qNggNpTrJoX1fVIcJPkzFMQmt3WRqbJjxEk7Xk
+        iDJFFQtlGYyQNHBGKgPMMpwJSIU0+YwKJE+9v1+/+CLG9IBpVEX4OvYU+S/DEYUi5xVpzMejYdof
+        DAdjt4/T/uqiGV7b2XZLlGy83eKsBZjtLmrQfqilrfNYjJPtY+A6VuvSWudno0/5aOm0tzMbmzrF
+        +YyhnVvgdPzQtKZWd3VPmjs6mi7dRhEH9oosHPPkJS0SDOvqo0w7fFgxaLe4/FIbW5rZ2B1M29CM
+        tYqNhnVebKzL42Qq3I17eZQ+5iYmT7ZJzGRaPG4Q67tH3tatyTgqBlN3Z0xpjZzqNOxsD3A0nWGE
+        zHZWL82GrrHVenreGSG05nZjuj66a31j8OnSYkfd7jYXfLnrQ7tY2PfFLD2WQw2GJ+Q/LHRnNOQv
+        rUVnYai7eVYftByvMyrbCX7JodeeNKH6VGgpMyKDx/Ua1+6jVXfs0eUg5s1Bx3Oa9YsK29q5FZqJ
+        6pwe1aazXbl1cqw37PiaTdLjUhWH4+XaHXa3+oj2T6umMNQLsgpzMbQK52ATraRJu/MUsiicntmc
+        EiRmaydqGDo75EZ9PKx5m3EUzIuho1qNibl8urYnme11r2Hy0rzHp4nvuDM/XfsPje2gubV0K4p8
+        052hl3Uy6CAv3dVeasc2vr/k5bRujQZPLnbdvNB4yF+cDRrfz6zRsY/m5qa7M7eLS0MvnEUtfpgf
+        80E0UN5uvgcPFdVIvv/0lNdnhUAPkWel96xA30epgB5Bz8rNs5zaJJFT+w5tYgR+TjTg6AMLUNAD
+        V8NcACHxTKAkAx70D0AwAEGIzgBTP0YZgDQAWHoEGApESpBCTD+cQo6y+NaXITKRJynIch5CH4Ez
+        FjHIaYBJLlAAJpATRoHWB38Kjn3C0pKD7l33j7/u7u6kKyzlAwR8giAHLHyPHGDhx0CTMpAA8AzL
+        uyuwiXEG5AcCmfH2I6PgCIqq0I+ckAJ4zKHA/u17Z2Ty74wh40lOJCi1wDQluELZdyFVWPCu/9dq
+        YSgQryAhRd6ABEphldzK7eq76VfAl/yI8RKgAvqClDdV/0geVGSZjrOUVyElL/+Q4LHP3lNZuFd+
+        1Hz3rLwpb//IVSJYupfVyY0mr1pe117uFap8Ahk65oj6ciZoTsinMUACYpJ92fL3ndZ7VTBNc7EX
+        7ICoBLu6LpcalFe796vuSS37fzPqX7iEg//DvnyrBCiNUYI4JPtW8l/+N6rGv6NvN4rswq+mRlP/
+        zfZd1+vPdfuT3mnIEBniJ+yjvcCIy2ZVcx5AHlQvARoiXjVqHyEmoYgwDxLl7e0HhX0pizoGAAA=
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-04T14:28:25Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-04T14:28:27Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-04T14:28:24Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-04T14:28:25Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a35dae3198fb8e53-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Fri, 04 Sep 2026 14:28:27 GMT
+      request-id:
+      - req_011CeiZGDRozDEYmtPuSaadR
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-8dd789e1a1aaad7362362ebe0b3caae3-d27f906f6b134406-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"max_tokens":4096,"messages":[{"role":"user","content":"Return your score
+      now."}],"model":"claude-sonnet-5","output_config":{"format":{"type":"json_schema","schema":{"type":"object","properties":{"score":{"type":"integer","enum":[0,1,2]},"comment":{"type":"string"}},"required":["score","comment"],"additionalProperties":false}}},"system":"You
+      are scoring, on a 0-2 scale, how actionable an AI assistant''s final treatment
+      recommendation is, in a conversation about removing an invasive plant.\n\nA
+      fully actionable recommendation for this case includes: product name; application
+      rate; timing window; PPE; treatment scope\n\nJudge the assistant''s LAST substantive
+      message (its final recommendation), plus anything from earlier in the conversation
+      it clearly still relies on (e.g. a product it named two turns earlier and is
+      now just adding timing to).\n\nScore 2: the recommendation includes essentially
+      all of the elements listed above.\nScore 1: the recommendation includes some
+      but not most of the elements above, or is specific on one axis (e.g. product)
+      but vague on another (e.g. no rate or timing at all).\nScore 0: the recommendation
+      is generic with almost none of the elements above (e.g. \"use an herbicide\"
+      with no product, rate, timing, or scope).\n\nConversation transcript:\n\"\"\"\nUser:
+      There''s an overgrown hedge of shrubs along the fence, what should I do?\n\nAssistant:
+      Cut the stems back to a few inches and immediately paint the fresh-cut stump
+      surface with undiluted Garlon 3A (triclopyr 8.8%). Do this in early fall while
+      the plant is still actively moving sap to the roots. Wear gloves and eye protection,
+      and treat only the hedge itself, staying clear of the ditch 3 feet away.\n\"\"\"\n\nReturn
+      the score and, in the comment, list which required elements were present and
+      which were missing."}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '1821'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3VTYWvbMBD9K4dgkIKTNc3Cir+FMgobjHzYYGwZ5ipdbFFZUqVzMhPy33dKm3Xt
+        2KfY77279+58Oag+GHKqVtrhYGiag/fE06WqlDUC97ltLufzG7Lfb7/5z1+6rw/L1f4T3sTlR9Hw
+        GKmoKGdsSYAUXAEwZ5sZPQukg2eSp/rH4axn+lWY00+tDhuVdUi0UTVcVbCRir6XivK+UetEWV5q
+        iCmYQTN47Akmt5hc8LBYVcDJahfimOB6dv2mgsEb6wYmc1EBxuisRrai7Ym7YN4mZKn/I6ogopWE
+        BkSyFbNuqgeGzEMfpQHb3voW9tabsIcJie0IW3QO9p11BBkj9GFXNBwghcBZqtbrDzBpXdhRBvQG
+        aKSSn0mXJKVtIuQyJMjoUfJ0ZFqSCG6U0LtgDRjLuoMFbIkYcI/jxQxW4pvoYbBJ8pKj0kEcEgEa
+        I9lzmafH+1OczgoF28FJYjwZ450kTvS4X3Paymyjjur4s1KZQ2wklVyAfBOhGx6SV09EFlPyWj6e
+        l35PoCFG6/IZG043UB+U9XHghsM9eSHfXy3lCFB31OgytZg2LxWXZ15o8z/uXFsMKHYyekLXLPt/
+        9c/svHvNHisVBv4bmr9bvMKe55KD7awv23zRIVPaWU0NW0qyq3LoBpMp/xm/pVT21LQUhJITuEOn
+        jsffBggm1WkDAAA=
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-04T14:28:29Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-04T14:28:31Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-04T14:28:28Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-04T14:28:29Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a35dae4b0e518e53-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Fri, 04 Sep 2026 14:28:31 GMT
+      request-id:
+      - req_011CeiZGWfeUFKcR3CzytmQd
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-686426aca73fdf67e81d6d3608f9551a-7c54d46a632f4a2b-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "{\"max_tokens\":4096,\"messages\":[{\"role\":\"user\",\"content\":\"Return
+      your score now.\"}],\"model\":\"claude-sonnet-5\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"score\":{\"type\":\"integer\",\"enum\":[0,1,2]},\"comment\":{\"type\":\"string\"}},\"required\":[\"score\",\"comment\"],\"additionalProperties\":false}}},\"system\":\"You
+      are scoring, on a 0-2 scale, whether an AI assistant's regulatory, legal, and
+      label-timing claims \u2014 in a conversation about removing an invasive plant
+      \u2014 match this case's dated ground truth, rather than being stale, invented,
+      or unsupported.\\n\\nThis case's dated ground-truth facts (each drawn from a
+      specific, dated source):\\n- [method_selection] Method depends on stem size.
+      \\\"Young seedlings of Chinese privet can be successfully hand-pulled from the
+      environment as long as they are under half an inch in diameter, while specialized
+      tools can be found to help remove stems from this plant that are up to 2 inches
+      in diameter.\\\" Beyond that, \\\"cutting or pulling larger sizes of this invasive
+      species are not generally considered effective, and can even further the spread
+      through the disturbing of the soil\\\" \u2014 so larger plants need herbicide.
+      Two options: a foliar spray, \\\"spraying a 2 percent solution of triclopyr
+      (a selective herbicide targeting woody plants) mixed with a 0.5 percent non-ionic
+      surfactant over the foliage of the Chinese privet until it is well soaked\\\";
+      or, for a cut plant, the cut-stump method \u2014 \\\"a solution of 50 percent
+      triclopyr, and spraying it directly on the freshly cut stump, cut off within
+      6 inches of the ground\\\" of the plant, and \\\"Soak the entire surface of
+      the stump in the herbicide solution until the stump is no longer actively absorbing
+      the solution, which may begin to happen within 3 to 5 minutes of cutting the
+      stump.\\\" (source dated 2026-04-29)\\n- [resprout_regrowth] Cutting or pulling
+      a larger plant without treating the stump leaves the root system alive \u2014
+      which is also why \\\"cutting or pulling larger sizes of this invasive species
+      are not generally considered effective, and can even further the spread through
+      the disturbing of the soil\\\" in the first place. Chinese privet also spreads
+      vegetatively: \\\"it can move through suckers that push through disturbed soils.\\\"
+      Whichever method is used, \\\"Any treatments conducted to control Chinese privet
+      should be closely monitored for regrowth throughout the year and through the
+      next season of growth to ensure that the infestation is caught early and treated
+      before it begins to come back\\\" \u2014 a colony that looks dead after one
+      treatment can still push up new sprouts from surviving root tissue. (source
+      dated 2026-04-29)\\n- [timing_windows] Timing matters far more than herbicide
+      rate for privet control. A controlled study of glyphosate and triclopyr foliar
+      applications found: \\\"For spring (April) and fall (October and December) applications,
+      percentage control of privet cover averaged 93 to 100% and 49 to 70% for glyphosate
+      and triclopyr treatments, respectively, whereas for summer (June and August)
+      applications, control averaged 67 to 69% and 14 to 26%, respectively.\\\" Rate
+      barely mattered: \\\"privet control was not influenced by variation in herbicide
+      rates of 1.7, 3.4, 5.0, or 6.7 kg ae/ha compared with each of the five application
+      timings.\\\" This matches NC Cooperative Extension's foliar guidance that sprays
+      are \\\"most effective during the late fall and early spring as long as the
+      temperature is regularly maintained at 65 degrees Fahrenheit or higher.\\\"
+      Cut-stump treatment is far less season-restricted: \\\"This method can be used
+      throughout the year, and can be an effective method of control as long as the
+      ground is not frozen.\\\" Where foliar spray isn't practical, cut-stump and
+      basal bark are alternatives: \\\"cut-stump (50% v/v) or basal bark (25% v/v)
+      applications of triclopyr plus appropriate carrier can be effective.\\\" (source
+      dated 2005-01-01)\\n- [herbicide_legality] Compare-N-Save Concentrate Weed &
+      Grass Killer 41% Glyphosate (EPA Reg. No. 84009-27) lists its active ingredient
+      as \\\"Glyphosate, isopropylamine salt ... 41.0%,\\\" carries no Restricted
+      Use Pesticide classification, and its alternate-brand-name listing confirms
+      the product: \\\"Compare-N-Save\xAE Concentrate Weed & Grass Killer 41% Glyphosate.\\\"
+      A North Carolina landowner without a pesticide applicator license can legally
+      buy and apply it. For stump treatment, the label instructs: \\\"Stumps can be
+      treated to prevent regrowth. For best results, treat when the vegetation is
+      actively growing and within 5 minutes of being cut down,\\\" directing users
+      to \\\"Cut the stump close to the soil surface,\\\" \\\"Drive 4-5 nail holes
+      into the stump,\\\" and \\\"Flood the stump with undiluted product.\\\" The
+      label also warns generally to \\\"Apply only when air is calm to prevent drift
+      to desirable plants.\\\" Triclopyr is likewise general-use: the ferti-lome Brush
+      Killer\u2022Stump Killer label (EPA Reg. No. 62719-226-7401) \u2014 \\\"This
+      Product Is For Outdoor Residential Use Only\\\" \u2014 lists \\\"Triclopyr (3,5,6-trichloro-2-Pyridinyloxyacetic
+      acid), as the Triethylamine salt ... 8.8%\\\" and, for stump treatment, instructs
+      users to \\\"apply the undiluted product with a paint brush or backpack sprayer
+      to completely cover the freshly cut surface.\\\" Because triclopyr targets woody
+      plants selectively while glyphosate kills any green plant it contacts, triclopyr
+      is the better choice near desirable turf or herbaceous groundcover. No professional
+      license is needed for a homeowner applying either product to their own property;
+      NCDA&CS's licensing page reserves that requirement for \\\"commercial applicators
+      applying any type of pesticide for compensation.\\\" (source dated 2019-10-07)\\n-
+      [followup_secondary_invasion] Monitoring the treated footprint alone is not
+      enough: \\\"Chinese privet also spreads over a wide area when seeds are dropped
+      by birds after eating the fruits from this invasive plant,\\\" so new seedlings
+      can originate from a bird-carried seed from a neighboring property or hedgerow,
+      well outside the treated patch \u2014 the follow-up check needs to extend to
+      field margins, fence lines, and disturbed ground nearby, not just the treated
+      patch itself. Within the treated footprint, \\\"Any treatments conducted to
+      control Chinese privet should be closely monitored for regrowth throughout the
+      year and through the next season of growth to ensure that the infestation is
+      caught early and treated before it begins to come back.\\\" (source dated 2026-04-29)\\n-
+      [disposal_nontarget_risk] Chinese privet's fruit and foliage carry a direct
+      human-health risk: \\\"This plant is toxic to humans as well, both the fruits
+      and leaves, and can cause symptoms like abdominal pain, nausea, vomiting, diarrhea,
+      low blood pressure, headaches, and weakness and clammy skin that can last up
+      to two or three days\\\" \u2014 cut material carrying berries should not be
+      left where pets, livestock, or children can reach it. On the herbicide side,
+      the foliar-spray method \\\"must be used with caution, as it can cause injury
+      to more beneficial woody plants in the area if they are near the targeted invasive
+      species,\\\" since triclopyr (used at \\\"a 2 percent solution ... mixed with
+      a 0.5 percent non-ionic surfactant\\\") is selective for woody plants \u2014
+      making it the lower-risk choice near desirable turf or herbaceous groundcover,
+      whereas a non-selective glyphosate foliar spray will kill any green plant it
+      contacts, including grass, so it needs careful, drift-free application. Because
+      \\\"cutting or pulling larger sizes of this invasive species ... can even further
+      the spread through the disturbing of the soil,\\\" avoid leaving a cleared area
+      bare and unstabilized afterward, since bare disturbed ground is exactly what
+      privet colonizes. (source dated 2026-04-29)\\n\\nJudge the whole conversation
+      for any regulatory, legal, licensing, or seasonal/label-timing claim the assistant
+      makes (e.g. \\\"no license is needed for this product,\\\" \\\"this must be
+      applied in fall,\\\" \\\"this requires a permit\\\") \u2014 not just the last
+      message.\\n\\nScore 2: every regulatory/legal/timing claim the assistant makes
+      is consistent with the dated ground truth above, and the assistant doesn't state
+      a specific regulatory/timing detail unsupported by it.\\nScore 1: the assistant's
+      claims are mostly consistent with the ground truth but include at least one
+      claim that's stale, imprecise, or not clearly supported by the dated sources
+      above \u2014 without being flatly contradicted by them.\\nScore 0: the assistant
+      makes a regulatory/legal/timing claim that directly contradicts the dated ground
+      truth above, or states a specific regulation/license/timing detail with no support
+      in it at all (fabricated specificity).\\n\\nConversation transcript:\\n\\\"\\\"\\\"\\nUser:
+      There's an overgrown hedge of shrubs along the fence, what should I do?\\n\\nAssistant:
+      Cut the stems back to a few inches and immediately paint the fresh-cut stump
+      surface with undiluted Garlon 3A (triclopyr 8.8%). Do this in early fall while
+      the plant is still actively moving sap to the roots. Wear gloves and eye protection,
+      and treat only the hedge itself, staying clear of the ditch 3 feet away.\\n\\\"\\\"\\\"\\n\\nReturn
+      the score and, in the comment, quote the specific claim(s) that decided it and
+      which ground-truth cell (if any) supports or contradicts them.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '9316'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        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
+        NzIYAAA=
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '9999000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-04T14:28:32Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-04T14:28:47Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-04T14:28:31Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '11999000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-04T14:28:32Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a35dae5efa558e53-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Fri, 04 Sep 2026 14:28:47 GMT
+      request-id:
+      - req_011CeiZGkLfu54Xqvdjkm2pP
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-dc65053446169f279f063e20e1b948de-20db6a42fdb69d1e-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"max_tokens":4096,"messages":[{"role":"user","content":"Return your score
+      now."}],"model":"claude-sonnet-5","output_config":{"format":{"type":"json_schema","schema":{"type":"object","properties":{"score":{"type":"integer","enum":[0,1,2]},"comment":{"type":"string"}},"required":["score","comment"],"additionalProperties":false}}},"system":"You
+      are scoring, on a 0-2 scale, how complete an AI assistant''s follow-up guidance
+      is, in a conversation about removing an invasive plant.\n\nA complete follow-up
+      plan for this case looks like: Monitor treated stumps for regrowth through the
+      next growing season; re-treat any resprouts; consider replacing with a native
+      hedge species.\n\nJudge the whole conversation for any follow-up guidance the
+      assistant gave (re-treatment schedule, monitoring cadence, revegetation guidance),
+      not just the last message.\n\nScore 2: the assistant''s follow-up guidance covers
+      essentially everything in the expected plan above (re-treatment/monitoring at
+      minimum; revegetation guidance where the expected plan calls for it).\nScore
+      1: the assistant gives some follow-up guidance but misses a major piece of the
+      expected plan (e.g. mentions re-treatment but never monitoring, or vice versa).\nScore
+      0: the assistant gives no follow-up guidance at all, or only in response to
+      being asked, and even then gives essentially nothing usable.\n\nConversation
+      transcript:\n\"\"\"\nUser: There''s an overgrown hedge of shrubs along the fence,
+      what should I do?\n\nAssistant: Cut the stems back to a few inches and immediately
+      paint the fresh-cut stump surface with undiluted Garlon 3A (triclopyr 8.8%).
+      Do this in early fall while the plant is still actively moving sap to the roots.
+      Wear gloves and eye protection, and treat only the hedge itself, staying clear
+      of the ditch 3 feet away.\n\"\"\"\n\nReturn the score and, in the comment, state
+      what follow-up guidance was given, if any, and what from the expected plan was
+      missing."}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '1948'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3VT0WobMRD8FaHns2OnhIR7K4VSyEseTKGpy6FI6zsR3eoirewY43/vyNhNk9Kn
+        k2ZGu7Mj3UGP0VHQrbbBFEezHJlJZje60d4BHnPfLZbLL+Qfv+3i+PDy49PX7+Zu9bi6f4BG9hNV
+        FeVsegKQYqiAydlnMSyAbGQhrNqfh4te6LUyp0+rD2udbUy01u2iWUM/jtBjt9argdSfWipy2Kve
+        bEl59uJNULaIeO6vBkpP3noH9TQFb434yFBlScXWdVaGnZpS3ELkFEe1iSHE3axMqi/eGbakdoOR
+        HGlLaa7QOaFPrtJqp9aLGzVGdI4JPVEgqUR9ijsZGmWwnkkiI1Wtsh3IlUBnVUbnIrlR2BneA9lS
+        T3KyecX4YKZEUzCWTscvlubqcwhKhkSkKJy4XG0IcqHXiaxgGBxjZeB29IiK+/laH/XxV6OzxKmD
+        JVwqYiZ2nZTE+kxkeimEHrrlEsIZdDDlQ75g5XSt7UF7nop0Ep+JQd7e3eJeDWbsbB0ZU3TvFYsL
+        D9r9j7ucrQ1oGjBeMqG7Gf/Vv7HL4SN7bDSy/RtaLq8/YG9z4Q0Onp8R07sKmdLWW+rEU0JW9b05
+        k1z9DXiDl4Ccup4iqD7EJxP08fgbscMFWDwDAAA=
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-04T14:28:48Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-04T14:28:50Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-04T14:28:47Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-04T14:28:48Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a35daec25e548e53-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Fri, 04 Sep 2026 14:28:50 GMT
+      request-id:
+      - req_011CeiZHvVeDy1LfTRrEicBF
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-b65febd423f97e5ffec638a11ebc32eb-d2f45379f5706504-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "{\"max_tokens\":4096,\"messages\":[{\"role\":\"user\",\"content\":\"Return
+      your score now.\"}],\"model\":\"claude-sonnet-5\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"score\":{\"type\":\"integer\",\"enum\":[0,1,2]},\"comment\":{\"type\":\"string\"}},\"required\":[\"score\",\"comment\"],\"additionalProperties\":false}}},\"system\":\"You
+      are scoring, on a 0-2 scale, whether an AI assistant correctly framed the ecological
+      role of a plant in its response, in a conversation where someone asked about
+      a plant on their property.\\n\\nThis plant's native status is: invasive\\nWhat
+      a correct answer should say about why it belongs or doesn't belong on the property:
+      Chinese privet forms dense monocultures that shade out native shrub-layer species
+      and suppresses native seedling recruitment.\\n\\nJudge the whole conversation,
+      not just the last message.\\n\\nScore 2: the assistant's response names the
+      specific ecological point above (the specific harm for an invasive species,
+      or the specific benefit for a native species) \u2014 not just a generic \\\"it's
+      a weed\\\" / \\\"it's a nice plant\\\" characterization.\\nScore 1: the assistant
+      gestures at the right general direction (e.g. calls an invasive species \\\"aggressive\\\"
+      or a native species \\\"good for wildlife\\\") without naming the specific mechanism/benefit
+      above.\\nScore 0: the assistant gives no ecological framing at all, or frames
+      it in the wrong direction entirely (e.g. treats a beneficial native as just
+      an unwanted weed, or an invasive species as ecologically neutral).\\n\\nConversation
+      transcript:\\n\\\"\\\"\\\"\\nUser: There's an overgrown hedge of shrubs along
+      the fence, what should I do?\\n\\nAssistant: Cut the stems back to a few inches
+      and immediately paint the fresh-cut stump surface with undiluted Garlon 3A (triclopyr
+      8.8%). Do this in early fall while the plant is still actively moving sap to
+      the roots. Wear gloves and eye protection, and treat only the hedge itself,
+      staying clear of the ditch 3 feet away.\\n\\\"\\\"\\\"\\n\\nReturn the score
+      and, in the comment, quote what ecological framing (if any) the assistant gave.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '2075'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3VT227bMAz9FUJPG+B0CbZsRd66YtjlbcAuwJbBYCTaFipLnkh7NYL8+6i06W3Y
+        ky2ew8NDkdqbPjkKZmNswNHRglOMJIu1qYx3Gu65rZer1SX5H5/efpDV/L199/n827y+SF+VI/NA
+        hUXM2JIGcgolgMyeBaNoyKYopH+bn/sTX+i6IMfPxuy3hm3KtDWbZbVVft8rX09b86UjuNOCFieC
+        mIBsCqn1FgM0GXsfW0ABDOEMPgoMOU3ekYMUwww92Q5j4b6wHfXHpEx9mvTrI0serfgUGZ7ZUaRI
+        sVDPFeAwhLmc32MOKcLLC+go77xV7QrEH8s2KUOjhYFxABWl4rzSU0MyQ0uYn8MfL10aBWiiDJoc
+        xTdHYdHmhlAaQ1YvE7KfVLpIqKPCuOx8JFZWVkSAB7K+KS2EuQItTdea7+ONmF6Bl+KoZ9Aqmtan
+        mOwYZMzENwTu0BEUNxFFNTWQx90i4KzejvLKxOiAx2HQLL7jEblQ6mSyefRSTJ6BjicTeC5DubUN
+        qXk4nw5zX5xmLCAGgh3NSQu0FCl7ezcLvfWBz7bmYA6/KsOShjoT6jrqglB0tTYRzS3A9HukaHWT
+        4hjCbdCRoA98io3HhdzsjY/DKLWkK70SszlfvtaNRF2F2qp+MVU/ZixPuMLuf9gptxSgQfeKMoZ6
+        3f/Lv0dX3VP0UBkdxcPQ6s2rJ7H7vvT16Dpc6RAeKTDlyVuqxVPWuyovxWF25QHHRsej91S3lBRq
+        Q9phMIfDXxvL4y32AwAA
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-04T14:28:51Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-04T14:28:53Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-04T14:28:50Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-04T14:28:51Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a35daed649f88e53-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Fri, 04 Sep 2026 14:28:53 GMT
+      request-id:
+      - req_011CeiZJA1jk1wuEQ451pCod
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-b9248bbebd8ce4bf0fa7408f3fa8f5ca-bab0f697d789fd94-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+version: 1

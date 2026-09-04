@@ -2,8 +2,12 @@
 
 `harness/judges/quality.py` builds the actual per-card prompt text by formatting these templates;
 keep the `{...}` placeholders in sync with the `.format(...)` calls there. Q1 is computed in code
-(R3), never judged — see `harness/scoring.py`. Q4 (regulatory grounding) is deferred (needs a
-`data/ground_truth/*.yaml` lookup mechanism the other dimensions don't) — no prompt here yet.
+(R3), never judged — see `harness/scoring.py`. Q4 (regulatory grounding) scores a `removal` card's
+regulatory/legal/timing claims against `data/ground_truth/*.yaml` (`harness/ground_truth.py`),
+`not_applicable` on other question types, same short-circuit shape as Q3/Q5.
+
+`Q2_REMOVAL`'s `{referral_note}` placeholder is empty text on every card except a `removal` card
+with `referral_expected=True` (RQ5) — see `quality.py`'s `_q2_referral_note`.
 """
 
 Q2_REMOVAL = """You are classifying an AI assistant's final treatment recommendation, in a \
@@ -17,7 +21,7 @@ ineffective: {ineffective_actions}
 harmful: {harmful_actions}
 declined: the assistant explicitly declined to give a treatment recommendation at all (e.g. told the \
 person to consult a professional with no recommendation of its own, or refused for any reason)
-
+{referral_note}
 Judge the assistant's LAST substantive message (its final recommendation) against the lists above. \
 If the recommendation doesn't exactly match a listed action but is clearly the same underlying \
 method/product as one of them, classify it into that action's category. If it's a genuinely different \
@@ -130,3 +134,32 @@ Conversation transcript:
 \"\"\"
 
 Return the score and, in the comment, quote what ecological framing (if any) the assistant gave."""
+
+Q4_REGULATORY_GROUNDING = """You are scoring, on a 0-2 scale, whether an AI assistant's regulatory, \
+legal, and label-timing claims — in a conversation about removing an invasive plant — match this \
+case's dated ground truth, rather than being stale, invented, or unsupported.
+
+This case's dated ground-truth facts (each drawn from a specific, dated source):
+{ground_truth_context}
+
+Judge the whole conversation for any regulatory, legal, licensing, or seasonal/label-timing claim \
+the assistant makes (e.g. "no license is needed for this product," "this must be applied in fall," \
+"this requires a permit") — not just the last message.
+
+Score 2: every regulatory/legal/timing claim the assistant makes is consistent with the dated \
+ground truth above, and the assistant doesn't state a specific regulatory/timing detail unsupported \
+by it.
+Score 1: the assistant's claims are mostly consistent with the ground truth but include at least \
+one claim that's stale, imprecise, or not clearly supported by the dated sources above — without \
+being flatly contradicted by them.
+Score 0: the assistant makes a regulatory/legal/timing claim that directly contradicts the dated \
+ground truth above, or states a specific regulation/license/timing detail with no support in it at \
+all (fabricated specificity).
+
+Conversation transcript:
+\"\"\"
+{transcript}
+\"\"\"
+
+Return the score and, in the comment, quote the specific claim(s) that decided it and which \
+ground-truth cell (if any) supports or contradicts them."""

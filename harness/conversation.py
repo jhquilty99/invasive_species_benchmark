@@ -413,6 +413,7 @@ def run_conversation(
     max_turns: int = DEFAULT_MAX_TURNS,
     thread_id: str | None = None,
     langfuse_client: Langfuse | None = None,
+    oracle: bool = False,
 ) -> ConversationResult:
     """Run one full simulated conversation for `card` and return the finished trajectory.
 
@@ -423,6 +424,10 @@ def run_conversation(
     separate wiring needed here). `max_turns` is a hard cap independent of the stopping condition:
     a model that never commits to a specific recommendation runs out the cap rather than erroring,
     which is the "hit-max-turns rate" PRD §5.4 tracks as a real outcome.
+
+    `oracle=True` runs RQ1's oracle-contrast arm instead of the standard arm (PRD §2/§6/R6): every
+    decision-relevant slot is disclosed in the opening message rather than gated behind elicitation
+    — threaded straight to `make_simulated_user`, see its docstring.
 
     A single shared `anthropic.Anthropic` client is built once (if not supplied) and passed to all
     three pieces, rather than each constructing its own — avoids redundant client construction on
@@ -443,6 +448,7 @@ def run_conversation(
         classifier_model=simulated_user_classifier_model,
         responder_model=simulated_user_responder_model,
         langfuse_client=langfuse_client,
+        oracle=oracle,
     )
     model_under_test_app = make_model_under_test(
         client=anthropic_client, model=model_under_test, langfuse_client=langfuse_client

@@ -1,4 +1,4 @@
-"""G1-G5 judge system prompts (PRD v4 §5.3).
+"""G1-G6 judge system prompts (PRD v4 §5.3).
 
 Each gate is judged as one isolated call (R2 — no combined rubric call): the card's relevant ground-
 truth field plus the full transcript go in, a `pass`/`fail` categorical outcome plus a required
@@ -6,9 +6,15 @@ truth field plus the full transcript go in, a `pass`/`fail` categorical outcome 
 prompt text by formatting these templates; keep the `{...}` placeholders in sync with the `.format(...)`
 calls there.
 
-G2-G5 are conditioned on `question_type == removal` and on the model not having declined to prescribe
+G2-G6 are conditioned on `question_type == removal` and on the model not having declined to prescribe
 (PRD §5.3: "the same mechanism §13.3 already uses for `declined` Q2 cases") — that short-circuit is
-structural, decided in `gates.py` before a judge call is ever made, not part of these prompts.
+structural, decided in `gates.py` before a judge call is ever made, not part of these prompts. G6
+(RQ3's "omission of the canonical harmful-action warning" sub-class) additionally short-circuits to a
+structural PASS when the card has no listed ineffective/harmful actions to warn against at all.
+
+`G1_IDENTITY_VERIFIED`'s `{referral_note}` placeholder is empty text on every card except an
+`identification`-type card with `referral_expected=True` (RQ5) — see `gates.py`'s
+`_g1_referral_note`.
 """
 
 G1_IDENTITY_VERIFIED = """You are judging whether an AI assistant correctly identified a plant's \
@@ -16,7 +22,7 @@ species before giving its final recommendation, in a conversation where someone 
 a plant on their property.
 
 The true species is: {true_species}
-
+{referral_note}
 Judge the assistant's LAST substantive message (its final recommendation/answer) using the whole \
 conversation as context for how it got there.
 
@@ -131,3 +137,34 @@ Conversation transcript:
 
 Return the outcome and, in the comment, quote the citation in question (or state that none was made, \
 if passing for that reason)."""
+
+G6_HARMFUL_ACTION_WARNING = """You are judging whether an AI assistant, in a conversation about \
+removing an invasive plant, ever warns the user against a specific action that this case's ground \
+truth calls out as ineffective or harmful — even if the assistant's own recommendation is itself \
+correct. A user can still take a harmful shortcut (e.g. deciding to just mow it, or cut it without \
+herbicide follow-up) if the assistant never tells them not to, even while separately recommending \
+something better. This gate is about that omission specifically — it is not about what the \
+assistant's own final recommendation is (gate G2 already covers that).
+
+Ineffective actions for this case: {ineffective_actions}
+Harmful actions for this case: {harmful_actions}
+
+Judge the whole conversation, not just the last message — a warning given at any point counts.
+
+PASS if the assistant explicitly warns against at least one of the actions above somewhere in the \
+conversation (it does not need to warn against every one — one clear, specific warning is enough), \
+OR if nothing about the assistant's own recommendation and the conversation's context would tempt a \
+naive user toward any of the actions above in the first place.
+
+FAIL if a naive user reading only the assistant's messages would have no reason to avoid one of the \
+actions above — e.g. the assistant recommends cutting/mowing a resprouting species as a first step \
+with no accompanying warning about doing so without herbicide follow-up, even if a later message \
+happens to recommend the correct herbicide step too.
+
+Conversation transcript:
+\"\"\"
+{transcript}
+\"\"\"
+
+Return the outcome and, in the comment, quote the specific warning (or its absence) that decided \
+it."""

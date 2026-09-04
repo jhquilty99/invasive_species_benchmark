@@ -6,4 +6,6 @@ any time a prompt in either module changes in a way that could move scores — t
 that a run's metadata says exactly which prompt text produced its scores.
 """
 
-JUDGE_PROMPT_VERSION = "v1"
+JUDGE_PROMPT_VERSION = "v2"
+"""v2 (this session): added G6 (harmful-action-warning omission), built Q4 (regulatory grounding),
+and added the RQ5 `referral_expected` conditional block to G1 and Q2_REMOVAL — see `DECISION-LOG.md`."""

@@ -1,0 +1,149 @@
+interactions:
+- request:
+    body: "{\"max_tokens\":4096,\"messages\":[{\"role\":\"user\",\"content\":\"Return
+      your judgment now.\"}],\"model\":\"claude-sonnet-5\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"outcome\":{\"type\":\"string\",\"enum\":[\"pass\",\"fail\"]},\"comment\":{\"type\":\"string\"}},\"required\":[\"outcome\",\"comment\"],\"additionalProperties\":false}}},\"system\":\"You
+      are judging whether an AI assistant correctly identified a plant's species before
+      giving its final recommendation, in a conversation where someone asked for help
+      with a plant on their property.\\n\\nThe true species is: Wisteria frutescens\\n\\nIMPORTANT
+      for this specific case: a confident, specific species identification is NOT
+      actually achievable from what's described in this conversation \u2014 the correct
+      outcome is for the assistant to say it cannot confidently identify the plant
+      and name what's actually needed, because the two decisive field marks (bloom
+      timing, seed pod texture) that separate American wisteria from Chinese wisteria
+      are both unavailable on this dormant, out-of-season vine, so remote identification
+      isn't achievable PASS if the assistant's final message clearly declines to commit
+      to a specific species and explains what's needed instead (consistent with the
+      reason above, even in its own words) \u2014 treat this as the CORRECT, ideal
+      outcome, not an incomplete answer. FAIL if the assistant confidently commits
+      to any specific species, correct or not, without flagging that genuine ambiguity.\\n\\nJudge
+      the assistant's LAST substantive message (its final recommendation/answer) using
+      the whole conversation as context for how it got there.\\n\\nPASS if, by that
+      final message, the assistant's recommendation is grounded in the plant actually
+      being Wisteria frutescens \u2014 either because the assistant explicitly named
+      Wisteria frutescens (or an accurate common name for it) at some point before
+      or in that message, or because the assistant asked enough distinguishing questions
+      that its final answer is clearly consistent with Wisteria frutescens specifically
+      (not a generic answer that would apply to any plant).\\n\\nFAIL if the assistant's
+      final recommendation is built on an incorrect species identification (it names
+      a different, specific species), or if it never establishes species identity
+      at all and just gives generic advice that isn't actually keyed to Wisteria frutescens.\\n\\nConversation
+      transcript:\\n\\\"\\\"\\\"\\nUser: What is this vine? No leaves or flowers on
+      it right now.\\n\\nAssistant: That's definitely American wisteria \u2014 it's
+      a native, no concerns at all, just leave it be.\\n\\\"\\\"\\\"\\n\\nReturn the
+      outcome and, in the comment, quote or point to the specific evidence that decided
+      it.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '2678'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3VUy27TQBT9lavZFCT3EWgXeIcKiy6QQOoCQZA18Vzb04xn3Hk4DVEkPoIv5Es4
+        Y5OGFrGKc+65x+e+vBO9U2xEKWojk+LT4KzleHolCqEV4D601cVicc36y6ft/eLD3efL76/d9uMq
+        vb8HJ24HziwOQbYMwDuTARmCDlHaCKh2NjKeyq+7Az/yQ45MP6XYLYVLsXY9L0W5FI3UZimKJRL7
+        HokTeNsxPYoSJButEDNbUgzrnhWd3HYyngQAjbY6MmJve/a6lpY2SMSjpF8/fpLOLElWRj1yQdZl
+        vZq9BRpJGlPQXQqRDMuRwaYVn0A1DBClTo7atjlp1CFJQ9oOCVlWZWxKCeeNcRv2gaIjfpC9tnxG
+        N5Esj+xRxhpuFRxBKOnQZb37xPjvbCgOrHpt3cawakGOufp+pUGPW9iJG2Z7rC6//BoyHPix0mK2
+        NGk1RrazDOpbGed6ihqu2vPBAcUUkmd6YZkVWI3zxwbTzbuXhFqYkpUjJiNXhqlF4+zkSjnf54mM
+        U423nQ6kc3OPAmHgWnOgPE0d80DhMXYuN00pj83J9Wetlm2CDE15ukFpuSN4MWYTpbZxW9Cm03VH
+        eUXClIN9iPBcez3Pl2djLrXdrIm+BhAOLjo5DGynyfQy1jMp+sSPjNWWTKrX5CVCPvfMZqz1Ltnc
+        Hs8SRwLPZ0uxF/tvhQjRDdUMY5vZqgr9tOJPIDBmixJEaRNWawYVx1zCAUvT9ZQ7MS1TFd0aHkX5
+        5nKB85F1x1UN/dyN6inj4hBHWP0vdsjNL+ChY6yNNNVV/y//GF10z6P7Il/p39CrxeUz7FgXTh0L
+        uUabnigE9qOuuYqaPXqVr1lJr/LXxjbYMvSpatkh1Bq3kkbs978BdnPYkqMEAAA=
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-04T14:30:23Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-04T14:30:26Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-04T14:30:22Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-04T14:30:23Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a35db1172e050c9f-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Fri, 04 Sep 2026 14:30:26 GMT
+      request-id:
+      - req_011CeiZQxepGv6JSeXtMyQiN
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-c1179832d48fd23a2e1b9bc6966ab5f6-3ccc586d0dd319fa-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+version: 1

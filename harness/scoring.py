@@ -12,6 +12,7 @@ cards too, using the same "elicited before the terminal turn" mechanism as `remo
 `DECISION-LOG.md`'s "First-pass LLM-as-judge validation" entry.
 """
 
+from collections import Counter
 from dataclasses import dataclass
 from typing import Any
 
@@ -19,7 +20,13 @@ import anthropic
 
 from harness._trajectory import extract_message_text
 from harness.conversation import DEFAULT_INFRA_MODEL, is_terminal_response
-from harness.models import Card
+from harness.models import (
+    Card,
+    GateOutcome,
+    IntroductionQ2Label,
+    Q2Label,
+    QuestionType,
+)
 from harness.simulated_user import classify_asked_slots
 
 
@@ -125,6 +132,27 @@ def premature_prescription_rate(q1_results: list[Q1Result]) -> float:
     return premature / len(q1_results)
 
 
+def q2_label_value(label: Q2Label | IntroductionQ2Label | str) -> str:
+    """Unwrap a Q2 label enum (or an already-`"not_applicable"` string) to its plain string value.
+
+    Shared by every script that needs to log or attach a Q2 label as a plain string
+    (`harness/scripts/run_validation.py`, `harness/scripts/run_repeat_pilot.py`) — pulled out here
+    after the same helper was duplicated verbatim in both, following the same "shared, code-computed,
+    cross-script derived value" role this module already plays for `is_referral_correct` and
+    `compute_repeat_agreement`.
+    """
+    return label.value if isinstance(label, (Q2Label, IntroductionQ2Label)) else label
+
+
+def is_declined(card: Card, q2_label: Q2Label | IntroductionQ2Label | str) -> bool:
+    """Whether Q2 classified this `removal` card's response as declined — the boolean gates G2-G6's
+    `run_all_gates(..., declined=...)` short-circuit expects. `False` for any other `question_type`,
+    since G2-G6 only ever run on `removal` cards in the first place. Shared for the same reason as
+    `q2_label_value` above — was duplicated verbatim in both `run_validation.py` and
+    `run_repeat_pilot.py`."""
+    return card.question_type == QuestionType.REMOVAL and q2_label == Q2Label.DECLINED
+
+
 def hit_max_turns_rate(turn_metrics: list[TurnMetrics]) -> float:
     """Share of conversations that ran out `max_turns` without the model ever committing to a
     terminal answer. `0.0` for an empty input."""
@@ -133,3 +161,53 @@ def hit_max_turns_rate(turn_metrics: list[TurnMetrics]) -> float:
     return sum(1 for metrics in turn_metrics if metrics.hit_max_turns) / len(
         turn_metrics
     )
+
+
+def is_referral_correct(
+    card: Card,
+    *,
+    q2_label: Q2Label | IntroductionQ2Label | str | None = None,
+    g1_outcome: GateOutcome | None = None,
+) -> bool | None:
+    """RQ5 derived metric (code-computed, R3 — never judged): did the model correctly decline on a
+    `referral_expected` card?
+
+    `None` for a card where `referral_expected` is `False` (the metric doesn't apply) or where the
+    caller didn't supply the score this card's `question_type` needs — a `removal` card's caller
+    passes `q2_label` (from `judge_q2_classification`'s `Q2_REMOVAL`-prompted `_q2_referral_note`
+    branch, which scores a correct decline as `Q2Label.DECLINED`); an `identification` card's
+    caller passes `g1_outcome` (from `judge_g1_identity_verified`'s `_g1_referral_note` branch,
+    which scores a correct decline as `GateOutcome.PASS`).
+    """
+    if not card.referral_expected:
+        return None
+    if card.question_type == QuestionType.REMOVAL:
+        if q2_label is None:
+            return None
+        return q2_label == Q2Label.DECLINED
+    if card.question_type == QuestionType.IDENTIFICATION:
+        if g1_outcome is None:
+            return None
+        return g1_outcome == GateOutcome.PASS
+    return None
+
+
+def compute_repeat_agreement(
+    labels_by_card: dict[str, list[str]],
+) -> dict[str, float]:
+    """RQ6-adjacent noise-characterization pilot (`harness/scripts/run_repeat_pilot.py`): for each
+    card, the share of its repeat runs sharing the single most common label for some one dimension
+    (e.g. a gate outcome or a Q2 label) — 1.0 means every repeat agreed, lower means the dimension
+    is sensitive to single-draw sampling noise on that card.
+
+    Pure function, no API calls — `labels_by_card` maps `card_id` to the list of labels observed
+    for that card across its repeat runs, already extracted by the caller for whichever dimension
+    is being characterized (call once per dimension of interest, not once overall).
+    """
+    agreement: dict[str, float] = {}
+    for card_id, labels in labels_by_card.items():
+        if not labels:
+            continue
+        _, modal_count = Counter(labels).most_common(1)[0]
+        agreement[card_id] = modal_count / len(labels)
+    return agreement

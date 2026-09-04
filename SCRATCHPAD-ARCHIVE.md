@@ -160,3 +160,28 @@ index, not a history of *why*.
   results directly from ClickHouse instead. Headline finding: G1 failed on 9/13 cards (69%) — the
   model-under-test frequently answers without committing to species identity (detail: `DECISION-LOG.md`,
   2026-09-03 "Live validation run: one real bug fixed, one local-infra bug found and deferred").
+- 2026-09-04 — Expanded `PRODUCT_REQUIREMENTS.md` §2 to RQ1-RQ6 + C1/C2 (from the old 3-RQ version) and
+  added an oracle-contrast experimental arm to RQ1; propagated the new numbering through `SCOPE.md` and
+  `cards/SCHEMA.md` (detail: `DECISION-LOG.md`, 2026-09-04 "Expanded research questions to RQ1-RQ6 +
+  C1/C2; added oracle-contrast experimental arm").
+- 2026-09-04 — Built Q4 (regulatory grounding): `harness/ground_truth.py` loads `data/ground_truth/
+  *.yaml` directly, `judge_q4_regulatory_grounding` scores a removal card's regulatory/legal/timing
+  claims against it, `not_applicable` elsewhere — closes the task this file had tracked since the
+  2026-09-03 first-pass validation build deferred it (detail: `DECISION-LOG.md`, 2026-09-04
+  "Methodology-eval hardening: G6, Q4, oracle-contrast mechanism, repeat pilot").
+- 2026-09-04 — Built the RQ1 oracle-contrast arm mechanism (PRD §2/§6/R6): `build_oracle_opening_
+  message`, `make_simulated_user(..., oracle=True)`, `run_conversation(..., oracle=True)`,
+  `start_dataset_run(..., arm=...)` giving standard/oracle runs distinct Langfuse dataset-run names and
+  metadata. Validated end-to-end on a real removal card via `run_validation.py`'s new `ARM` constant —
+  closes the "zero code exists" gap the methodology eval flagged (detail: `DECISION-LOG.md`, 2026-09-04
+  "Methodology-eval hardening: G6, Q4, oracle-contrast mechanism, repeat pilot").
+- 2026-09-04 — Added gate G6 (RQ3's harmful-action-warning-omission sub-class) and a repeated-sampling
+  pilot script (`harness/scripts/run_repeat_pilot.py`, RQ6-adjacent noise characterization; RQ6 itself
+  stays cut) — both surfaced by the methodology eval (detail: `DECISION-LOG.md`, 2026-09-04
+  "Methodology-eval hardening: G6, Q4, oracle-contrast mechanism, repeat pilot").
+- 2026-09-04 — Added RQ5 `referral_expected`/`referral_reason` schema fields (`Card` model, Q2/G1 judge
+  prompts, `is_referral_correct` derived metric) and 2 new cards using them
+  (`phragmites-public-water-referral-01.json` removal, `wisteria-dormant-vine-referral-01.json`
+  identification) — real scope growth, 54 → 56 cards / 84 → 87 runs per model, logged the same way as
+  the 2026-09-04 oracle-arm growth (detail: `DECISION-LOG.md`, 2026-09-04 "RQ5 referral_expected schema
+  and card-count growth").

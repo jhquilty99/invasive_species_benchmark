@@ -68,6 +68,12 @@ Q1_SCORE_NAME = "Q1_ELICITATION"
 categorical pass/fail score for visibility in the Langfuse UI alongside the judged dimensions —
 `pass` iff every `decision_relevant` slot on the card was elicited before the model's terminal turn."""
 
+REFERRAL_CORRECT_SCORE_NAME = "REFERRAL_CORRECT"
+"""RQ5 (`referral_expected`, added 2026-09-04): computed in code from Q2/G1 (R3, see
+`harness/scoring.py`'s `is_referral_correct`), not judged directly. Only ever attached for a card
+where `referral_expected` is `True` — skipped entirely otherwise, the same "not_applicable can't be
+a numeric/this-config's-shape value, so don't attach" pattern the quality scores use."""
+
 GATE_OUTCOME_LABELS: list[str] = ["fail", "pass", "not_applicable"]
 """Every gate is scored categorical pass/fail/not_applicable (PRD Sec 5.3)."""
 
@@ -146,6 +152,16 @@ def build_score_config_specs() -> list[ScoreConfigSpec]:
             categories=_categorical_categories(["fail", "pass"]),
             description="Q1 elicitation (computed in code, R3): pass iff every decision-relevant "
             "slot was elicited before the model's terminal turn.",
+        )
+    )
+    specs.append(
+        ScoreConfigSpec(
+            name=REFERRAL_CORRECT_SCORE_NAME,
+            data_type=ScoreConfigDataType.CATEGORICAL,
+            categories=_categorical_categories(["fail", "pass"]),
+            description="RQ5 referral correctness (computed in code, R3): pass iff a "
+            "referral_expected=True card's model response correctly declined and referred. Only "
+            "ever attached on a referral_expected card.",
         )
     )
     return specs
@@ -292,19 +308,36 @@ class DatasetRunHandle:
 
 
 def start_dataset_run(
-    model_id: str, prompt_version: str, *, card_set_version: str | None = None
+    model_id: str,
+    prompt_version: str,
+    *,
+    card_set_version: str | None = None,
+    arm: str = "standard",
 ) -> DatasetRunHandle:
-    """Build the handle for a (model_id, prompt_version) dataset run.
+    """Build the handle for a (model_id, prompt_version[, arm]) dataset run.
 
     `run_name` doubles as the run's identity in the Langfuse UI. `metadata` carries PRD R4's
     reproducibility fields (model ID, prompt version, and optionally the pinned card set version) —
     attach it to every trace/dataset-run-item created under this run.
+
+    `arm` (R6, PRD §6): `"standard"` (the default) keeps `run_name` exactly as before — not a
+    breaking rename for existing standard-arm runs. Any other value (the RQ1 oracle-contrast arm
+    passes `"oracle"`) is appended to `run_name` so the two arms land as distinct Langfuse dataset
+    runs instead of colliding under one name, and is always included in `metadata` regardless of
+    value so a run's arm is checkable without parsing `run_name`.
     """
-    metadata: dict[str, Any] = {"model_id": model_id, "prompt_version": prompt_version}
+    metadata: dict[str, Any] = {
+        "model_id": model_id,
+        "prompt_version": prompt_version,
+        "arm": arm,
+    }
     if card_set_version is not None:
         metadata["card_set_version"] = card_set_version
+    run_name = f"{model_id}__{prompt_version}"
+    if arm != "standard":
+        run_name = f"{run_name}__{arm}"
     return DatasetRunHandle(
-        run_name=f"{model_id}__{prompt_version}",
+        run_name=run_name,
         model_id=model_id,
         prompt_version=prompt_version,
         metadata=metadata,
