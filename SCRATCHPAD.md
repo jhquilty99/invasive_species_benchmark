@@ -73,12 +73,11 @@ in a rule file or `DECISION-LOG.md`.
   `max_tokens=1024` were getting truncated mid-JSON (`claude-sonnet-5`'s extended thinking eating the
   budget, same failure mode already documented for `claude-opus-5` as model-under-test) — bumped to
   4096 in `harness/judges/_common.py`. All 116 gate/quality/Q1 scores landed correctly in Langfuse's
-  ClickHouse `scores` table. **Found and partially worked around a separate local-infra bug**: the
-  `langfuse-worker` container was failing every queue job with Redis socket timeouts, so trace/span
-  data and dataset-run-item linking never got ingested (confirmed via a bare `span+flush()` smoke test
-  after restarting the worker — still didn't land), even though direct score-writes were unaffected.
-  Restarting the worker did not fix live ingestion either — needs real investigation, not blocking
-  since the scores themselves are the primary signal. Headline result: G1 (identity verified) failed
+  ClickHouse `scores` table, and (corrected 2026-09-04, see `DECISION-LOG.md`'s "Corrected misdiagnosis"
+  entry) per-turn trace/span data landed fine too — it's in the event-sourced `events_core`/`events_full`
+  tables this "events_only mode" deployment's UI actually reads, not the empty legacy `traces` table the
+  original diagnosis checked. The one real remaining gap is dataset-run-item linkage
+  (`dataset_run_items_rmt` is empty — see open task above), not trace ingestion. Headline result: G1 (identity verified) failed
   on 9/13 cards (69%), matching the derived premature-prescription rate exactly — the model-under-test
   very often gives removal/introduction/identification answers without ever committing to which
   species it's talking about, which is exactly the RQ1 gap this benchmark is designed to catch.
@@ -107,7 +106,8 @@ in a rule file or `DECISION-LOG.md`.
   PROMPT_VERSION` bumped v1 → v2. 126 tests passing (up from 83), all new judge-hitting tests
   cassette-recorded against the real API.
 - **Last touched:** 2026-09-04 (methodology eval + hardening pass: G6, Q4, oracle-arm mechanism, repeat
-  pilot, RQ5 schema/cards)
+  pilot, RQ5 schema/cards; corrected the Langfuse trace-ingestion misdiagnosis; made the simulated
+  user's mid-conversation turns lazier/less polite)
 
 ## Open tasks (ranked)
 
@@ -116,13 +116,13 @@ in a rule file or `DECISION-LOG.md`.
    topic proximity rather than an explicit question.
 2. **[Day 2]** Implement the R5 leakage check in code (not judged): no card slot value may appear in a user
    turn that wasn't preceded by a matching elicitation. Pass it on the test-card harness.
-3. Fix the local Langfuse stack's trace/span ingestion: the `langfuse-worker` container was failing
-   every queue job with Redis socket timeouts during the 2026-09-03 live run, so no trace, observation,
-   or dataset-run-item data landed (scores did, since those write directly rather than through the
-   worker's queue). Restarting the worker did not fix it — a bare span-create-then-flush smoke test
-   still didn't land afterward. Needs real investigation (Redis connectivity from the worker container,
-   possibly a stale connection pool or a `docker compose down && up -d` full reset) before per-turn
-   traces are actually browsable in the Langfuse UI for any future run.
+3. Fix `link_trace_to_dataset_run` (`harness/langfuse_client.py`): `dataset_run_items_rmt` is 0 rows in
+   ClickHouse, so traces from the 2026-09-03 run were never actually grouped under a dataset run, even
+   though the traces themselves are fine (see `DECISION-LOG.md`, 2026-09-04 "Corrected misdiagnosis" —
+   the earlier "trace/span ingestion is broken" diagnosis was wrong; per-turn traces are populated and
+   browsable in the Langfuse UI today, confirmed via direct ClickHouse query). Needs real investigation
+   into why `client.api.dataset_run_items.create` isn't landing a row, before cross-run comparison in the
+   Langfuse UI (PRD §6) works for any future run.
 4. **[Gate — Fri Sep 5]** Harness + leakage check working end to end. Gate judges, quality judges,
    per-turn Langfuse tracing, and a live 13-card validation run are all done (see the Status note
    above); still blocked on the slot-classifier and R5-leakage-check tasks above. If not met, this is
@@ -170,6 +170,13 @@ in a rule file or `DECISION-LOG.md`.
 14. Fix `outreach/EMAIL-TRACKER.md`'s Status/Date-sent columns to reflect the emails that were actually
     sent (currently still shows "Not sent" for all real contacts). No dependency on anything above — pure
     housekeeping, lowest priority.
+15. **[Added 2026-09-04, found during `/commit` copy review]** `harness/simulated_user.py`'s
+    `generate_user_response` tells the roleplay model it's "asking an AI assistant for help managing an
+    **invasive plant**" in both branches' instruction text — in tension with `.claude/rules/card-voice.md`'s
+    "Doesn't know it's invasive" rule for the persona it's playing. Pre-existing (predates the 2026-09-04
+    tone tweak, not introduced by it); unclear yet whether it actually leaks into generated turns 1+ or is
+    just an internal framing the model never echoes — needs a quick check against a few real transcripts
+    before deciding whether to reword. Low priority, no dependency on anything above.
 
 ## Open bugs
 

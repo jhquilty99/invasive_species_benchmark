@@ -185,3 +185,13 @@ index, not a history of *why*.
   identification) — real scope growth, 54 → 56 cards / 84 → 87 runs per model, logged the same way as
   the 2026-09-04 oracle-arm growth (detail: `DECISION-LOG.md`, 2026-09-04 "RQ5 referral_expected schema
   and card-count growth").
+- 2026-09-04 — Diagnosed that the "Langfuse trace/span ingestion is broken" task from 2026-09-03 was a
+  misdiagnosis: per-turn traces are populated and browsable in the Langfuse UI (verified via direct
+  ClickHouse query); only dataset-run-item linkage is actually broken, narrowing (not closing) the
+  open task (detail: `DECISION-LOG.md`, 2026-09-04 "Corrected misdiagnosis: per-turn traces DO exist
+  in Langfuse; only dataset-run linkage is broken").
+- 2026-09-04 — Made the simulated user's mid-conversation turns (`harness/simulated_user.py`'s
+  `generate_user_response`) lazier and less polite, carrying `.claude/rules/card-voice.md`'s
+  lazy-user framing from turn-0 `opening_message` content into the LLM-generated turns 1+, which it
+  previously didn't cover (detail: `DECISION-LOG.md`, 2026-09-04 "Made the simulated user's
+  mid-conversation turns lazier/less polite").

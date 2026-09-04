@@ -1694,7 +1694,9 @@ calls) independently discovered rather than generalized from the first. If a thi
 `.claude/rules/python.md` should get an explicit default (e.g. "any Anthropic call using a
 thinking-capable model needs `max_tokens >= 4096`") instead of relying on each site's author
 remembering the earlier fix.
-**Status:** Active
+**Status:** Active — its trace/span-ingestion-failure claim is corrected by the 2026-09-04 "Corrected
+misdiagnosis" entry below (traces did land; only dataset-run-item linkage is actually broken). The
+`max_tokens` fix and G1 headline finding are unaffected and still stand.
 
 ## 2026-09-03 — `/commit` review of the judge/tracing/validation diff
 
@@ -1961,4 +1963,65 @@ same silent-no-op gap in this review. Did NOT add a leakage-style runtime check 
 on identification cards beyond the schema-level `question_type` restriction — the two-question-type
 restriction is enough to prevent the specific silent-no-op the reviewer found.
 **Rule Updated:** N — standard review-fix pass, not a new pattern.
+**Status:** Active
+
+## 2026-09-04 — Corrected misdiagnosis: per-turn traces DO exist in Langfuse; only dataset-run linkage is broken
+
+**Decision:** The 2026-09-03 "Live validation run" entry's claim that "no trace, observation, or
+dataset-run-item data landed" is wrong for two of those three. Queried the local Langfuse ClickHouse
+backend directly (`http://127.0.0.1:8123`, creds in `infra/langfuse/.env`) and found: the legacy
+aggregated `traces`/`observations` tables are indeed empty (0 rows each), which is what the prior
+diagnosis checked — but this Langfuse deployment runs in "events_only mode" (already noted in
+`reports/2026-09-03-first-pass-validation-findings.md` re: the REST API 404), meaning the UI actually
+reads from the raw event-sourced `events_core`/`events_full` tables instead. Those hold 222 real
+span/generation events across 13 distinct trace IDs from the 2026-09-03 run (root `conversation` span +
+per-turn `model-under-test`/`stopping-condition` generations), all 13 of which match the trace IDs the
+116 scores are attached to. So per-turn traces are genuinely populated and browsable in the Langfuse UI
+today — the user confirmed this by looking. The one thing still genuinely broken: `dataset_run_items_rmt`
+is 0 rows, so `link_trace_to_dataset_run` (`harness/langfuse_client.py`) never actually created the
+dataset-run linkage — traces exist standalone but aren't grouped under a dataset run, so the
+cross-run-comparison view PRD §6 wants isn't populated yet.
+**Rationale:** The prior session (no Docker access in that environment) reasoned about `langfuse-worker`
+"failing every queue job" from a smoke test that checked the classic `traces` table, without confirming
+that table is even what this Langfuse version's UI reads from. Direct ClickHouse inspection, done with
+Docker/DB access in this session, is authoritative over that inference.
+**Trade-offs:** Deliberately did NOT re-run `link_trace_to_dataset_run` or otherwise attempt a live fix
+in this session — confirming the actual scope of the bug (dataset-run linkage only, not trace ingestion)
+was the goal; fixing it is a separate task. Did NOT dig into *why* `dataset_run_items.create` never
+landed a row (worker-queue-dependent vs. a separate direct-API-call bug) — that diagnosis is still open.
+**Rule Updated:** N — flag for retro. This is the second time in this project a claim about "what data
+landed" was inferred from one table/endpoint instead of checking what the actual read path uses
+(the first: the REST `/api/public/scores` 404 in "events_only mode," which was correctly noted but not
+connected to what it implied about the `traces` table). If a third instance shows up, add a rule:
+"before concluding ingestion failed, confirm which table/endpoint the consuming UI/API actually reads."
+**Status:** Active — supersedes the trace/observation ingestion-failure claim in the 2026-09-03 "Live
+validation run" entry above; that entry's `max_tokens` fix and score-landing results stand unchanged.
+
+## 2026-09-04 — Made the simulated user's mid-conversation turns lazier/less polite
+
+**Decision:** Added explicit fragment/low-effort tone guidance, with concrete example phrasings, to both
+branches of `generate_user_response`'s inline system prompt (`harness/simulated_user.py`) — the LLM
+prompt that generates every simulated-user turn after turn 0. Instructs the model to prefer sentence
+fragments and dropped subjects/articles over complete sentences, and to not default to a thank-you or
+acknowledgement of the assistant's question.
+**Rationale:** User observed the simulated user was consistently polite and grammatically complete
+("Yeah, there's a drainage ditch that runs along the property line, pretty close—maybe about 3 feet from
+the hedge."), confirmed against the one recorded cassette sample. `.claude/rules/card-voice.md` already
+establishes the target user as lazy/impatient for the human-authored `opening_message` (turn 0), but that
+framing was never carried into the LLM-generated turns 1+, so the assistant was being scored against an
+easier, more articulate conversational partner than the benchmark's own stated target user. A live
+spot-check (4 samples per branch) after the change showed clear fragments/dropped punctuation and no
+thank-yous ("yeah there's a drainage ditch like 3 feet away along the property line", "ok so how do I
+actually apply that? just paint it on or what").
+**Trade-offs:** Deliberately did NOT touch `card.opening_message` or `.claude/rules/card-voice.md` —
+turn 0 is human-authored card content already governed by that rule file, not part of this gap. Did NOT
+add a rules file dedicated to simulated-user tone (unlike card-voice.md) — kept the guidance inline in
+the system prompt strings themselves, since this is runtime LLM-prompt text, not authored content a
+human writes per-card. Did NOT re-record any VCR cassettes — `vcrpy`'s default `match_on` is method+URI,
+not request body, so `tests/test_simulated_user.py`'s existing cassettes replay unchanged and none of its
+assertions check politeness/sentence-completeness (only slot-value presence/absence); confirmed all 7
+tests still pass.
+**Rule Updated:** N — flag for retro. If another LLM-prompt-only tone instruction (adjective-only, no
+examples) turns out to under-constrain output elsewhere in `harness/`, the pattern worth generalizing is
+"tone instructions need concrete example phrasings, not just adjectives" — this entry is one data point.
 **Status:** Active
