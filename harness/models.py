@@ -223,11 +223,18 @@ class Q2Classification(BaseModel):
     correctly regardless of which class it's actually an instance of — but `model_validate`/JSON
     deserialization of a bare `{"label": "declined", ...}` dict always resolves to `Q2Label` (the
     first union member listed here), never `IntroductionQ2Label`, since nothing here disambiguates by
-    the source card's `question_type`. Harmless today (every `Q2Classification` in this codebase is
-    built in-process from an already-resolved enum instance, never round-tripped through a dict —
-    see `harness/judges/quality.py`), but an `isinstance(label, IntroductionQ2Label)` check on a
-    deserialized instance would give a misleading answer for an `introduction`-card score. Don't add
-    that kind of check without first confirming the value didn't come from deserialization.
+    the source card's `question_type`. Every other label value is unambiguous (`Q2Label` and
+    `IntroductionQ2Label`'s non-`declined` members don't share string values, so pydantic's union
+    resolution picks the right class), so only a deserialized `declined` classification is affected.
+    `harness/results_store.py`'s `SweepResult` **does** round-trip `Q2Classification` through JSON
+    (`model_dump_json`/`model_validate_json`, for on-disk sweep persistence), so this sharp edge is
+    live today, not hypothetical — a deserialized `SweepResult` for an `introduction` card whose Q2
+    was `declined` comes back as `Q2Label.DECLINED`, not `IntroductionQ2Label.DECLINED`. Still
+    harmless in practice because every current consumer (`harness/scoring.py`'s `q2_label_value`,
+    `is_declined`, `is_referral_correct`) compares by `.value` or via `==` against `Q2Label.DECLINED`
+    specifically (which matches by value regardless of the actual class), never
+    `isinstance(label, IntroductionQ2Label)`. Don't add that kind of `isinstance` check against a
+    `label` that may have come from `SweepResult` deserialization without accounting for this.
     """
 
     label: Q2Label | IntroductionQ2Label | Literal["not_applicable"]

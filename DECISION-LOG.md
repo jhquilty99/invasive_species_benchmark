@@ -2025,3 +2025,49 @@ tests still pass.
 examples) turns out to under-constrain output elsewhere in `harness/`, the pattern worth generalizing is
 "tone instructions need concrete example phrasings, not just adjectives" — this entry is one data point.
 **Status:** Active
+
+## 2026-09-04 — Built R5 leakage check, multi-vendor model client, and sweep persistence for the SME-validation deliverable; picked `gpt-5.6-sol`/`gemini-3.1-pro-preview` as the OpenAI/Google models
+
+**Decision:** Built three pieces toward the plan for a properly-powered, one-shot SME human-validation
+sample (see `~/.claude/plans/whats-the-fastest-way-luminous-finch.md`, approved this session): the R5
+leakage checker (`harness/leakage_check.py`, mechanical substring re-scan, no judge call), a
+multi-vendor model-under-test dispatch (`harness/model_clients.py`, plain chat completion across
+Anthropic/OpenAI/Google, wired into `harness/conversation.py` via a new optional `model_clients`
+param — judges/classifiers stay Anthropic-only), and on-disk JSONL sweep persistence
+(`harness/results_store.py`, `harness/sweep.py`'s `ThreadPoolExecutor` orchestration). Also moved
+`run_validation.py`'s private `_attach_*` Langfuse score-attachment helpers into `harness/
+langfuse_client.py` as public functions so `sweep.py` could reuse them instead of duplicating a third
+copy.
+
+Picked the OpenAI and Google models for `MODEL_VENDOR_MAP` by checking each vendor's official API
+docs directly, then verifying against this project's own account rather than trusting docs alone:
+OpenAI's actual newest flagship, `gpt-6-astra`, 404s on this project's API key
+(`openai.NotFoundError: model_not_found`, confirmed via `client.models.list()` — a real enterprise-
+phased-rollout access gap, not a bug), so `gpt-5.6-sol` (the flagship this key can call, "the main
+flagship option for professional applications" per OpenAI's own docs) is used instead. Google's
+`gemini-3.1-pro-preview` (the "Pro"-tier frontier reasoning model, matching Claude Opus's positioning)
+called successfully and was kept, despite some web sources this session found describing a "Flash"-
+tier Gemini model as more capable than "Pro" this cycle while Pro itself is still labeled `preview`.
+
+**Rationale:** R5 needed to exist before any sweep the SME sample would draw from, per the plan's own
+sequencing (a contaminated transcript should never be candidate-able for human review). The multi-
+vendor client and sweep persistence are the two pieces of net-new engineering the plan's "2-3 models,
+properly powered" scope requires that nothing in the repo had before this session. Reusing
+`langfuse_client.py`'s score-attach helpers rather than re-copying them into `sweep.py` follows this
+repo's own established pattern (`q2_label_value`/`is_declined` were pulled into `scoring.py` after
+duplicating twice — see earlier 2026-09-04 entries) of factoring out a helper before it duplicates a
+third time.
+
+**Trade-offs:** Deliberately did NOT wait to build/confirm a cross-vendor *judge* (only the model-
+under-test needed 3 vendors for this deliverable — PRD §7 needs human-vs-judge agreement, not cross-
+judge-family agreement; the same-vendor judge/subject optics risk stays deferred to `SCRATCHPAD.md`
+task 7 as before). Did NOT solve the open-weight-model hosting requirement here — that's the separate,
+not-yet-due full 4-6-model line-up's own requirement, decoupled from this 2-3-model SME-validation
+scope. Did NOT treat `gpt-6-astra` access as blocking — substituted `gpt-5.6-sol` and moved on, since
+re-litigating enterprise API access isn't this session's job; if/when this project's OpenAI account
+gains `gpt-6-astra` access, that's the more defensible pick and this entry (plus `model_clients.py`'s
+own docstring, which carries the same reasoning) should be updated. Did NOT resolve the Gemini Flash-
+vs-Pro naming ambiguity independently — flagged for the user rather than guessed past.
+**Rule Updated:** N — not clearly a recurring pattern yet (first time this project has needed to verify
+a model ID against a live account rather than docs alone).
+**Status:** Active

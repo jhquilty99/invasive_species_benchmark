@@ -107,70 +107,118 @@ in a rule file or `DECISION-LOG.md`.
   cassette-recorded against the real API.
 - **Last touched:** 2026-09-04 (methodology eval + hardening pass: G6, Q4, oracle-arm mechanism, repeat
   pilot, RQ5 schema/cards; corrected the Langfuse trace-ingestion misdiagnosis; made the simulated
-  user's mid-conversation turns lazier/less polite)
+  user's mid-conversation turns lazier/less polite; built the R5 leakage checker, a 3-vendor
+  model-under-test client, and sweep persistence toward the SME-validation deliverable below)
+- **SME-validation plan approved and partly built (2026-09-04):** the user asked for the fastest path
+  to a properly human-validated dataset SMEs can review (see `DECISION-LOG.md`'s "Built R5 leakage
+  check, multi-vendor model client, and sweep persistence..." entry for the full build list) — this
+  **supersedes/narrows PRD §7's plan for tasks 8-9 below**, not just extends it: (1) the sample size is
+  trimmed to ~20 conversations (not ~50), matching the ~2-hour ask `outreach/expert-validation-email.md`
+  already promised the contacted SMEs — the user chose "trim the sample" over renegotiating that ask;
+  (2) SMEs review a spreadsheet export, not the Langfuse annotation queue tasks 8-9 assumed, since
+  external SMEs shouldn't need Langfuse accounts. Built so far: R5 leakage check
+  (`harness/leakage_check.py`), a 3-vendor (Anthropic/OpenAI/Google) model-under-test dispatch
+  (`harness/model_clients.py`, wired into `harness/conversation.py`), and sweep persistence
+  (`harness/results_store.py`, `harness/sweep.py`). **Not yet built:** the stratified sample-selection
+  logic, the SME-facing xlsx export, and the read-back script — all still open, see the tasks below.
+  **Two picks need the user's confirmation before real budget is spent** (flagged in
+  `harness/model_clients.py`'s `MODEL_VENDOR_MAP` docstring and the DECISION-LOG entry): `gpt-5.6-sol`
+  substituted for the inaccessible `gpt-6-astra` (this project's OpenAI key 404s on it — re-pick if/when
+  access lands), and `gemini-3.1-pro-preview` despite some sources describing a "Flash"-tier Gemini
+  model as more capable this cycle.
 
 ## Open tasks (ranked)
 
-1. **[Day 2]** Tune the slot classifier (`harness/simulated_user.py`) against the test cards until it
-   reliably matches which slots were actually asked about — a live Day 1 run showed it can over-trigger on
-   topic proximity rather than an explicit question.
-2. **[Day 2]** Implement the R5 leakage check in code (not judged): no card slot value may appear in a user
-   turn that wasn't preceded by a matching elicitation. Pass it on the test-card harness.
-3. Fix `link_trace_to_dataset_run` (`harness/langfuse_client.py`): `dataset_run_items_rmt` is 0 rows in
+1. **[SME-validation plan, next up]** Run the dry run: `harness/sweep.py`'s `run_sweep` against the
+   existing 15-card corpus × the 3 wired models (`claude-opus-5`/`gpt-5.6-sol`/`gemini-3.1-pro-preview`,
+   pending the confirmation flagged above) × standard arm. Serves two purposes at once — rehearses the
+   sweep/persistence/leakage-filter pipeline cheaply, and gives a real R5 leakage-rate baseline that
+   decides task 2 below. Spends real API budget across all 3 vendors for the first time; get the model
+   picks confirmed first.
+2. Tune the slot classifier (`harness/simulated_user.py`) against the test cards until it reliably
+   matches which slots were actually asked about — a live Day 1 run showed it can over-trigger on topic
+   proximity rather than an explicit question. **Conditional on task 1's leakage baseline**: only invest
+   here if that baseline shows leakage is systemic, not reflexively (see the approved plan's reasoning).
+3. **[SME-validation plan]** Author ~5-6 more `introduction`-type cards (currently 1/12 exist) — the one
+   real card-authoring gap for a ~20-item stratified sample across all 3 question types (removal and
+   identification already have enough breadth at 7 cards each). Use the existing native-counterpart
+   pairing table (`PRODUCT_REQUIREMENTS.md` §4) and the already-complete `data/ground_truth/*.yaml` for
+   all 12 species — no new research needed. Can run in parallel with tasks 4-6 below; only needs to land
+   before the real (non-dry-run) sweep.
+4. **[SME-validation plan]** Build the stratified sample-selection logic (`harness/sampling.py` +
+   `harness/scripts/select_sme_sample.py`): ~20 conversations, stratified across the 3 question types,
+   oversampled on gate failures/`harmful` Q2, round-robin across the 3 models, excluding every
+   `leakage_detected` result. Depends on task 1's real (non-dry-run) sweep output.
+5. **[SME-validation plan]** Build the SME-facing xlsx export (`uv add openpyxl` first;
+   `harness/scripts/build_sme_review_xlsx.py`, modeled on `archive/study-a-single-turn/scoring/
+   build_checklist_xlsx.py` and `build_items_review_xlsx.py`): rubric/instructions sheet distilled from
+   the judge prompts, a card-reference sheet, and per-question-type score-entry sheets with dropdown
+   validation — blind to judge scores by construction, model identity coded as Model A/B/C per the
+   user's choice. Depends on task 4's selection output.
+6. **[SME-validation plan]** Build the read-back script (`harness/scripts/sync_sme_review_xlsx.py`,
+   mirroring the archived `sync_items_from_xlsx.py`'s load/validate/merge pattern) once task 5's sheet
+   layout is settled. Doesn't block sending the artifact to SMEs — build it any time before responses
+   start coming back.
+7. Fix `link_trace_to_dataset_run` (`harness/langfuse_client.py`): `dataset_run_items_rmt` is 0 rows in
    ClickHouse, so traces from the 2026-09-03 run were never actually grouped under a dataset run, even
    though the traces themselves are fine (see `DECISION-LOG.md`, 2026-09-04 "Corrected misdiagnosis" —
    the earlier "trace/span ingestion is broken" diagnosis was wrong; per-turn traces are populated and
    browsable in the Langfuse UI today, confirmed via direct ClickHouse query). Needs real investigation
    into why `client.api.dataset_run_items.create` isn't landing a row, before cross-run comparison in the
    Langfuse UI (PRD §6) works for any future run.
-4. **[Gate — Fri Sep 5]** Harness + leakage check working end to end. Gate judges, quality judges,
-   per-turn Langfuse tracing, and a live 13-card validation run are all done (see the Status note
-   above); still blocked on the slot-classifier and R5-leakage-check tasks above. If not met, this is
-   the day to cut card-count scope (PRD §8 rule 2), not later.
-5. **[Days 6-9]** Author the remaining 56-card matrix: 31 removal cards total (6 invasive species × 5
-   condition variations, plus the new `phragmites-public-water-referral-01` referral card — 7 already
-   exist, 24 more needed), 12 introduction cards total (6 invasive + 6 native — 1 exists, 11 more
-   needed), 13 identification cards total (12 species plus the new `wisteria-dormant-vine-referral-01`
-   referral card — 7 already exist, 6 more needed for the invasive species), drawing on existing
-   `data/ground_truth/*.yaml` for all 12 species (invasive and native ground truth both complete).
-6. **[Gate — Thu Sep 11]** 56 cards complete, corpus frozen (PRD §8 rule 1) — no card changes after this
-   point for any reason. (Was 54; +2 for the 2026-09-04 RQ5 `referral_expected` cards — see
-   `DECISION-LOG.md`, 2026-09-04 "RQ5 referral_expected schema and card-count growth".)
-7. Pick the specific open-weight model and host (Together.ai/Groq/Fireworks/local) for the 4-6 model
-   line-up, and wire a model client for every provider in the line-up — needed before the full sweep task.
-   When built, this multi-vendor client abstraction should also serve the cross-judge-validation use case
-   the methodology eval flagged (a same-vendor judge/subject optics risk, deliberately deferred to land
-   here rather than building a throwaway adapter twice — see `DECISION-LOG.md`, 2026-09-04
-   "Methodology-eval hardening..."): add a config knob to re-run `run_all_quality`/`run_all_gates` on
-   existing trajectories with a second, different-vendor judge model, and report cross-judge-family
-   agreement alongside the human-vs-judge Krippendorff's alpha (§7).
-8. **[Days 10-11]** Full sweep across 4-6 models (incl. the open-weight model), both arms (standard +
-   oracle) for the removal set — 87 conversation-model pairs per model, not 56 (the oracle-contrast
-   mechanism itself is built and validated end-to-end, see Status above; this task is the production
-   `run_sweep.py` that runs it across the full model line-up, still to be built). Fix what breaks;
-   re-run. Confirm transcripts complete for every (model × card × arm) pair. Log the pinned card-set
-   version, judge prompt version, and exact model version strings in run metadata (R4 — non-negotiable,
-   carries forward PRD §8 rule 5).
-9. **[Day 12]** Set up the Langfuse human-annotation queue; brief annotators; select the stratified ~50
-   sample (oversampled on gate failures and `harmful` Q2 classifications, stratified across all 3
-   question types).
-10. **[Days 13-14]** Human annotation, blind to judge scores. Write and run the Krippendorff's alpha
-    computation per dimension, including Q6 (PRD §7).
-11. **[Days 15-16]** Write-up: motivation, method, gates/quality design, results, failure examples (rates
+8. **[Gate — Fri Sep 5]** Harness + leakage check working end to end. Gate judges, quality judges,
+   per-turn Langfuse tracing, a live 13-card validation run, and the R5 leakage checker are all done
+   (see Status above); still blocked on the slot-classifier task above if it turns out to be needed. If
+   not met, this is the day to cut card-count scope (PRD §8 rule 2), not later.
+9. **[Days 6-9]** Author the remaining full 56-card matrix (beyond task 3's smaller SME-validation-only
+   slice): 31 removal cards total (6 invasive species × 5 condition variations, plus the
+   `phragmites-public-water-referral-01` referral card — 7 already exist, 24 more needed), 12
+   introduction cards total (6 invasive + 6 native — 1 exists, 11 more needed, task 3 covers ~5-6 of
+   these early), 13 identification cards total (12 species plus the `wisteria-dormant-vine-referral-01`
+   referral card — 7 already exist, 6 more needed for the invasive species).
+10. **[Gate — Thu Sep 11]** 56 cards complete, corpus frozen (PRD §8 rule 1) — no card changes after this
+    point for any reason. (Was 54; +2 for the 2026-09-04 RQ5 `referral_expected` cards — see
+    `DECISION-LOG.md`, 2026-09-04 "RQ5 referral_expected schema and card-count growth".)
+11. Pick the specific open-weight model and host (Together.ai/Groq/Fireworks/local) for the eventual
+    full 4-6 model line-up — the 3 vendors wired this session (`harness/model_clients.py`:
+    Anthropic/OpenAI/Google) cover the non-open-weight slots but not this one, which PRD §4 locks as
+    non-droppable. Also still open: the cross-judge-validation config knob the methodology eval flagged
+    (a same-vendor judge/subject optics risk — judges stayed Anthropic-only this session, deliberately,
+    per `DECISION-LOG.md`'s 2026-09-04 "Built R5 leakage check..." entry) — add a config knob to re-run
+    `run_all_quality`/`run_all_gates` on existing trajectories with a second, different-vendor judge
+    model, and report cross-judge-family agreement alongside the human-vs-judge Krippendorff's alpha (§7).
+12. **[Days 10-11]** Full production sweep across the eventual 4-6 model line-up (incl. the open-weight
+    model), both arms (standard + oracle) for the removal set — 87 conversation-model pairs per model,
+    not 56. The sweep mechanism itself (`harness/sweep.py`, `harness/results_store.py`) is now built
+    and used for the smaller SME-validation sweep (tasks 1-6 above) — this task is running it again at
+    full scale once the corpus is frozen (task 10) and the full model line-up is wired (task 11). Fix
+    what breaks; re-run. Confirm transcripts complete for every (model × card × arm) pair. Log the
+    pinned card-set version, judge prompt version, and exact model version strings in run metadata (R4
+    — non-negotiable, carries forward PRD §8 rule 5).
+13. **[Day 12, superseded in scope by the SME-validation plan above — re-evaluate once tasks 1-6 ship]**
+    PRD §7's original plan: set up a Langfuse human-annotation queue, brief annotators, select a
+    stratified ~50 sample. The SME-validation plan (tasks 1-6) covers a trimmed ~20-item version of this
+    same validation need via a spreadsheet instead of the Langfuse queue — decide whether this task is
+    still needed on top of that (e.g. a second, larger/non-SME annotation pass) or fully superseded,
+    once the SME sample is actually sent and results start coming back.
+14. **[Days 13-14]** Human annotation, blind to judge scores. Write and run the Krippendorff's alpha
+    computation per dimension, including Q6 (PRD §7) — now likely computed from task 6's read-back
+    script output (the SME xlsx responses) rather than a Langfuse annotation queue, per the plan above.
+15. **[Days 15-16]** Write-up: motivation, method, gates/quality design, results, failure examples (rates
     redacted per PRD §8 rule 3), limitations, generalization. Repo cleanup — assemble the PRD §12 release
     layout (`cards/`, `harness/`, `results/`, README with the schema documented standalone). Include the
     §5.4 reporting-granularity pre-registration (counts-only vs. CI'd metrics — PRD §5.4, added
     2026-09-04) so the analysis doesn't overclaim on the thin-cell metrics the methodology eval flagged.
-12. **[Day 17]** Zenodo archive → DOI. Post to arXiv (cs.CL) and EcoEvoRxiv.
-13. **[Added 2026-09-04]** Decide RQ6's (stability, PRD §2/§13) implementation scope — repeated-sampling
+16. **[Day 17]** Zenodo archive → DOI. Post to arXiv (cs.CL) and EcoEvoRxiv.
+17. **[Added 2026-09-04]** Decide RQ6's (stability, PRD §2/§13) implementation scope — repeated-sampling
     budget per card and the new simulated-user behaviors ("corrects the model," "presses for a specific
     treatment") it needs — before committing any further sweep volume beyond the 2026-09-04 repeated-
     sampling pilot (`harness/scripts/run_repeat_pilot.py`, RQ6-adjacent noise characterization only, not
     RQ6 itself). Not blocking anything above; no dependency, just needs a decision before it's picked up.
-14. Fix `outreach/EMAIL-TRACKER.md`'s Status/Date-sent columns to reflect the emails that were actually
+18. Fix `outreach/EMAIL-TRACKER.md`'s Status/Date-sent columns to reflect the emails that were actually
     sent (currently still shows "Not sent" for all real contacts). No dependency on anything above — pure
     housekeeping, lowest priority.
-15. **[Added 2026-09-04, found during `/commit` copy review]** `harness/simulated_user.py`'s
+19. **[Added 2026-09-04, found during `/commit` copy review]** `harness/simulated_user.py`'s
     `generate_user_response` tells the roleplay model it's "asking an AI assistant for help managing an
     **invasive plant**" in both branches' instruction text — in tension with `.claude/rules/card-voice.md`'s
     "Doesn't know it's invasive" rule for the persona it's playing. Pre-existing (predates the 2026-09-04

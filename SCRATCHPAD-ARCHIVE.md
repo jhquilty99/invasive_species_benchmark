@@ -195,3 +195,11 @@ index, not a history of *why*.
   lazy-user framing from turn-0 `opening_message` content into the LLM-generated turns 1+, which it
   previously didn't cover (detail: `DECISION-LOG.md`, 2026-09-04 "Made the simulated user's
   mid-conversation turns lazier/less polite").
+- 2026-09-04 — Closes the old "implement the R5 leakage check" task: built
+  `harness/leakage_check.py` (mechanical re-scan for slot values appearing before elicitation, no
+  judge call), plus a 3-vendor (Anthropic/OpenAI/Google) model-under-test dispatch
+  (`harness/model_clients.py`) and on-disk JSONL sweep persistence (`harness/results_store.py`,
+  `harness/sweep.py`) — all toward the SME-validation deliverable approved this session (detail:
+  `DECISION-LOG.md`, 2026-09-04 "Built R5 leakage check, multi-vendor model client, and sweep
+  persistence..."). Remaining SME-validation work (sample selection, xlsx export, read-back script)
+  stays open — see `SCRATCHPAD.md`.

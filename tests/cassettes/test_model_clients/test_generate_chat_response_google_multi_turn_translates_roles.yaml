@@ -1,0 +1,77 @@
+interactions:
+- request:
+    body: '{"contents": [{"parts": [{"text": "My favorite color is teal. Just acknowledge
+      that."}], "role": "user"}, {"parts": [{"text": "Got it, teal."}], "role": "model"},
+      {"parts": [{"text": "What''s my favorite color? One word answer."}], "role":
+      "user"}], "systemInstruction": {"parts": [{"text": "You are a helpful assistant."}],
+      "role": "user"}, "generationConfig": {"maxOutputTokens": 1024}}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate, zstd
+      connection:
+      - keep-alive
+      content-length:
+      - '387'
+      content-type:
+      - application/json
+      host:
+      - generativelanguage.googleapis.com
+      user-agent:
+      - google-genai-sdk/2.22.0 gl-python/3.11.16
+      x-goog-api-client:
+      - google-genai-sdk/2.22.0 gl-python/3.11.16
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/2VUW4+iSBh971/R8ZWZQUQR9w3kIoIKchM3m00BJZRyp0Cw0/990J6esXcroVL5
+        zuG7nOQ7by+vr6MAZCEKAYb16K/Xv4fI6+vb475jeYZhhgfgMzQEC1DhP9yP8/b0HigYdvefRhYE
+        yY/Rt/+Acd5EMTZRlAHcVPBOFGtPXNYbkdtL201EaNDeT91p4x4xyfD4OG5BS9n01p8ReB2FsXqt
+        LW/G9g5jIq2s45yZXPQl6U7c/uy39MVwdl13W9tIZlIznYc+Wp2UGtqANEKzSgVXSvClXbPaSVsd
+        fGXlEWWi7y/pDPCZsLoE7YyYBHFvnItAjmzJQ8txdz3mmAceO2FRFVOnzdqLi8CilrEZjcsEjrl4
+        T4N1GYqiXPpMco71gqGow5TY04QKBDYym4rd3GbSlskl+bDASsr01VbU07221Y+qK21iTzgjmRMj
+        Kzhr2fGkkWExyTqvkYlSMo9Qk3CKCK44q5LeoRtd74pFBAxuqtVza4clqYcNteSjJRn29clpGoFb
+        zBaU1zmJCucup+/9zaHPPIKgTinMy/7K8mUqVILMNOB0CgzTKAA79kjyKkeL4FxGTqLYoZ7zkTHV
+        69zFm0kr4NLgs529C3N6I3O8Jbhpug+5lXWNNZ8vRVp21NtNQgfa3EYKQW15lzgxVdUDPCly3T2a
+        CtkeTZqfhb4EJwYZSuRtR+YqJaBmSq0QlUq3heBwvlVKFr31ZsfVvpvleqXl17owdJWQVjIChgN3
+        clfZyKJF0PLkhj+eaWE5x3tOPhOxp7pr/sA4zaknYv9AGkG1bLNZzEMAzLEgt9MkVKOWX5BVLMvC
+        SXdMwptF7rFZzSlRKS0nnk1EfiUDEIlqoNlAcxTDjqc8BfFG4GXArYvc69Zs7QZO3+a5gXVPXTIK
+        r+Q+ntvRbbqr8EVlu77TJudrZhTClJNDKhCsnc/uzx3PThlLnrR1adP1+mATdHdWDqOndXn//f7n
+        zxaNqjx5bE2ahzD5pL9/EkYnlKE63kNQ59mdZlo7/fcSjlAWwm4Ij18+CzxSj5oaRHADMRi8APze
+        +FFR5WmBrfwCs2XePLyAZj6SPVnHV/wXjHMMki8INae+/S9tLQxFUfJsKU9uM8wIEoT7h52IB+vJ
+        TYYCX7r6FOLlSa9Pt/naIUVPfsE1rFoUQAvB6l6hxsNIoArvoj4E/dDYgVWNPsSMYDrI+53+QX0f
+        Zhg+2CJ4fXQ1qmBd5FkNlfDRbaT6oKRZhS3Rv81G7zVdQ5w4enl/+Qn4Ng1xeQUAAA==
+    headers:
+      alt-svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      date:
+      - Fri, 04 Sep 2026 17:39:29 GMT
+      server:
+      - scaffolding on HTTPServer2
+      server-timing:
+      - gfet4t7; dur=2871
+      transfer-encoding:
+      - chunked
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options:
+      - nosniff
+      x-frame-options:
+      - SAMEORIGIN
+      x-gemini-service-tier:
+      - standard
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+version: 1

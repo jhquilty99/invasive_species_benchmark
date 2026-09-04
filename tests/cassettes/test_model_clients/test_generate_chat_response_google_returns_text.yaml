@@ -1,0 +1,78 @@
+interactions:
+- request:
+    body: '{"contents": [{"parts": [{"text": "Say hello."}], "role": "user"}], "systemInstruction":
+      {"parts": [{"text": "You are a helpful assistant. Reply in exactly three words."}],
+      "role": "user"}, "generationConfig": {"maxOutputTokens": 1024}}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate, zstd
+      connection:
+      - keep-alive
+      content-length:
+      - '236'
+      content-type:
+      - application/json
+      host:
+      - generativelanguage.googleapis.com
+      user-agent:
+      - google-genai-sdk/2.22.0 gl-python/3.11.16
+      x-goog-api-client:
+      - google-genai-sdk/2.22.0 gl-python/3.11.16
+    method: POST
+    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/11U27KiOBR9P19h+cp0o6Ao86bcBLkqCDo1D1yCBgLBACp29b8Petpuz1AVKrXX
+        yr4syPrxMRgM47BMYBI2oB7+PfinjwwGP57vB4bLBpRND7xCfbAKSfOH+/n8eNv3lAbcHoeGK4AQ
+        HjR40OH2+/Cv/5FOuD2emi08lmHTEvA4IDULWahH8mIjm8aR1neFxY4mgRNLTECqq4LWGq0ARl46
+        Rr6wtYKpT60mJSJWVpfSIqfGdM44A/NwdT9VGObZKPLX0SlIC7eo9ntm720EVz/c6SJJlPNaCvgJ
+        L973R7rU7W2HiKQBT9yQrG4P7F0TIt4bTztw3Y+bHTUt8kwUqdiCc8CS+US8IWyeEIy64pgyFSio
+        mVdkYQJAq6+5WLhqnqGheb7mQYK2N/GswJmaeFxGV97sQGlNp+oLKDWWs8b3lQBgx6y61Jrz/Qfx
+        NwvnzMnmKdv4dX1sTHnNG+hgGAUlqrlOpqCD+pGCV8unLzeSqNlIkHZ4w1zPZevUVCOG6TIqeNtq
+        9ARlrhtTS9QF4Z7c2aKC45PFOfp1zbvaxN/OXMk+AB3OK2HpMgdViVSp6vUpbgf1MK9QEuwVn5qf
+        M4+GATFVFuaxJHqaaqOsybLLOAvBpjXiNYF+TJTd2dqFl+vyrlIN8nwsuVVFu/LVl6XaFqFMlmqY
+        l0tFVIiiBc1JrWI3P/sXG0+0EXvYIoHhg622CNOjvfeRLx7YLeSstGLgSgIicGKHdFyLFcNfGpf5
+        Ks27VcQbkbvOueK4zqYcvAAQTTSyZJtdCDX5eE75OWlHpmGdKdOyhRTpp1jLxxMjjvR7hWOOmmuM
+        HlkTmIaqzY/0sREQvsuMC41t2hAxv9IXJ1smtCBJAgo4TXWmt6LYq5ntj3NVipEk04XCFEaWZPdy
+        X9rqJXNiNJun45ratLFhyJXAGIBvvMCqnI1PTUV2vZ8JzuhGoaO1M9lZVHFtvYhpipWnoc4faTC7
+        2kW+3y+m0oVIkSOVkEwjAd3R1tvy3CqnR+eJ4GVpt/RiqhqpXFtpirXgHJqkDrVtVRqNCmltLmf3
+        mSj6s+AQWV1BTC9Il9gbORQxcbLYxDE7Lef3VXfYFLdloR2suxrOMNEOo8lVHtOcSnUT3piRmmz9
+        G1Buuc0sTf3S9X/92dmvTJNl+BRqC7VMqeHbNf/5e//vn9s/JBg9b3uBE4Be9J8vwjCFJaxPGxDW
+        uHzQtq5l/zaPISwTcOvDo49XgWfqYVuHR2CAJuy9LPztWMOK4KJqXJyDUsDt08vGs89kb9b3BZ/8
+        ghvchOgLwoxf2FvaWuyLQvRuiW9u2c8YIth0j0FcKXDfXLAv8KWrlxAfb3q9XPJrh2Oe/QXXgFxg
+        DFwIyKNC3fQjhSR5iPoU9FPjHSA1/BTzCIpe3m/s9/G3foZ+gQsE12dXQwLqCpc1UJOn7M46Cs9+
+        sNLaijewDdug4BbX4cfPj/8An+WgSDkGAAA=
+    headers:
+      alt-svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      content-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      date:
+      - Fri, 04 Sep 2026 17:39:26 GMT
+      server:
+      - scaffolding on HTTPServer2
+      server-timing:
+      - gfet4t7; dur=4995
+      transfer-encoding:
+      - chunked
+      vary:
+      - Origin
+      - X-Origin
+      - Referer
+      x-content-type-options:
+      - nosniff
+      x-frame-options:
+      - SAMEORIGIN
+      x-gemini-service-tier:
+      - standard
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+version: 1
