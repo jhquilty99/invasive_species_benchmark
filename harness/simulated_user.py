@@ -10,6 +10,13 @@ assistant ask the right questions" stops being measurable. Gating happens in cod
 text generation, so leakage of un-asked slot values is structurally impossible rather than merely
 discouraged by a system prompt.
 
+The oracle-contrast arm (RQ1, PRD §2/§6/R6) is the deliberate exception: `make_simulated_user(...,
+oracle=True)` discloses every `decision_relevant` slot's value in the opening turn itself
+(`build_oracle_opening_message`) instead of gating it behind elicitation, and pre-seeds the
+revealed-slot state so the rest of the turn loop treats those facts as already given. This isolates
+whether a model can act correctly on information it already has from whether it can draw that
+information out through questions — the standard arm measures the latter, this arm removes it.
+
 `make_simulated_user(card)` builds the combined callable matching the exact signature
 `openevals.simulators.run_multiturn_simulation` calls its `user` argument with: a positional
 `trajectory` (the accumulated list of message dicts so far) plus keyword-only `thread_id` and
@@ -109,6 +116,18 @@ def classify_asked_slots(
     return [name for name in asked if name in slot_names]
 
 
+def build_oracle_opening_message(card: Card) -> str:
+    """RQ1 oracle-contrast arm: `card.opening_message` plus every `decision_relevant` slot's value,
+    disclosed upfront rather than gated behind elicitation. Non-`decision_relevant` slots stay
+    gated as normal — the point is removing the elicitation requirement for the facts that actually
+    determine the correct answer, not eliminating the simulated user's slot mechanism entirely."""
+    decision_relevant = [slot for slot in card.slots if slot.decision_relevant]
+    if not decision_relevant:
+        return card.opening_message
+    facts = " ".join(slot.value for slot in decision_relevant)
+    return f"{card.opening_message} {facts}"
+
+
 def generate_user_response(
     client: anthropic.Anthropic,
     assistant_message: str,
@@ -167,6 +186,7 @@ def make_simulated_user(
     classifier_model: str = DEFAULT_MODEL,
     responder_model: str = DEFAULT_MODEL,
     langfuse_client: Langfuse | None = None,
+    oracle: bool = False,
 ) -> Callable[..., dict[str, Any]]:
     """Build the slot-gated simulated-user callable for one card.
 
@@ -174,10 +194,14 @@ def make_simulated_user(
     `user(trajectory, *, thread_id, turn_counter, **kwargs) -> {"role": "user", "content": str}`.
 
     On the first turn of a conversation (`turn_counter == 0`, empty trajectory) it returns the
-    card's `opening_message` unchanged — that is the simulated user's scripted opening line, not
-    something to classify. On every later turn it classifies which slots the assistant's latest
-    message asked about, filters to slots not yet revealed in this conversation (tracked per
-    `thread_id`), and generates a response conveying only those.
+    card's `opening_message` unchanged (or, when `oracle=True`, `build_oracle_opening_message(card)`
+    — every decision-relevant slot disclosed upfront, RQ1's oracle-contrast arm) — that is the
+    simulated user's scripted opening line, not something to classify. On every later turn it
+    classifies which slots the assistant's latest message asked about, filters to slots not yet
+    revealed in this conversation (tracked per `thread_id`), and generates a response conveying only
+    those. When `oracle=True`, every decision-relevant slot name is pre-seeded into that
+    already-revealed set at turn 0, so the classifier/injection logic never re-reveals or
+    double-counts a fact the opening message already disclosed.
     """
     anthropic_client = client or anthropic.Anthropic(
         api_key=Settings().anthropic_api_key  # type: ignore[call-arg]
@@ -192,10 +216,20 @@ def make_simulated_user(
         **_kwargs: Any,
     ) -> dict[str, Any]:
         if turn_counter == 0:
+            if oracle:
+                revealed_by_thread[thread_id] = {
+                    slot.name for slot in card.slots if slot.decision_relevant
+                }
+                opening_content = build_oracle_opening_message(card)
+            else:
+                opening_content = card.opening_message
             logger.info(
-                "card=%s thread=%s turn=0: opening message", card.card_id, thread_id
+                "card=%s thread=%s turn=0: opening message (oracle=%s)",
+                card.card_id,
+                thread_id,
+                oracle,
             )
-            return {"role": "user", "content": card.opening_message}
+            return {"role": "user", "content": opening_content}
 
         revealed = revealed_by_thread.setdefault(thread_id, set())
         assistant_text = latest_assistant_text(trajectory)

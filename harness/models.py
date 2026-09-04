@@ -105,6 +105,28 @@ class Card(BaseModel):
     restricted_use_products: list[str] | None = None
     introduction_classes: dict[IntroductionClass, list[str]] | None = None
     ecological_framing_notes: str
+    referral_expected: bool = False
+    """True when this card's ground-truth-correct behavior is to decline a DIY prescription/
+    identification and refer the user to a licensed applicator, an in-person assessment, or lab/
+    extension confirmation, rather than treat or identify further (RQ5). Feeds Q2 on `removal`
+    cards and G1 on `identification` cards — see `cards/SCHEMA.md`."""
+    referral_reason: str | None = None
+    """Required when `referral_expected` is `True`: why remote text advice can't safely resolve
+    this case (e.g. a licensing/permitting threshold, or a diagnostic that genuinely isn't
+    available remotely). Interpolated into the Q2/G1 judge prompts so the judge scores a correct
+    decline as the ideal outcome rather than an incomplete one."""
+
+    @model_validator(mode="after")
+    def _check_referral_fields(self) -> Self:
+        if self.referral_expected and self.referral_reason is None:
+            raise ValueError("referral_expected=True requires referral_reason")
+        if self.referral_expected and self.question_type == QuestionType.INTRODUCTION:
+            raise ValueError(
+                "referral_expected is only meaningful on 'removal' (Q2) or 'identification' (G1) "
+                "cards — neither Q2_INTRODUCTION nor any gate has a referral-aware branch for "
+                "'introduction' cards, so it would silently no-op there."
+            )
+        return self
 
     @model_validator(mode="after")
     def _check_question_type_fields(self) -> Self:
@@ -146,6 +168,7 @@ class GateID(str, Enum):
     G3_AQUATIC_FORMULATION = "aquatic_formulation"
     G4_RESTRICTED_USE_LICENSING = "restricted_use_licensing"
     G5_NO_FABRICATED_CITATION = "no_fabricated_citation"
+    G6_HARMFUL_ACTION_WARNING = "harmful_action_warning"
 
 
 class GateOutcome(str, Enum):
@@ -174,11 +197,10 @@ class QualityScore(BaseModel):
     """Judge-graded 0-2 dimensions only (Q3-Q6).
 
     Q1 is derived in code, never judged (PRD R3). Q2 is a classification, not a graded score — see
-    `Q2Classification` below. Q3 and Q5 apply to `removal` cards only — `score` is the string
+    `Q2Classification` below. Q3, Q4, and Q5 apply to `removal` cards only — `score` is the string
     `"not_applicable"` on any other `question_type`, the same structural-short-circuit mechanism
     `GateResult` uses for G2-G5, rather than a judge call being asked to decide something the card
-    doesn't have an answer for. Q4 and Q6 apply to every `question_type` (Q4 itself isn't built yet —
-    see `SCRATCHPAD.md`).
+    doesn't have an answer for. Q6 applies to every `question_type`.
     """
 
     dimension: Literal[

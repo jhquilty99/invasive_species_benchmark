@@ -82,7 +82,32 @@ in a rule file or `DECISION-LOG.md`.
   on 9/13 cards (69%), matching the derived premature-prescription rate exactly — the model-under-test
   very often gives removal/introduction/identification answers without ever committing to which
   species it's talking about, which is exactly the RQ1 gap this benchmark is designed to catch.
-- **Last touched:** 2026-09-03 (first-pass judge + Langfuse validation build, live run complete)
+- **Research questions expanded (2026-09-04):** `PRODUCT_REQUIREMENTS.md` §2 replaced the old RQ1-RQ3
+  with RQ1-RQ6 plus two cross-cutting analyses (C1 capability scaling, C2 actionability-vs-safety); RQ1,
+  RQ3, and C2 are primary. Added a new **oracle-contrast experimental arm** to RQ1 — the 30 removal
+  cards each also run once per model with every decision-relevant slot disclosed upfront, no elicitation
+  required — accepted as real scope growth (removal-set run volume 30 → 60, 84 total per model instead
+  of 54). RQ6 (stability) is documented but deliberately not resourced this pass. Propagated through
+  `SCOPE.md` and `cards/SCHEMA.md`. Full detail: `DECISION-LOG.md`, 2026-09-04 "Expanded research
+  questions to RQ1-RQ6 + C1/C2; added oracle-contrast experimental arm."
+- **Methodology eval + hardening pass (2026-09-04):** ran a full evaluation of whether the design as
+  spec'd could answer RQ1-RQ6/C1/C2 reliably at target scale (see `reports/2026-09-03-first-pass-
+  validation-findings.md` for the run this was evaluating). Findings and the resulting build are logged
+  across several `DECISION-LOG.md` entries dated 2026-09-04: **G6** (new gate, RQ3's harmful-action-
+  warning-omission sub-class), **Q4 built** (regulatory grounding, `harness/ground_truth.py` loads
+  `data/ground_truth/*.yaml` directly), **oracle-contrast mechanism built** (`build_oracle_opening_
+  message`, `make_simulated_user(..., oracle=True)`, `run_conversation(..., oracle=True)`,
+  `start_dataset_run(..., arm=...)` — closes the "zero code exists" gap task 9 below was tracking),
+  **repeated-sampling pilot** (`harness/scripts/run_repeat_pilot.py`, cheap RQ6-adjacent noise
+  characterization — RQ6 itself stays cut), **RQ5 `referral_expected`/`referral_reason` schema fields +
+  2 new cards** (real scope growth: 54 → 56 cards, 84 → 87 runs/model — logged same as the 2026-09-04
+  oracle-arm growth), and **cross-vendor second judge deferred** to task 8 below (a same-vendor judge/
+  subject optics risk, logged but not built this pass — `harness/config.py` already carries unused
+  `openai_api_key`/`google_api_key` for when task 8 builds the real multi-vendor adapter). `JUDGE_
+  PROMPT_VERSION` bumped v1 → v2. 126 tests passing (up from 83), all new judge-hitting tests
+  cassette-recorded against the real API.
+- **Last touched:** 2026-09-04 (methodology eval + hardening pass: G6, Q4, oracle-arm mechanism, repeat
+  pilot, RQ5 schema/cards)
 
 ## Open tasks (ranked)
 
@@ -102,34 +127,46 @@ in a rule file or `DECISION-LOG.md`.
    per-turn Langfuse tracing, and a live 13-card validation run are all done (see the Status note
    above); still blocked on the slot-classifier and R5-leakage-check tasks above. If not met, this is
    the day to cut card-count scope (PRD §8 rule 2), not later.
-5. Build the Q4 (regulatory grounding) judge — deferred out of the first-pass validation build since it
-   needs a `data/ground_truth/*.yaml` lookup mechanism none of the other dimensions need. Not blocking the
-   Fri Sep 5 gate (PRD table doesn't restrict it to removal-only, but it wasn't in this task's original
-   scope either); pick this up before the full sweep so every sweep run has a complete quality dimension
-   set.
-6. **[Days 6-9]** Author the remaining 54-card matrix: 30 removal cards total (6 invasive species × 5
-   condition variations — 6 already exist as one-per-species starting cards, 24 more needed), 12
-   introduction cards total (6 invasive + 6 native — 1 exists, 11 more needed), 12 identification cards
-   total (same 12 species — 6 already exist as the migrated native cards, 6 more needed for the invasive
-   species), drawing on existing `data/ground_truth/*.yaml` for all 12 species (invasive and native ground
-   truth both complete).
-7. **[Gate — Thu Sep 11]** 54 cards complete, corpus frozen (PRD §8 rule 1) — no card changes after this
-   point for any reason.
-8. Pick the specific open-weight model and host (Together.ai/Groq/Fireworks/local) for the 4-6 model
+5. **[Days 6-9]** Author the remaining 56-card matrix: 31 removal cards total (6 invasive species × 5
+   condition variations, plus the new `phragmites-public-water-referral-01` referral card — 7 already
+   exist, 24 more needed), 12 introduction cards total (6 invasive + 6 native — 1 exists, 11 more
+   needed), 13 identification cards total (12 species plus the new `wisteria-dormant-vine-referral-01`
+   referral card — 7 already exist, 6 more needed for the invasive species), drawing on existing
+   `data/ground_truth/*.yaml` for all 12 species (invasive and native ground truth both complete).
+6. **[Gate — Thu Sep 11]** 56 cards complete, corpus frozen (PRD §8 rule 1) — no card changes after this
+   point for any reason. (Was 54; +2 for the 2026-09-04 RQ5 `referral_expected` cards — see
+   `DECISION-LOG.md`, 2026-09-04 "RQ5 referral_expected schema and card-count growth".)
+7. Pick the specific open-weight model and host (Together.ai/Groq/Fireworks/local) for the 4-6 model
    line-up, and wire a model client for every provider in the line-up — needed before the full sweep task.
-9. **[Days 10-11]** Full sweep across 4-6 models (incl. the open-weight model). Fix what breaks; re-run.
-    Confirm transcripts complete for every (model × card) pair. Log the pinned card-set version, judge
-    prompt version, and exact model version strings in run metadata (R4 — non-negotiable, carries forward
-    PRD §8 rule 5).
-10. **[Day 12]** Set up the Langfuse human-annotation queue; brief annotators; select the stratified ~50
-    sample (oversampled on gate failures and `harmful` Q2 classifications, stratified across all 3
-    question types).
-11. **[Days 13-14]** Human annotation, blind to judge scores. Write and run the Krippendorff's alpha
+   When built, this multi-vendor client abstraction should also serve the cross-judge-validation use case
+   the methodology eval flagged (a same-vendor judge/subject optics risk, deliberately deferred to land
+   here rather than building a throwaway adapter twice — see `DECISION-LOG.md`, 2026-09-04
+   "Methodology-eval hardening..."): add a config knob to re-run `run_all_quality`/`run_all_gates` on
+   existing trajectories with a second, different-vendor judge model, and report cross-judge-family
+   agreement alongside the human-vs-judge Krippendorff's alpha (§7).
+8. **[Days 10-11]** Full sweep across 4-6 models (incl. the open-weight model), both arms (standard +
+   oracle) for the removal set — 87 conversation-model pairs per model, not 56 (the oracle-contrast
+   mechanism itself is built and validated end-to-end, see Status above; this task is the production
+   `run_sweep.py` that runs it across the full model line-up, still to be built). Fix what breaks;
+   re-run. Confirm transcripts complete for every (model × card × arm) pair. Log the pinned card-set
+   version, judge prompt version, and exact model version strings in run metadata (R4 — non-negotiable,
+   carries forward PRD §8 rule 5).
+9. **[Day 12]** Set up the Langfuse human-annotation queue; brief annotators; select the stratified ~50
+   sample (oversampled on gate failures and `harmful` Q2 classifications, stratified across all 3
+   question types).
+10. **[Days 13-14]** Human annotation, blind to judge scores. Write and run the Krippendorff's alpha
     computation per dimension, including Q6 (PRD §7).
-12. **[Days 15-16]** Write-up: motivation, method, gates/quality design, results, failure examples (rates
+11. **[Days 15-16]** Write-up: motivation, method, gates/quality design, results, failure examples (rates
     redacted per PRD §8 rule 3), limitations, generalization. Repo cleanup — assemble the PRD §12 release
-    layout (`cards/`, `harness/`, `results/`, README with the schema documented standalone).
-13. **[Day 17]** Zenodo archive → DOI. Post to arXiv (cs.CL) and EcoEvoRxiv.
+    layout (`cards/`, `harness/`, `results/`, README with the schema documented standalone). Include the
+    §5.4 reporting-granularity pre-registration (counts-only vs. CI'd metrics — PRD §5.4, added
+    2026-09-04) so the analysis doesn't overclaim on the thin-cell metrics the methodology eval flagged.
+12. **[Day 17]** Zenodo archive → DOI. Post to arXiv (cs.CL) and EcoEvoRxiv.
+13. **[Added 2026-09-04]** Decide RQ6's (stability, PRD §2/§13) implementation scope — repeated-sampling
+    budget per card and the new simulated-user behaviors ("corrects the model," "presses for a specific
+    treatment") it needs — before committing any further sweep volume beyond the 2026-09-04 repeated-
+    sampling pilot (`harness/scripts/run_repeat_pilot.py`, RQ6-adjacent noise characterization only, not
+    RQ6 itself). Not blocking anything above; no dependency, just needs a decision before it's picked up.
 14. Fix `outreach/EMAIL-TRACKER.md`'s Status/Date-sent columns to reflect the emails that were actually
     sent (currently still shows "Not sent" for all real contacts). No dependency on anything above — pure
     housekeeping, lowest priority.
@@ -145,8 +182,11 @@ to now-archived files) — see `archive/study-a-single-turn/README.md` if they n
 
 ## Pending tests
 
-83 tests passing (`harness/` unit/integration tests, VCR cassettes recorded for the Anthropic-hitting
-ones — see `tests/cassettes/`), including new coverage for the gate judges, quality judges, Q1/derived
-metrics, and the two new stopping-condition classifiers. All 13 `cards/*.json` files load and validate
-against the `Card` model; ruff/mypy clean except the pre-existing `test_cards.py:81` finding noted above.
-No dedicated tests yet for the R5 leakage check (not built) or Q4 (not built, deferred).
+126 tests passing (up from 83 as of the 2026-09-04 methodology-eval hardening pass — `harness/`
+unit/integration tests, VCR cassettes recorded for the Anthropic-hitting ones, including the new
+G6/Q4/referral/oracle-arm cassettes — see `tests/cassettes/`), covering the gate judges (now G1-G6),
+quality judges (now Q2-Q6, all six built), Q1/derived metrics, the two stopping-condition classifiers,
+the oracle-contrast mechanism, and the RQ5 `referral_expected` conditional judge blocks. All 15
+`cards/*.json` files load and validate against the `Card` model (13 + the 2 new RQ5 referral cards);
+ruff/mypy clean except the pre-existing `test_cards.py:81` finding noted above. No dedicated tests yet
+for the R5 leakage check (still not built).

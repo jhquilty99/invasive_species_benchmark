@@ -13,6 +13,7 @@ import pytest
 
 from harness.models import Card, NativeStatus, QuestionType, Slot, TreatmentClass
 from harness.simulated_user import (
+    build_oracle_opening_message,
     classify_asked_slots,
     make_simulated_user,
 )
@@ -128,3 +129,92 @@ def test_simulated_user_returns_opening_message_on_first_turn(
     result = simulated_user([], thread_id="test-thread-2", turn_counter=0)
 
     assert result == {"role": "user", "content": card.opening_message}
+
+
+# --- oracle-contrast arm (RQ1) -------------------------------------------------------------------
+
+
+def test_build_oracle_opening_message_includes_every_decision_relevant_slot_value() -> (
+    None
+):
+    card = _fixture_card()
+
+    message = build_oracle_opening_message(card)
+
+    assert card.opening_message in message
+    assert "3 feet from the hedge" in message  # water_proximity (decision_relevant)
+    assert "pencil-thick" in message  # stem_diameter (decision_relevant)
+    assert "third of an acre" not in message  # yard_size (NOT decision_relevant)
+
+
+def test_build_oracle_opening_message_with_no_decision_relevant_slots_is_unchanged() -> (
+    None
+):
+    card = _fixture_card()
+    for slot in card.slots:
+        slot.decision_relevant = False
+
+    assert build_oracle_opening_message(card) == card.opening_message
+
+
+def test_simulated_user_oracle_mode_discloses_decision_relevant_slots_on_first_turn(
+    anthropic_test_client: anthropic.Anthropic,
+) -> None:
+    """No API call needed here either — oracle mode's turn-0 branch, like the standard branch,
+    builds the opening message from the card alone."""
+    card = _fixture_card()
+    simulated_user = make_simulated_user(
+        card, client=anthropic_test_client, oracle=True
+    )
+
+    result = simulated_user([], thread_id="test-thread-oracle-1", turn_counter=0)
+
+    assert result["role"] == "user"
+    assert "3 feet from the hedge" in result["content"]
+    assert "pencil-thick" in result["content"]
+    assert "third of an acre" not in result["content"]
+
+
+def test_simulated_user_oracle_mode_does_not_reveal_already_disclosed_slots_again(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Every decision-relevant slot was already disclosed at turn 0 in oracle mode — if the model
+    then explicitly asks about one anyway, the response generator must not be told it's newly
+    asked (it's already in `revealed` from the turn-0 pre-seed). Monkeypatches the classifier and
+    response generator to make this a deterministic, API-free assertion on exactly what
+    `generate_user_response` is called with, rather than inferring it from generated text.
+    """
+    import harness.simulated_user as simulated_user_module
+
+    card = _fixture_card()
+    monkeypatch.setattr(
+        simulated_user_module,
+        "classify_asked_slots",
+        lambda *a, **k: ["water_proximity"],
+    )
+    captured: dict[str, Any] = {}
+
+    def _fake_generate_user_response(
+        client: Any, assistant_message: str, revealed_slots: list[Slot], **kwargs: Any
+    ) -> str:
+        captured["revealed_slots"] = revealed_slots
+        return "okay"
+
+    monkeypatch.setattr(
+        simulated_user_module, "generate_user_response", _fake_generate_user_response
+    )
+
+    simulated_user = make_simulated_user(
+        card, client=anthropic.Anthropic(api_key="unused"), oracle=True
+    )
+    simulated_user(
+        [], thread_id="test-thread-oracle-2", turn_counter=0
+    )  # seeds revealed state
+
+    trajectory = [
+        {"role": "user", "content": build_oracle_opening_message(card)},
+        {"role": "assistant", "content": ASSISTANT_ASKS_ABOUT_WATER},
+    ]
+    simulated_user(trajectory, thread_id="test-thread-oracle-2", turn_counter=1)
+
+    assert captured["revealed_slots"] == []

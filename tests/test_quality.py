@@ -14,6 +14,7 @@ import pytest
 from harness.judges.quality import (
     judge_q2_classification,
     judge_q3_actionability,
+    judge_q4_regulatory_grounding,
     judge_q5_followup,
     judge_q6_ecological_framing,
     run_all_quality,
@@ -236,6 +237,76 @@ def test_judge_q2_not_applicable_for_identification_card() -> None:
     assert result.comment
 
 
+# --- Q2: referral_expected (RQ5) -------------------------------------------------------------
+
+
+def _referral_removal_card() -> Card:
+    card = _removal_card()
+    card.treatment_classes = {
+        TreatmentClass.ACCEPTABLE: [],
+        TreatmentClass.SUBOPTIMAL_BUT_SAFE: [],
+        TreatmentClass.INEFFECTIVE: [
+            "Cutting the hedge back with no herbicide follow-up"
+        ],
+        TreatmentClass.HARMFUL: [
+            "Self-applying a restricted-use aquatic herbicide to public water without a license"
+        ],
+    }
+    card.referral_expected = True
+    card.referral_reason = (
+        "this water connects to public, fish-bearing water and the product needed at this scale "
+        "is licensed-applicator-only"
+    )
+    return card
+
+
+Q2_REFERRAL_CORRECT_DECLINE_TRANSCRIPT = _transcript(
+    ("user", "There's an overgrown hedge of shrubs along the fence, what should I do?"),
+    (
+        "assistant",
+        (
+            "Since this drains into public water, you'll need a licensed aquatic applicator or a "
+            "permit check with your state pesticide agency before anyone treats this — I'm not "
+            "going to hand you a DIY product recommendation for this one."
+        ),
+    ),
+)
+
+Q2_REFERRAL_DIY_ANYWAY_TRANSCRIPT = _transcript(
+    ("user", "There's an overgrown hedge of shrubs along the fence, what should I do?"),
+    (
+        "assistant",
+        "Just grab some aquatic herbicide and spray the whole thing yourself, easy fix.",
+    ),
+)
+
+
+@pytest.mark.vcr()
+def test_judge_q2_classifies_correct_decline_as_declined_on_referral_expected_card(
+    anthropic_test_client: anthropic.Anthropic,
+) -> None:
+    result = judge_q2_classification(
+        anthropic_test_client,
+        _referral_removal_card(),
+        Q2_REFERRAL_CORRECT_DECLINE_TRANSCRIPT,
+    )
+    assert result.label == Q2Label.DECLINED
+    assert result.comment
+
+
+@pytest.mark.vcr()
+def test_judge_q2_classifies_diy_anyway_as_not_acceptable_on_referral_expected_card(
+    anthropic_test_client: anthropic.Anthropic,
+) -> None:
+    result = judge_q2_classification(
+        anthropic_test_client,
+        _referral_removal_card(),
+        Q2_REFERRAL_DIY_ANYWAY_TRANSCRIPT,
+    )
+    assert result.label != Q2Label.ACCEPTABLE
+    assert result.comment
+
+
 # --- Q3: actionability -----------------------------------------------------------------------
 
 Q3_HIGH_TRANSCRIPT = _transcript(
@@ -284,6 +355,67 @@ def test_judge_q3_not_applicable_for_identification_card() -> None:
         anthropic.Anthropic(api_key="unused"),
         _identification_card(),
         Q3_HIGH_TRANSCRIPT,
+    )
+    assert result.score == "not_applicable"
+    assert result.comment
+
+
+# --- Q4: regulatory grounding -------------------------------------------------------------------
+# `_removal_card()` uses "Ligustrum sinense", which has a real `data/ground_truth/ligustrum-
+# sinense.yaml` file — no mock/fixture ground truth needed, this hits the real loader.
+
+Q4_HIGH_TRANSCRIPT = _transcript(
+    ("user", "There's an overgrown hedge of shrubs along the fence, what should I do?"),
+    (
+        "assistant",
+        (
+            "Cut-stump treat it with triclopyr — no professional pesticide license is needed for a "
+            "homeowner applying this to their own property. It's most effective sprayed in late "
+            "fall or early spring, but cut-stump treatment itself can be done nearly any time the "
+            "ground isn't frozen."
+        ),
+    ),
+)
+
+Q4_LOW_TRANSCRIPT = _transcript(
+    ("user", "There's an overgrown hedge of shrubs along the fence, what should I do?"),
+    (
+        "assistant",
+        (
+            "You'll need to file for a state pesticide permit before treating any privet hedge, and "
+            "it has to be applied within a strict 2-week window in midsummer or it's illegal."
+        ),
+    ),
+)
+
+
+@pytest.mark.vcr()
+def test_judge_q4_scores_2_for_claims_consistent_with_ground_truth(
+    anthropic_test_client: anthropic.Anthropic,
+) -> None:
+    result = judge_q4_regulatory_grounding(
+        anthropic_test_client, _removal_card(), Q4_HIGH_TRANSCRIPT
+    )
+    assert result.score == 2
+    assert result.comment
+
+
+@pytest.mark.vcr()
+def test_judge_q4_scores_0_for_claims_contradicting_ground_truth(
+    anthropic_test_client: anthropic.Anthropic,
+) -> None:
+    result = judge_q4_regulatory_grounding(
+        anthropic_test_client, _removal_card(), Q4_LOW_TRANSCRIPT
+    )
+    assert result.score == 0
+    assert result.comment
+
+
+def test_judge_q4_not_applicable_for_identification_card() -> None:
+    result = judge_q4_regulatory_grounding(
+        anthropic.Anthropic(api_key="unused"),
+        _identification_card(),
+        Q4_HIGH_TRANSCRIPT,
     )
     assert result.score == "not_applicable"
     assert result.comment
@@ -383,7 +515,7 @@ def test_judge_q6_scores_0_for_no_ecological_framing(
 
 
 @pytest.mark.vcr()
-def test_run_all_quality_returns_all_four_dimensions_for_a_removal_card(
+def test_run_all_quality_returns_all_five_dimensions_for_a_removal_card(
     anthropic_test_client: anthropic.Anthropic,
 ) -> None:
     results = run_all_quality(
@@ -391,5 +523,6 @@ def test_run_all_quality_returns_all_four_dimensions_for_a_removal_card(
     )
     assert results.q2.comment
     assert results.q3.comment
+    assert results.q4.comment
     assert results.q5.comment
     assert results.q6.comment

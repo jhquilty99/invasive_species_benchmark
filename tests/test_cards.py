@@ -201,6 +201,74 @@ def test_introduction_card_with_removal_fields_raises(tmp_path: Path) -> None:
         load_card(card_path)
 
 
+# --- referral_expected / referral_reason (RQ5) -------------------------------------------------
+
+
+def test_referral_expected_true_requires_referral_reason(tmp_path: Path) -> None:
+    """Known-incorrect: referral_expected=True with no referral_reason must fail to load."""
+    card_dict = _minimal_card_dict()
+    card_dict["card_id"] = "TEST-REFERRAL-001"
+    card_dict["referral_expected"] = True
+    card_path = tmp_path / "malformed-referral.json"
+    card_path.write_text(json.dumps(card_dict), encoding="utf-8")
+
+    with pytest.raises(ValidationError):
+        load_card(card_path)
+
+
+def test_referral_expected_true_with_reason_loads(tmp_path: Path) -> None:
+    """Known-correct: referral_expected=True paired with a referral_reason loads fine."""
+    card_dict = _minimal_card_dict()
+    card_dict["card_id"] = "TEST-REFERRAL-002"
+    card_dict["referral_expected"] = True
+    card_dict["referral_reason"] = (
+        "this scale of treatment requires a licensed applicator"
+    )
+    card_path = tmp_path / "referral.json"
+    card_path.write_text(json.dumps(card_dict), encoding="utf-8")
+
+    card = load_card(card_path)
+
+    assert card.referral_expected is True
+    assert (
+        card.referral_reason == "this scale of treatment requires a licensed applicator"
+    )
+
+
+def test_referral_expected_true_on_introduction_card_raises(tmp_path: Path) -> None:
+    """Known-incorrect: neither Q2_INTRODUCTION nor any gate has a referral-aware branch for
+    'introduction' cards, so referral_expected=True there would silently no-op — must fail to load
+    rather than doing that."""
+    card_dict = _identification_card_dict()
+    card_dict["card_id"] = "TEST-REFERRAL-INTRO"
+    card_dict["question_type"] = "introduction"
+    card_dict["introduction_classes"] = {
+        "encouraged": [],
+        "neutral": [],
+        "discouraged": [],
+        "harmful_to_encourage": [],
+    }
+    card_dict["referral_expected"] = True
+    card_dict["referral_reason"] = "this needs a licensed applicator"
+    card_path = tmp_path / "malformed-referral-intro.json"
+    card_path.write_text(json.dumps(card_dict), encoding="utf-8")
+
+    with pytest.raises(ValidationError):
+        load_card(card_path)
+
+
+def test_referral_expected_defaults_to_false(tmp_path: Path) -> None:
+    """A card with no referral_expected field at all (every existing card) still loads, defaulting
+    to False with no referral_reason required."""
+    card_path = tmp_path / "no-referral.json"
+    card_path.write_text(json.dumps(_minimal_card_dict()), encoding="utf-8")
+
+    card = load_card(card_path)
+
+    assert card.referral_expected is False
+    assert card.referral_reason is None
+
+
 def test_introduction_card_with_introduction_classes_loads(tmp_path: Path) -> None:
     """Known-correct: an introduction card carries introduction_classes, not treatment_classes."""
     card_dict = _identification_card_dict()

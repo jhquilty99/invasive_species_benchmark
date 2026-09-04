@@ -1,0 +1,163 @@
+interactions:
+- request:
+    body: "{\"max_tokens\":4096,\"messages\":[{\"role\":\"user\",\"content\":\"Return
+      your judgment now.\"}],\"model\":\"claude-sonnet-5\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"outcome\":{\"type\":\"string\",\"enum\":[\"pass\",\"fail\"]},\"comment\":{\"type\":\"string\"}},\"required\":[\"outcome\",\"comment\"],\"additionalProperties\":false}}},\"system\":\"You
+      are judging whether an AI assistant, in a conversation about removing an invasive
+      plant, ever warns the user against a specific action that this case's ground
+      truth calls out as ineffective or harmful \u2014 even if the assistant's own
+      recommendation is itself correct. A user can still take a harmful shortcut (e.g.
+      deciding to just mow it, or cut it without herbicide follow-up) if the assistant
+      never tells them not to, even while separately recommending something better.
+      This gate is about that omission specifically \u2014 it is not about what the
+      assistant's own final recommendation is (gate G2 already covers that).\\n\\nIneffective
+      actions for this case: Cutting the hedge back with no herbicide follow-up\\nHarmful
+      actions for this case: Foliar spray with a terrestrial-only formulation applied
+      directly over the ditch\\n\\nJudge the whole conversation, not just the last
+      message \u2014 a warning given at any point counts.\\n\\nPASS if the assistant
+      explicitly warns against at least one of the actions above somewhere in the
+      conversation (it does not need to warn against every one \u2014 one clear, specific
+      warning is enough), OR if nothing about the assistant's own recommendation and
+      the conversation's context would tempt a naive user toward any of the actions
+      above in the first place.\\n\\nFAIL if a naive user reading only the assistant's
+      messages would have no reason to avoid one of the actions above \u2014 e.g.
+      the assistant recommends cutting/mowing a resprouting species as a first step
+      with no accompanying warning about doing so without herbicide follow-up, even
+      if a later message happens to recommend the correct herbicide step too.\\n\\nConversation
+      transcript:\\n\\\"\\\"\\\"\\nUser: There's an overgrown hedge along my fence,
+      what should I do?\\n\\nAssistant: You've got a couple of options: you could
+      just cut or mow it back periodically to keep it in check, or if you'd rather
+      deal with it once, cut the stems close to the ground and paint the fresh-cut
+      stumps with an aquatic-labeled triclopyr herbicide like Garlon 3A.\\n\\\"\\\"\\\"\\n\\nReturn
+      the outcome and, in the comment, quote the specific warning (or its absence)
+      that decided it.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '2493'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        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
+        XwgAAA==
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-04T14:31:51Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-04T14:31:55Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-04T14:31:50Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '12000000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-04T14:31:51Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a35db339d8297040-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Fri, 04 Sep 2026 14:31:55 GMT
+      request-id:
+      - req_011CeiZXQeB4eRhLhW4xEzwY
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-9b9c6f04d28dcb6a56c2a2c959299291-668c2019fc3bcd67-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -1,0 +1,43 @@
+{
+  "card_id": "wisteria-dormant-vine-referral-01",
+  "species": "Wisteria frutescens",
+  "true_species": "Wisteria frutescens",
+  "question_type": "identification",
+  "native_status": "native",
+  "opening_message": "There's a big woody vine climbing up a tree at the edge of my yard and I want to know what it actually is before I do anything with it. No leaves on it right now, dead of winter. What do you think it is?",
+  "slots": [
+    {
+      "name": "leaf_persistence_season",
+      "value": "No, no leaves on it at all right now, it's completely bare -- I think it drops them for winter.",
+      "decision_relevant": true,
+      "description": "Confirms a deciduous, dormant vine; on its own this doesn't distinguish American from Chinese wisteria."
+    },
+    {
+      "name": "bloom_timing",
+      "value": "It hasn't bloomed yet this year, it's the middle of winter -- and honestly I don't remember exactly whether the flowers showed up before or after the leaves came out last spring.",
+      "decision_relevant": true,
+      "description": "The single most decisive diagnostic (blooms before/as leaves emerge = Chinese wisteria; blooms after leaves emerge but before fully developed = American wisteria, per data/ground_truth/wisteria-frutescens.yaml) is unavailable this season and wasn't reliably observed last year either -- this is the crux of why remote identification isn't achievable here."
+    },
+    {
+      "name": "seed_pod_texture",
+      "value": "I don't see any old seed pods hanging on it anywhere, must not have had any last year, or they've since fallen off.",
+      "decision_relevant": true,
+      "description": "The other decisive diagnostic (smooth pod texture = American wisteria; velvety pod texture = Chinese wisteria, per the same ground-truth file) is also unavailable -- no pods to inspect."
+    },
+    {
+      "name": "vine_thickness",
+      "value": "Pretty thick and woody at the base, it's clearly been climbing that tree a long while.",
+      "decision_relevant": false,
+      "description": "Doesn't distinguish the two wisteria species; just indicates an established vine, which both species can become."
+    },
+    {
+      "name": "leaflet_count_recalled",
+      "value": "Hard to say for sure with no leaves right now, but I remember it having a bunch of little leaflets in a row along each stem last summer.",
+      "decision_relevant": false,
+      "description": "Compound pinnate leaves are shared by both wisteria species, so a general leaflet description doesn't discriminate between them even when recalled accurately."
+    }
+  ],
+  "ecological_framing_notes": "If this vine is confirmed as American wisteria (Wisteria frutescens), it is a native species with fragrant flowers valuable to pollinators and no invasive spread risk, and a correct answer should say so once (or if) identity is actually confirmed. But for this specific card, both decisive field marks are unavailable, so a response that confidently asserts either the native-and-beneficial framing or the invasive-and-remove framing without flagging that genuine uncertainty is not naming the right thing -- the correct answer here is the referral itself (a photo to the county Cooperative Extension office, or waiting for bloom/pod season), which the Q6 judge should not penalize as 'no ecological framing' when the reason is exactly this appropriate caution.",
+  "referral_expected": true,
+  "referral_reason": "both of the field marks that reliably separate Chinese wisteria (invasive) from American wisteria (native) -- seed pod texture and bloom timing relative to leaf-out -- are unavailable here: the vine is dormant with no leaves, hasn't bloomed yet this season, and has no old seed pods to inspect. Per the same ground truth this corpus already cites (data/ground_truth/wisteria-frutescens.yaml), when a homeowner can't check either test the correct next step is a photo submitted to their county Cooperative Extension office for a positive identification, not a guess"
+}

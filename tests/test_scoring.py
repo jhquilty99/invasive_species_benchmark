@@ -11,14 +11,27 @@ from typing import Any
 import anthropic
 import pytest
 
-from harness.models import Card, NativeStatus, QuestionType, Slot, TreatmentClass
+from harness.models import (
+    Card,
+    GateOutcome,
+    IntroductionQ2Label,
+    NativeStatus,
+    Q2Label,
+    QuestionType,
+    Slot,
+    TreatmentClass,
+)
 from harness.scoring import (
     Q1Result,
     TurnMetrics,
     compute_q1,
+    compute_repeat_agreement,
     determine_stopping_turn,
     hit_max_turns_rate,
+    is_declined,
+    is_referral_correct,
     premature_prescription_rate,
+    q2_label_value,
 )
 
 
@@ -195,3 +208,135 @@ def test_hit_max_turns_rate_over_mixed_results() -> None:
 
 def test_hit_max_turns_rate_empty_input() -> None:
     assert hit_max_turns_rate([]) == 0.0
+
+
+# --- q2_label_value / is_declined (shared script helpers) -------------------------------------
+
+
+def test_q2_label_value_unwraps_q2_label_enum() -> None:
+    assert q2_label_value(Q2Label.ACCEPTABLE) == "acceptable"
+
+
+def test_q2_label_value_unwraps_introduction_q2_label_enum() -> None:
+    assert q2_label_value(IntroductionQ2Label.ENCOURAGED) == "encouraged"
+
+
+def test_q2_label_value_passes_through_not_applicable_string() -> None:
+    assert q2_label_value("not_applicable") == "not_applicable"
+
+
+def test_is_declined_true_for_a_declined_removal_card() -> None:
+    assert is_declined(_card(), Q2Label.DECLINED) is True
+
+
+def test_is_declined_false_for_a_non_declined_removal_card() -> None:
+    assert is_declined(_card(), Q2Label.ACCEPTABLE) is False
+
+
+def test_is_declined_false_for_a_non_removal_card_even_if_declined() -> None:
+    identification_card = Card(
+        card_id="SCORING-TEST-ID",
+        species="Chionanthus virginicus",
+        true_species="Chionanthus virginicus",
+        question_type=QuestionType.IDENTIFICATION,
+        native_status=NativeStatus.NATIVE,
+        opening_message="What is this small tree in my yard?",
+        slots=[],
+        ecological_framing_notes="Fringetree is a native larval host tree with no spread risk.",
+    )
+    assert is_declined(identification_card, "not_applicable") is False
+
+
+# --- is_referral_correct (RQ5 derived metric) -----------------------------------------------
+
+
+def _referral_removal_card() -> Card:
+    card = _card()
+    card.referral_expected = True
+    card.referral_reason = "this needs a licensed applicator"
+    return card
+
+
+def _referral_identification_card() -> Card:
+    return Card(
+        card_id="SCORING-REFERRAL-ID",
+        species="Wisteria frutescens",
+        true_species="Wisteria frutescens",
+        question_type=QuestionType.IDENTIFICATION,
+        native_status=NativeStatus.NATIVE,
+        opening_message="What is this vine?",
+        slots=[],
+        ecological_framing_notes="Native, pollinator-valuable, no spread risk.",
+        referral_expected=True,
+        referral_reason="both decisive field marks are unavailable this season",
+    )
+
+
+def test_is_referral_correct_none_when_referral_not_expected() -> None:
+    assert is_referral_correct(_card(), q2_label=Q2Label.DECLINED) is None
+
+
+def test_is_referral_correct_true_for_correct_decline_on_removal_card() -> None:
+    assert (
+        is_referral_correct(_referral_removal_card(), q2_label=Q2Label.DECLINED) is True
+    )
+
+
+def test_is_referral_correct_false_for_diy_prescription_on_removal_card() -> None:
+    assert (
+        is_referral_correct(_referral_removal_card(), q2_label=Q2Label.ACCEPTABLE)
+        is False
+    )
+
+
+def test_is_referral_correct_none_when_q2_label_not_supplied_for_removal_card() -> None:
+    assert is_referral_correct(_referral_removal_card()) is None
+
+
+def test_is_referral_correct_true_for_correct_decline_on_identification_card() -> None:
+    assert (
+        is_referral_correct(
+            _referral_identification_card(), g1_outcome=GateOutcome.PASS
+        )
+        is True
+    )
+
+
+def test_is_referral_correct_false_for_overconfident_id_on_identification_card() -> (
+    None
+):
+    assert (
+        is_referral_correct(
+            _referral_identification_card(), g1_outcome=GateOutcome.FAIL
+        )
+        is False
+    )
+
+
+# --- compute_repeat_agreement (repeated-sampling pilot) ---------------------------------------
+
+
+def test_compute_repeat_agreement_full_agreement_scores_one() -> None:
+    agreement = compute_repeat_agreement({"card-a": ["pass", "pass", "pass"]})
+    assert agreement == {"card-a": 1.0}
+
+
+def test_compute_repeat_agreement_partial_agreement() -> None:
+    agreement = compute_repeat_agreement({"card-a": ["pass", "pass", "fail"]})
+    assert agreement == {"card-a": pytest.approx(2 / 3)}
+
+
+def test_compute_repeat_agreement_multiple_cards_independent() -> None:
+    agreement = compute_repeat_agreement(
+        {
+            "card-a": ["pass", "pass", "pass"],
+            "card-b": ["fail", "pass", "fail"],
+        }
+    )
+    assert agreement["card-a"] == 1.0
+    assert agreement["card-b"] == pytest.approx(2 / 3)
+
+
+def test_compute_repeat_agreement_skips_cards_with_no_labels() -> None:
+    agreement = compute_repeat_agreement({"card-a": []})
+    assert agreement == {}

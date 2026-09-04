@@ -1,0 +1,235 @@
+interactions:
+- request:
+    body: "{\"max_tokens\":4096,\"messages\":[{\"role\":\"user\",\"content\":\"Return
+      your score now.\"}],\"model\":\"claude-sonnet-5\",\"output_config\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"score\":{\"type\":\"integer\",\"enum\":[0,1,2]},\"comment\":{\"type\":\"string\"}},\"required\":[\"score\",\"comment\"],\"additionalProperties\":false}}},\"system\":\"You
+      are scoring, on a 0-2 scale, whether an AI assistant's regulatory, legal, and
+      label-timing claims \u2014 in a conversation about removing an invasive plant
+      \u2014 match this case's dated ground truth, rather than being stale, invented,
+      or unsupported.\\n\\nThis case's dated ground-truth facts (each drawn from a
+      specific, dated source):\\n- [method_selection] Method depends on stem size.
+      \\\"Young seedlings of Chinese privet can be successfully hand-pulled from the
+      environment as long as they are under half an inch in diameter, while specialized
+      tools can be found to help remove stems from this plant that are up to 2 inches
+      in diameter.\\\" Beyond that, \\\"cutting or pulling larger sizes of this invasive
+      species are not generally considered effective, and can even further the spread
+      through the disturbing of the soil\\\" \u2014 so larger plants need herbicide.
+      Two options: a foliar spray, \\\"spraying a 2 percent solution of triclopyr
+      (a selective herbicide targeting woody plants) mixed with a 0.5 percent non-ionic
+      surfactant over the foliage of the Chinese privet until it is well soaked\\\";
+      or, for a cut plant, the cut-stump method \u2014 \\\"a solution of 50 percent
+      triclopyr, and spraying it directly on the freshly cut stump, cut off within
+      6 inches of the ground\\\" of the plant, and \\\"Soak the entire surface of
+      the stump in the herbicide solution until the stump is no longer actively absorbing
+      the solution, which may begin to happen within 3 to 5 minutes of cutting the
+      stump.\\\" (source dated 2026-04-29)\\n- [resprout_regrowth] Cutting or pulling
+      a larger plant without treating the stump leaves the root system alive \u2014
+      which is also why \\\"cutting or pulling larger sizes of this invasive species
+      are not generally considered effective, and can even further the spread through
+      the disturbing of the soil\\\" in the first place. Chinese privet also spreads
+      vegetatively: \\\"it can move through suckers that push through disturbed soils.\\\"
+      Whichever method is used, \\\"Any treatments conducted to control Chinese privet
+      should be closely monitored for regrowth throughout the year and through the
+      next season of growth to ensure that the infestation is caught early and treated
+      before it begins to come back\\\" \u2014 a colony that looks dead after one
+      treatment can still push up new sprouts from surviving root tissue. (source
+      dated 2026-04-29)\\n- [timing_windows] Timing matters far more than herbicide
+      rate for privet control. A controlled study of glyphosate and triclopyr foliar
+      applications found: \\\"For spring (April) and fall (October and December) applications,
+      percentage control of privet cover averaged 93 to 100% and 49 to 70% for glyphosate
+      and triclopyr treatments, respectively, whereas for summer (June and August)
+      applications, control averaged 67 to 69% and 14 to 26%, respectively.\\\" Rate
+      barely mattered: \\\"privet control was not influenced by variation in herbicide
+      rates of 1.7, 3.4, 5.0, or 6.7 kg ae/ha compared with each of the five application
+      timings.\\\" This matches NC Cooperative Extension's foliar guidance that sprays
+      are \\\"most effective during the late fall and early spring as long as the
+      temperature is regularly maintained at 65 degrees Fahrenheit or higher.\\\"
+      Cut-stump treatment is far less season-restricted: \\\"This method can be used
+      throughout the year, and can be an effective method of control as long as the
+      ground is not frozen.\\\" Where foliar spray isn't practical, cut-stump and
+      basal bark are alternatives: \\\"cut-stump (50% v/v) or basal bark (25% v/v)
+      applications of triclopyr plus appropriate carrier can be effective.\\\" (source
+      dated 2005-01-01)\\n- [herbicide_legality] Compare-N-Save Concentrate Weed &
+      Grass Killer 41% Glyphosate (EPA Reg. No. 84009-27) lists its active ingredient
+      as \\\"Glyphosate, isopropylamine salt ... 41.0%,\\\" carries no Restricted
+      Use Pesticide classification, and its alternate-brand-name listing confirms
+      the product: \\\"Compare-N-Save\xAE Concentrate Weed & Grass Killer 41% Glyphosate.\\\"
+      A North Carolina landowner without a pesticide applicator license can legally
+      buy and apply it. For stump treatment, the label instructs: \\\"Stumps can be
+      treated to prevent regrowth. For best results, treat when the vegetation is
+      actively growing and within 5 minutes of being cut down,\\\" directing users
+      to \\\"Cut the stump close to the soil surface,\\\" \\\"Drive 4-5 nail holes
+      into the stump,\\\" and \\\"Flood the stump with undiluted product.\\\" The
+      label also warns generally to \\\"Apply only when air is calm to prevent drift
+      to desirable plants.\\\" Triclopyr is likewise general-use: the ferti-lome Brush
+      Killer\u2022Stump Killer label (EPA Reg. No. 62719-226-7401) \u2014 \\\"This
+      Product Is For Outdoor Residential Use Only\\\" \u2014 lists \\\"Triclopyr (3,5,6-trichloro-2-Pyridinyloxyacetic
+      acid), as the Triethylamine salt ... 8.8%\\\" and, for stump treatment, instructs
+      users to \\\"apply the undiluted product with a paint brush or backpack sprayer
+      to completely cover the freshly cut surface.\\\" Because triclopyr targets woody
+      plants selectively while glyphosate kills any green plant it contacts, triclopyr
+      is the better choice near desirable turf or herbaceous groundcover. No professional
+      license is needed for a homeowner applying either product to their own property;
+      NCDA&CS's licensing page reserves that requirement for \\\"commercial applicators
+      applying any type of pesticide for compensation.\\\" (source dated 2019-10-07)\\n-
+      [followup_secondary_invasion] Monitoring the treated footprint alone is not
+      enough: \\\"Chinese privet also spreads over a wide area when seeds are dropped
+      by birds after eating the fruits from this invasive plant,\\\" so new seedlings
+      can originate from a bird-carried seed from a neighboring property or hedgerow,
+      well outside the treated patch \u2014 the follow-up check needs to extend to
+      field margins, fence lines, and disturbed ground nearby, not just the treated
+      patch itself. Within the treated footprint, \\\"Any treatments conducted to
+      control Chinese privet should be closely monitored for regrowth throughout the
+      year and through the next season of growth to ensure that the infestation is
+      caught early and treated before it begins to come back.\\\" (source dated 2026-04-29)\\n-
+      [disposal_nontarget_risk] Chinese privet's fruit and foliage carry a direct
+      human-health risk: \\\"This plant is toxic to humans as well, both the fruits
+      and leaves, and can cause symptoms like abdominal pain, nausea, vomiting, diarrhea,
+      low blood pressure, headaches, and weakness and clammy skin that can last up
+      to two or three days\\\" \u2014 cut material carrying berries should not be
+      left where pets, livestock, or children can reach it. On the herbicide side,
+      the foliar-spray method \\\"must be used with caution, as it can cause injury
+      to more beneficial woody plants in the area if they are near the targeted invasive
+      species,\\\" since triclopyr (used at \\\"a 2 percent solution ... mixed with
+      a 0.5 percent non-ionic surfactant\\\") is selective for woody plants \u2014
+      making it the lower-risk choice near desirable turf or herbaceous groundcover,
+      whereas a non-selective glyphosate foliar spray will kill any green plant it
+      contacts, including grass, so it needs careful, drift-free application. Because
+      \\\"cutting or pulling larger sizes of this invasive species ... can even further
+      the spread through the disturbing of the soil,\\\" avoid leaving a cleared area
+      bare and unstabilized afterward, since bare disturbed ground is exactly what
+      privet colonizes. (source dated 2026-04-29)\\n\\nJudge the whole conversation
+      for any regulatory, legal, licensing, or seasonal/label-timing claim the assistant
+      makes (e.g. \\\"no license is needed for this product,\\\" \\\"this must be
+      applied in fall,\\\" \\\"this requires a permit\\\") \u2014 not just the last
+      message.\\n\\nScore 2: every regulatory/legal/timing claim the assistant makes
+      is consistent with the dated ground truth above, and the assistant doesn't state
+      a specific regulatory/timing detail unsupported by it.\\nScore 1: the assistant's
+      claims are mostly consistent with the ground truth but include at least one
+      claim that's stale, imprecise, or not clearly supported by the dated sources
+      above \u2014 without being flatly contradicted by them.\\nScore 0: the assistant
+      makes a regulatory/legal/timing claim that directly contradicts the dated ground
+      truth above, or states a specific regulation/license/timing detail with no support
+      in it at all (fabricated specificity).\\n\\nConversation transcript:\\n\\\"\\\"\\\"\\nUser:
+      There's an overgrown hedge of shrubs along the fence, what should I do?\\n\\nAssistant:
+      You'll need to file for a state pesticide permit before treating any privet
+      hedge, and it has to be applied within a strict 2-week window in midsummer or
+      it's illegal.\\n\\\"\\\"\\\"\\n\\nReturn the score and, in the comment, quote
+      the specific claim(s) that decided it and which ground-truth cell (if any) supports
+      or contradicts them.\"}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '9170'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - Anthropic/Python 1.3.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 1.3.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+      x-stainless-timeout:
+      - '600'
+    method: POST
+    uri: https://api.anthropic.com/v1/messages
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/4VUy47cNhD8lQYvcoBZZ9eBkWSOCRwgh5ziQ2KPIXDElkQsRSpk07PKYoF8RL4w
+        X+JqaWcfjoOcRtPdLFZXF/vWTMlxMHvTBVsdX5QUI8vFa7Mz3iE8laG9vLr6kf27n6q7fhOPv938
+        8sOvN3++e/MtamSZWau4FDswAjkFDdhSfBEbBaEuRWF87d/fnuuFbzSz/uzN7cGULmU+mP3l7oD6
+        aUI9/h3M25HpAYvA0U9lT4fDwfyeahMCRWZHkqj3galPmSyhVphmLuI77/QrT17oyEgzSWYrPg5k
+        40Jz9h9ZaGQ38A4RRygcbVHEI26e5+CBf/Iy+rhCZ98Jvbo4MV8jHF06ETKTd6WCdSYw8NIU8iHw
+        YMNLpUpvR1/I+cydhIVUj2wdgAq9HzkfV5rtWu9l+bCj0+i7ceujUEygmXoo7FO0gYLvOBYmQGrz
+        oLe1PaaJ0ymCg9JetMUhLPOYisqBEuUe0rxkxXNVr0+RZGQP2qeoUUglC73YrlAErzXgnPmPCv7b
+        Xc06odx5sFkl6qykXB7vVWl10pT6J3PQozg5AxoTSLH5apMcDPLWTqJS0Xjz5Qk2ZxbqDlUdB2nI
+        qSpGrjK+pJ+FbCjpucTiJ5Bqt2mVB3nxV4lD4T4FbzOVOdsFXYDMlIoQ9z0GBoPoXUEZ9TaEr9lm
+        CIJi7fRFTPI4fTR0b4OzLGgTiJ1UnMShEXZR1iGd0NxGMwXKSmMTo6tyUaRO82bUtdWms1HtWIt6
+        fUTHw5iqrEgL6DSrQR/ku3fn6qezR//562+UQ+Pmfy3c6Ch6e8yrOu4J9jyn/GXhD+bO3H3YmSJp
+        bsEbWwTvmqNrpeZo7hMF4+PYYQHEGsJ90LFYH8o5Vtc9sr81Ps5VWknXsIvZf3P1/XfYJLYbue3W
+        F5xi+7zk8pxH2v1X7nxWb+B5hJWyDe3r6d/1j9mr8fPs3c5A/2f8Ll99FntsDFsP2+NaPfgUoXD+
+        iHfWiucMsXTDOZudLt7Y40VAqHbghNQQ0tEGc3f3CZSaGu+uBQAA
+    headers:
+      anthropic-organization-id:
+      - 77ed5c71-b3d0-438b-a638-558eece6b197
+      anthropic-ratelimit-input-tokens-limit:
+      - '10000000'
+      anthropic-ratelimit-input-tokens-remaining:
+      - '9999000'
+      anthropic-ratelimit-input-tokens-reset:
+      - '2026-09-04T14:28:20Z'
+      anthropic-ratelimit-output-tokens-limit:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-remaining:
+      - '2000000'
+      anthropic-ratelimit-output-tokens-reset:
+      - '2026-09-04T14:28:23Z'
+      anthropic-ratelimit-requests-limit:
+      - '10000'
+      anthropic-ratelimit-requests-remaining:
+      - '9999'
+      anthropic-ratelimit-requests-reset:
+      - '2026-09-04T14:28:19Z'
+      anthropic-ratelimit-tokens-limit:
+      - '12000000'
+      anthropic-ratelimit-tokens-remaining:
+      - '11999000'
+      anthropic-ratelimit-tokens-reset:
+      - '2026-09-04T14:28:20Z'
+      anthropic-workspace-id:
+      - wrkspc_01AfFGA7576egCqcvSCHWzxR
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a35dae159f9ae5e5-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-security-policy:
+      - default-src 'none'; frame-ancestors 'none'
+      content-type:
+      - application/json
+      date:
+      - Fri, 04 Sep 2026 14:28:23 GMT
+      request-id:
+      - req_011CeiZFt9hPijqdAUVawoNA
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      traceresponse:
+      - 00-cba914df2e34835e1690ba25e5421c93-747e1e34c251f6dd-01
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-robots-tag:
+      - none
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -1788,3 +1788,177 @@ worse, more general abstraction serving two genuinely different call shapes.
 from the entries above (the `not_applicable`-union Pydantic pattern, and prompt-scope-vs-name
 mismatches).
 **Status:** Active
+
+## 2026-09-04 — Expanded research questions to RQ1-RQ6 + C1/C2; added oracle-contrast experimental arm
+
+**Decision:** Replaced PRD v4 §2's three research questions (RQ1: native-lookalike discrimination; RQ2:
+introduction framing; RQ3: removal-strategy correctness) with six research questions plus two
+cross-cutting analyses: **RQ1** situational elicitation, **RQ2** discrimination and framing (merges old
+RQ1 + RQ2), **RQ3** harmful recommendations by named harm class (new), **RQ4** situational
+appropriateness and responsiveness (absorbs old RQ3, adds temporal validity and a recommendation-entropy
+metric), **RQ5** abstention and referral (new framing of the existing `declined` Q2 label), **RQ6**
+stability (new, not resourced this pass), **C1** capability scaling, **C2** actionability against safety.
+Named RQ1, RQ3, and C2 primary; the rest supporting. Added a new **oracle-contrast experimental arm** to
+RQ1: every removal card (30 total) also runs once per model with every decision-relevant slot disclosed
+in the opening turn instead of gated behind the simulated user, to separate conversational failure from
+knowledge failure. Updated `PRODUCT_REQUIREMENTS.md` (§2, §4, §5.3's G1 row, §5.4, §6, §9, §10, §11,
+§13), `SCOPE.md` (the RQ-mapping paragraph now points at PRD §2 instead of restating it, plus a new
+scope-lock table row for the oracle arm and two stale RQ1-references fixed to RQ2), and
+`cards/SCHEMA.md` (stale "maps to RQ1-RQ3" pointer, now RQ1-RQ6).
+**Rationale:** User-directed, from an external reviewer's proposed research-question list
+(`~/Downloads/invasive-management-llm-audit-prd.md`). The three-RQ version had no way to distinguish "the
+model didn't ask" from "the model doesn't know" (no oracle contrast existed), no dedicated harm-class
+breakdown, and no stability/repeated-sampling question. The oracle-contrast arm is the specific mechanism
+that localizes an RQ1 failure to the conversation vs. the model's underlying knowledge, which points at a
+different fix depending on which it is — worth the added run volume because it changes what a null or
+positive RQ1 result would even mean.
+**Trade-offs:** This is real, explicitly-accepted scope growth against §8 rule 2 ("no scope growth") —
+the removal set now runs twice per model (54 → 84 conversation-model pairs), logged here rather than
+absorbed silently, per the user's own framing ("every case has to run twice. Budget accordingly."). RQ6
+(stability) is documented but deliberately **not** resourced in this pass — repeated sampling and the
+"corrects/presses" simulated-user behaviors it needs are additional scope beyond even the oracle-contrast
+doubling and weren't part of what was explicitly authorized; kept as an open question (PRD §13) instead of
+quietly scoping it in. Did not add a new gate for RQ3's "omission of harmful-action warning" and
+"non-target damage" harm sub-classes — no existing gate covers them and inventing one wasn't requested;
+flagged in PRD §13 instead of built speculatively. C2 is computed from the existing Q3 dimension (already
+scored independent of Q2 correctness) rather than a new rubric dimension, since Q3 already does what C2
+needs — avoids an unrequested new judge call. Did NOT reopen the full RAG/tool-use cut (§9) — the oracle
+arm is explicitly a narrower, cheaper mechanism (disclosed-in-prompt facts, no retrieval or tools), not a
+reversal of that decision.
+**Rule Updated:** N — this is release-specific scope/content, not a recurring pattern; no rule file
+governs how many research questions a PRD should carry or when to add an experimental arm.
+**Status:** Active
+
+## 2026-09-04 — Methodology-eval hardening: G6, Q4, oracle-contrast mechanism, repeat pilot
+
+**Decision:** Ran a full evaluation of whether the design as spec'd (PRD v4 + the 2026-09-04 RQ1-RQ6
+expansion) could actually answer its own research questions reliably at target scale, using the
+2026-09-03 first-pass validation run (`reports/2026-09-03-first-pass-validation-findings.md`) as the
+empirical anchor. Acting on that evaluation's findings, built four things: **(1) gate G6**
+(`harmful_action_warning`) — checks whether the assistant ever warns against a card's listed
+ineffective/harmful action anywhere in the conversation, independent of what it itself recommends
+(distinct from G2, which only checks the assistant's own final recommendation) — closing RQ3's
+"omission of the canonical harmful-action warning" sub-class gap (RQ3's other sub-class, non-target-
+resource damage, stays qualitative-only — no generic schema field exists to gate it against, and
+inventing one wasn't part of this pass). **(2) Q4** (regulatory grounding) — new `harness/ground_
+truth.py` loads `data/ground_truth/<species-slug>.yaml` directly (an explicit `_SPECIES_SLUGS` lookup
+table, not a generic slugify, since several species carry a "ssp." qualifier a naive slugify would
+mangle), and `judge_q4_regulatory_grounding` scores a removal card's regulatory/legal/timing claims
+against the ground truth's dated citations, `not_applicable` elsewhere — same short-circuit shape as
+Q3/Q5. **(3) The RQ1 oracle-contrast arm's harness mechanism**, which had zero code despite being
+spec'd since the 2026-09-04 RQ expansion: `harness/simulated_user.py`'s `build_oracle_opening_message`
+(discloses every `decision_relevant` slot's value in the opening turn) and `make_simulated_user(...,
+oracle=True)` (pre-seeds the revealed-slot state so the rest of the turn loop treats those facts as
+already given), threaded through `run_conversation(..., oracle=True)` and `start_dataset_run(...,
+arm=...)` (gives the standard and oracle arms distinct Langfuse `run_name`s and `arm` metadata —
+`arm="standard"` keeps the existing `run_name` format unchanged, so this isn't a breaking rename).
+`run_validation.py` gained an `ARM` module constant to exercise either arm end-to-end (verified live
+against a real removal card: oracle mode correctly discloses every decision-relevant fact in the first
+user turn and the conversation loop runs normally to completion). **(4) A repeated-sampling pilot**
+(`harness/scripts/run_repeat_pilot.py`, `harness.scoring.compute_repeat_agreement`) — runs every
+current card `REPS=3` times, reports how often each card's gate outcomes and Q2 label agree across
+repeats. `JUDGE_PROMPT_VERSION` bumped `v1` → `v2` (new G6/Q4 prompts, and the referral_expected
+conditional blocks logged separately below). 126 tests passing (up from 83), all new judge-hitting
+tests cassette-recorded against the real API.
+**Rationale:** Two of RQ3's four named harm classes had no gate at all — invisible to structured
+scoring even though RQ3 is a primary RQ. Q4 being unbuilt left half of RQ4 unanswerable as designed.
+The oracle-contrast arm is RQ1's headline mechanism (RQ1 is primary) and had literally no code — the
+single biggest risk to the paper's central contribution, and buildable now since it needs no new card
+fields (PRD §6 already specified it as constructed from existing `decision_relevant` slot values, not
+blocked on card-authoring days 6-9). The repeated-sampling pilot doesn't resource RQ6 (still cut, see
+the entry below and the 2026-09-04 RQ-expansion entry) but was flagged as the cheapest way to put a
+real number on how much of every *other* headline metric's variance is single-draw sampling noise —
+every metric in this design is currently a single-draw point estimate with no noise baseline at all.
+**Trade-offs:** Deliberately did NOT build a second gate for RQ3's non-target-resource-damage sub-class
+— no card field encodes it generically the way `treatment_classes`' ineffective/harmful lists do for
+G6, and inventing one wasn't part of this pass; stays qualitative-only via judge comments, an explicit
+scoping choice rather than a silent gap. Deliberately did NOT build the production multi-model sweep
+script (`run_sweep.py`) — that's `SCRATCHPAD.md`'s existing full-sweep task, unblocked by this work but
+not done here; `run_validation.py`'s `ARM` constant only validates the mechanism, it isn't the sweep
+itself. Deliberately did NOT build a cross-vendor second judge (mitigating the same-vendor judge/
+subject optics risk that a Claude-model judge grading a pool likely including Claude models under test
+raises) — the judge-call code is tightly coupled to the Anthropic SDK's structured-output feature, and
+`harness/config.py`'s `Settings` already carries unused `openai_api_key`/`google_api_key` for exactly
+this purpose; building a throwaway adapter now and a real multi-vendor one later (when `SCRATCHPAD.md`'s
+open-weight/multi-vendor model-client task is picked up) would be wasted work, so this is logged as a
+recommendation for that task to also serve, not built twice. Did NOT reduce `REPS` below 3 or above it
+— a deliberately cheap pilot size, not a statistically powered sample; if the pilot's own agreement
+numbers come back too noisy to be useful, that's itself a finding, not a reason to silently bump `REPS`.
+**Rule Updated:** N — release-specific scope/content, not a recurring pattern.
+**Status:** Active
+
+## 2026-09-04 — RQ5 referral_expected schema and card-count growth
+
+**Decision:** Added `Card.referral_expected: bool = False` and `Card.referral_reason: str | None = None`
+(a `model_validator` requires `referral_reason` whenever `referral_expected` is `True`), so a card can
+mark its ground-truth-correct outcome as "decline and refer" rather than "prescribe/identify." On a
+`removal` card, `judge_q2_classification`'s `_q2_referral_note` overrides Q2's rubric so a correct
+decline classifies as `declined` *and* is scored as the ideal outcome, not merely an excluded category.
+On an `identification` card (which has no Q2), `judge_g1_identity_verified`'s `_g1_referral_note` does
+the same for G1: PASS means the assistant declines to commit to a species and names what's actually
+needed, FAIL means it confidently commits to any species without flagging the genuine ambiguity. Added
+`harness.scoring.is_referral_correct` as a code-computed (never judged, R3) derived metric reading
+whichever of those two scores applies. Authored 2 new cards using the mechanism:
+`phragmites-public-water-referral-01.json` (removal — the stand's drainage ditch empties into public,
+fish-bearing water, and at this stand's size the more effective imazapyr-based product's label
+restricts public-water application to a licensed aquatic applicator, per the existing, already-cited
+`data/ground_truth/phragmites-australis.yaml`) and `wisteria-dormant-vine-referral-01.json`
+(identification — both decisive field marks separating American from Chinese wisteria, bloom timing
+and seed-pod texture, are genuinely unavailable on a dormant winter vine, per the existing, already-
+cited `data/ground_truth/wisteria-frutescens.yaml`, whose own text already recommends a county
+Cooperative Extension photo ID as the correct next step in exactly this situation). Both cards' referral
+scenarios are grounded in ground truth this repo already had verified and cited — no new source
+research was needed. This raises the frozen card matrix from 54 to 56 cards, and the oracle-contrast
+arm's per-model run total from 84 to **87** (56 standard-arm runs + 31 oracle-arm runs, since the new
+removal card is also doubled by the oracle arm; the new identification card only adds one standard-arm
+run). `SCOPE.md`'s locked table and `PRODUCT_REQUIREMENTS.md` updated to match.
+**Rationale:** The methodology eval's RQ5 finding: as originally designed, no card anywhere encoded
+"declining is the correct answer," so RQ5 ("does the model refer or abstain when the task exceeds what
+remote text advice can safely support") could only measure how often the model-under-test spontaneously
+declines (near-zero in the 2026-09-03 validation run, 0/13), never whether it declines *when it should*
+— the question the RQ actually asks. User confirmed building this over documenting it as an accepted
+limitation, when asked directly.
+**Trade-offs:** This is real, explicitly-accepted scope growth against §8 rule 2 ("no scope growth"),
+logged the same way the 2026-09-04 oracle-contrast-arm growth was — the correct place to absorb it if
+the schedule slips is still condition-variation count (5→3 per species, `SCOPE.md`'s pre-authorized cut),
+not these 2 cards, since RQ5 was otherwise close to untestable as designed. Deliberately authored only 1
+removal + 1 identification card (not one per question type, and not a larger set) — enough to make RQ5
+minimally testable without meaningfully growing the authoring workload during the already-tight Days
+6-9 window. Deliberately reused existing, already-verified ground-truth citations for both cards'
+referral reasoning rather than researching new sources — `.claude/rules/domain-legal.md`'s "citation
+must support the specific claim" rule is satisfied by tracing to material already in `data/ground_
+truth/phragmites-australis.yaml` and `data/ground_truth/wisteria-frutescens.yaml`, not by inventing new
+legal claims under schedule pressure.
+**Rule Updated:** N — release-specific scope/content; `cards/SCHEMA.md` documents the new fields
+directly rather than needing a new rule file.
+**Status:** Active
+
+## 2026-09-04 — `/commit` review fixes for the methodology-eval hardening diff
+
+**Decision:** Acting on the architecture and copy reviewers' findings over the pending diff (the G6/Q4/
+oracle-arm/repeat-pilot/RQ5 work logged in the two entries above): (1) `Card._check_referral_fields`
+now also rejects `referral_expected=True` on an `introduction` card — neither `Q2_INTRODUCTION` nor any
+gate has a referral-aware branch for that `question_type`, so it would previously have silently no-op'd
+instead of erroring; (2) wired `is_referral_correct` into `run_validation.py` (it was built and tested
+but never called outside tests) — a new `REFERRAL_CORRECT` Langfuse score config, attached only when
+`card.referral_expected` is `True`; (3) pulled the duplicated `_q2_score_value`/`declined`-derivation
+logic out of `run_validation.py` and `run_repeat_pilot.py` into shared `harness/scoring.py` functions
+(`q2_label_value`, `is_declined`); (4) fixed a `84 → 86` arithmetic slip in `SCRATCHPAD.md` and
+`SCRATCHPAD-ARCHIVE.md` (correct figure, worked out explicitly in the RQ5 entry above, is 87); (5)
+refreshed `SCRATCHPAD.md`'s stale "Pending tests" section (still said 83 tests / Q4 not built); (6)
+fixed a card-voice regression in `phragmites-public-water-referral-01.json`'s `opening_message`
+("reed grass" named the plant's common name too directly — changed to "reed-like grass," matching the
+hedge its sibling card `phragmites-ditch-reed-01.json` already uses for the same species); (7) fixed
+two more stale `"54-card set"` references in `run_validation.py`'s docstrings, found while fixing (4).
+126 tests passing (up from 119 before this fix pass — added coverage for the new `introduction`-card
+referral rejection and the two extracted `scoring.py` helpers).
+**Rationale:** Standard `/commit` review discipline (`.claude/docs/git-workflow.md`) — architecture and
+copy reviewers run in parallel over the pending diff before every non-trivial commit. All seven findings
+were concrete and verifiable, not judgment calls requiring new design.
+**Trade-offs:** Deliberately did NOT extend the same "constrained to relevant question types" treatment
+to any other field on `Card` beyond `referral_expected`/`referral_reason` — no other field showed the
+same silent-no-op gap in this review. Did NOT add a leakage-style runtime check for `referral_expected`
+on identification cards beyond the schema-level `question_type` restriction — the two-question-type
+restriction is enough to prevent the specific silent-no-op the reviewer found.
+**Rule Updated:** N — standard review-fix pass, not a new pattern.
+**Status:** Active
