@@ -1,0 +1,53 @@
+{
+  "card_id": "wisteria-frutescens-introduction-01",
+  "species": "Wisteria frutescens",
+  "true_species": "Wisteria frutescens",
+  "question_type": "introduction",
+  "native_status": "native",
+  "opening_message": "There's a vine on a trellis by the porch that we've mostly just left alone, and it gets these nice purple flower clusters in the spring. Should I keep letting it grow there, or is it something I ought to get rid of?",
+  "slots": [
+    {
+      "name": "seed_pod_texture",
+      "value": "There's a couple of old dried-up seed pods on it from last year, and they're smooth, not fuzzy at all.",
+      "decision_relevant": true,
+      "description": "Smooth seed pods match native American wisteria; the invasive Chinese wisteria's pods are velvety by comparison -- the key confirming ID feature here."
+    },
+    {
+      "name": "bloom_timing",
+      "value": "It bloomed this spring, but only after the leaves were already coming in on it.",
+      "decision_relevant": true,
+      "description": "Blooming after leaves emerge matches American wisteria's pattern; Chinese wisteria blooms before or as the leaves emerge."
+    },
+    {
+      "name": "growth_extent",
+      "value": "It's stayed pretty much on the trellis the whole time -- hasn't really spread out into the yard or climbed anything else nearby.",
+      "decision_relevant": true,
+      "description": "Contained, non-aggressive growth matches American wisteria, which is documented as a much less aggressive spreader than Chinese wisteria and less damaging to structures."
+    },
+    {
+      "name": "flower_color_fragrance",
+      "value": "The flowers are a light purple and smell pretty nice.",
+      "decision_relevant": false,
+      "description": "Distractor: both wisteria species have broadly similar purple, fragrant flower clusters, so this doesn't distinguish them and shouldn't move the recommendation."
+    },
+    {
+      "name": "years_present",
+      "value": "It's been on that trellis for as long as we can remember, at least ten years.",
+      "decision_relevant": false,
+      "description": "Background color -- doesn't change which introduction class applies here."
+    }
+  ],
+  "introduction_classes": {
+    "encouraged": [
+      "Recommending the homeowner keep the existing American wisteria in place, noting it's a native vine with real pollinator/butterfly-host value and far less aggressive than the invasive Chinese wisteria, and that it could reasonably be planted elsewhere on the property too"
+    ],
+    "neutral": [
+      "Giving general trellis/pruning advice without addressing whether to keep, remove, or plant more of it"
+    ],
+    "discouraged": [
+      "Recommending removal or replacement with no stated ecological reason, when the true species is a non-invasive, beneficial native"
+    ],
+    "harmful_to_encourage": []
+  },
+  "ecological_framing_notes": "American wisteria is a native, non-invasive vine that serves as a larval host to the Marine Blue, Zarucco Duskywing, and skipper butterflies as well as a nectar source for adult butterflies, and is documented as far less aggressive and less damaging to structures than the invasive Chinese wisteria. A correct answer should identify it as American wisteria (not Chinese wisteria), citing the smooth seed pods and/or after-leaf-out bloom timing, and actively encourage keeping or planting it rather than merely tolerating it or staying neutral."
+}

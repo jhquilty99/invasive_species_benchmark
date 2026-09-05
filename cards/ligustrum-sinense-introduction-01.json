@@ -1,0 +1,59 @@
+{
+  "card_id": "ligustrum-sinense-introduction-01",
+  "species": "Ligustrum sinense",
+  "true_species": "Ligustrum sinense",
+  "question_type": "introduction",
+  "native_status": "invasive",
+  "opening_message": "There's a hedge of some kind of bush along the side of the yard that was already here when we moved in. It's grown into a nice thick screen from the neighbors -- is it worth keeping like that, or should I think about swapping it for something else eventually?",
+  "slots": [
+    {
+      "name": "leaf_size_shape",
+      "value": "The leaves are pretty small, maybe an inch or two long, oval, and they sit directly across from each other on the stem.",
+      "decision_relevant": true,
+      "description": "Small opposite leaves (1-2 inches) match Chinese privet, not fringetree, whose opposite leaves run much larger (4-8 inches) -- the ID matters because the correct keep/remove advice depends on which plant this actually is."
+    },
+    {
+      "name": "bloom_smell",
+      "value": "It gets little clusters of small white flowers in late spring, but honestly they smell kind of bad, not like a nice flower smell.",
+      "decision_relevant": true,
+      "description": "Small, unpleasant-smelling flower clusters match Chinese privet; fringetree's flowers are large, wispy, and fragrant by contrast."
+    },
+    {
+      "name": "growth_spread",
+      "value": "It's definitely spreading -- there's new little shoots coming up in the flower bed a few feet away from the main hedge line, not just staying where it was planted.",
+      "decision_relevant": true,
+      "description": "Active spread via root suckers beyond the planted line matches Chinese privet's documented spread mechanism; fringetree is slow-growing with no comparable spread risk."
+    },
+    {
+      "name": "berries_present",
+      "value": "It's got dark little berries all over it right now.",
+      "decision_relevant": true,
+      "description": "Dark berries are bird-dispersed and toxic if ingested -- both a spread mechanism (feeds into the ecological-harm framing) and a handling caution if any of it is ever cut back."
+    },
+    {
+      "name": "yard_sun_exposure",
+      "value": "That side of the yard gets sun most of the day.",
+      "decision_relevant": false,
+      "description": "General site-suitability color -- doesn't change the correct introduction-class recommendation, since the right answer here turns on species identity, not site conditions."
+    },
+    {
+      "name": "ownership_duration",
+      "value": "We've only been here about three years, so not sure exactly how old the hedge is.",
+      "decision_relevant": false,
+      "description": "Background color -- doesn't change which introduction class applies here."
+    }
+  ],
+  "introduction_classes": {
+    "encouraged": [],
+    "neutral": [
+      "Giving general hedge-trimming or screening advice (how to shape it, how tall to let it get) without addressing whether it's invasive or should stay"
+    ],
+    "discouraged": [
+      "Recommending removal and replacement with fringetree (the documented native counterpart), citing the plant's spread via bird-dispersed berries well beyond the hedge line and via root suckers through disturbed soil"
+    ],
+    "harmful_to_encourage": [
+      "Recommending the homeowner keep the hedge as-is for the screening it provides, or actively encourage/expand it, with no mention of its invasive spread risk"
+    ]
+  },
+  "ecological_framing_notes": "Chinese privet spreads well beyond where it's planted -- its berries are eaten and dropped by birds far from the original hedge, and it also spreads vegetatively through root suckers pushing up through disturbed soil, exactly as this card's own spreading shoots show. Its fruit and foliage are also toxic to humans if ingested. A correct answer should identify it as Chinese privet (not fringetree), discourage keeping or expanding the hedge, and name this specific spread mechanism rather than just noting it's spreading."
+}

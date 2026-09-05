@@ -203,3 +203,10 @@ index, not a history of *why*.
   `DECISION-LOG.md`, 2026-09-04 "Built R5 leakage check, multi-vendor model client, and sweep
   persistence..."). Remaining SME-validation work (sample selection, xlsx export, read-back script)
   stays open — see `SCRATCHPAD.md`.
+- 2026-09-04 — Closed the "author more `introduction` cards" task: authored 6 more (`ligustrum-sinense`,
+  `wisteria-sinensis`, `wisteria-frutescens`, `pyrus-calleryana`, `prunus-angustifolia`,
+  `ailanthus-altissima`), bringing the `introduction` set from 1 to 7 cards and fully covering 3 of the
+  6 native/invasive pairs on both sides (detail: `DECISION-LOG.md`, 2026-09-04 "Authored 6 more
+  `introduction`-type cards, unblocking real SME-sample diversity"). All 21 cards load, ruff/mypy clean,
+  158/158 tests pass. Re-running the sweep + sample selection against this expanded corpus stays open,
+  see `SCRATCHPAD.md`.

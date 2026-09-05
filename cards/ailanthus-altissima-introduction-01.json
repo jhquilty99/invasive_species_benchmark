@@ -1,0 +1,59 @@
+{
+  "card_id": "ailanthus-altissima-introduction-01",
+  "species": "Ailanthus altissima",
+  "true_species": "Ailanthus altissima",
+  "question_type": "introduction",
+  "native_status": "invasive",
+  "opening_message": "There's a tree that came up on its own near the property line a few years back and it's grown really fast -- already taller than the house. Is it worth keeping around for the shade, or should I think about taking it down while it's still smaller?",
+  "slots": [
+    {
+      "name": "growth_rate",
+      "value": "It's grown a lot -- easily several feet a year -- and it wasn't planted, just showed up.",
+      "decision_relevant": true,
+      "description": "Very fast growth to house-height within a few years from an unplanted volunteer is characteristic of tree-of-heaven, and feeds into the 'remove now while smaller' framing since a mature tree requires a much bigger job."
+    },
+    {
+      "name": "leaf_odor",
+      "value": "If you break off a leaf or a little twig, it's got a pretty strong, kind of unpleasant smell to it.",
+      "decision_relevant": true,
+      "description": "A strong, unpleasant odor from crushed leaves or broken stems is a distinctive, commonly cited field mark for tree-of-heaven."
+    },
+    {
+      "name": "suckering",
+      "value": "There's a few smaller shoots coming up out of the ground a little ways from the main trunk, even though nothing's ever been cut.",
+      "decision_relevant": true,
+      "description": "New shoots appearing away from an uncut, living trunk demonstrates active root suckering -- the same spread mechanism documented for tree-of-heaven, and a specific reason not to just let it keep growing."
+    },
+    {
+      "name": "seed_clusters",
+      "value": "Late last summer it had a ton of these papery, winged seed clusters all over it, kind of reddish-tan colored.",
+      "decision_relevant": true,
+      "description": "Abundant papery seed clusters match tree-of-heaven's prolific seed production, feeding into the seed-bank persistence concern documented for this species."
+    },
+    {
+      "name": "nearby_structures",
+      "value": "It's not too close to the house or anything, just out near the property line.",
+      "decision_relevant": false,
+      "description": "Doesn't change the correct introduction-class recommendation here, since the right answer turns on species identity and its documented spread mechanisms, not on hazard-to-structures."
+    },
+    {
+      "name": "current_season",
+      "value": "It's early September right now.",
+      "decision_relevant": false,
+      "description": "Time of year doesn't change the introduction-class recommendation itself (unlike a removal card, where it would affect herbicide timing)."
+    }
+  ],
+  "introduction_classes": {
+    "encouraged": [],
+    "neutral": [
+      "Giving general shade-tree placement or pruning advice without addressing whether it's invasive or should stay"
+    ],
+    "discouraged": [
+      "Recommending removal now while the tree is smaller (rather than waiting), noting that a cut tree will resprout unless the stump is herbicide-treated and that the seed bank can persist for years, and suggesting a native shade-tree alternative"
+    ],
+    "harmful_to_encourage": [
+      "Recommending the homeowner keep the tree for shade, or let it keep growing, with no mention of its invasive spread mechanisms or the harder removal job it becomes later"
+    ]
+  },
+  "ecological_framing_notes": "Tree-of-heaven spreads aggressively by both root suckering and seed that can remain viable in the soil seed bank for two years or more, and its wood and living tissue carry allelopathic compounds that suppress germination and growth of neighboring plants. A correct answer should identify it as tree-of-heaven (not a generic fast-growing shade tree), discourage keeping it, name this specific ecological harm rather than just calling it a fast-growing tree, and note that removing it now while smaller avoids the harder resprout-control job a cut mature tree requires."
+}

@@ -2071,3 +2071,63 @@ vs-Pro naming ambiguity independently — flagged for the user rather than guess
 **Rule Updated:** N — not clearly a recurring pattern yet (first time this project has needed to verify
 a model ID against a live account rather than docs alone).
 **Status:** Active
+## 2026-09-04 — Authored 6 more `introduction`-type cards, unblocking real SME-sample diversity
+
+**Decision:** Authored `cards/ligustrum-sinense-introduction-01.json`,
+`cards/wisteria-sinensis-introduction-01.json`, `cards/wisteria-frutescens-introduction-01.json`,
+`cards/pyrus-calleryana-introduction-01.json`, `cards/prunus-angustifolia-introduction-01.json`, and
+`cards/ailanthus-altissima-introduction-01.json` — bringing the `introduction` set from 1 to 7 cards
+(4 invasive, 3 native). Species picked to maximize pair coverage within the "~5-6 more" budget: 3 of
+the 6 native/invasive pairs (`PRODUCT_REQUIREMENTS.md` §4's pairing table) now have *both* sides
+authored as `introduction` cards — privet/fringetree, Chinese/American wisteria, Callery pear/Chickasaw
+plum — plus tree-of-heaven on its own (its native counterpart, winged sumac, stays unauthored for this
+pass). Every card's `introduction_classes`/`ecological_framing_notes` claim traces to the same-species
+`data/ground_truth/*.yaml` file already cited by that species' `removal`/`identification` cards, per
+`cards/SCHEMA.md`'s sourcing rule — no new research done, only re-application of facts already quoted
+there. Opening messages use a distinct "is it worth keeping" framing from each species' existing
+removal/identification card so the three question types don't read as reworded duplicates of each
+other on the same species. All 21 cards load against `Card`, ruff/mypy clean, 158/158 tests still pass
+(no test hardcodes a card count).
+
+**Rationale:** This was `SCRATCHPAD.md` task 1 and the one real blocker on the SME-validation plan —
+the 2026-09-04 dry-run sample selection came up 3 short of its 6-card introduction target because only
+1 introduction card existed, so all 3 of its picks were the same card scored by 3 different models
+(zero per-card diversity in that stratum). Picking pairs (rather than 6 arbitrary species) means the
+re-run sample selection can draw a mix of `encouraged`/`discouraged`/`harmful_to_encourage` correct
+answers within the stratum, not just "every introduction card happens to be a discourage-it invasive
+case" or vice versa.
+
+**Trade-offs:** Deliberately did NOT author the remaining 5 introduction cards needed for the full
+56-card matrix (winged sumac, stiltgrass, whitegrass, and the 2 Phragmites subspecies) — that's
+`SCRATCHPAD.md` task 7's job (Days 6-9, full matrix), out of scope for the SME-validation slice this
+task exists to unblock. Also did NOT re-run the sweep or sample selection in this same pass — that's
+`SCRATCHPAD.md` task 1, kept separately scoped so this entry's diff is reviewable as "cards only."
+
+**Review pass (`/commit`):** `reviewer-architecture` found no issues (schema conformance, slot/class
+consistency, and the SCRATCHPAD renumbering itself all checked out). `reviewer-copy` found 4 real
+citation-tracing violations — this repo's known failure pattern per `.claude/rules/domain-legal.md` —
+all fixed before commit: (1) `ligustrum-sinense-introduction-01.json`'s `ecological_framing_notes`
+claimed privet "forms dense monocultures that shade out native shrub-layer species," a phrase lifted
+from `cards/SCHEMA.md`'s explicitly-illustrative, not-sourced worked example rather than from
+`data/ground_truth/ligustrum-sinense.yaml` — rewritten to cite only the yaml's actual bird-dispersed-
+seed/root-sucker/toxicity claims; (2) the same card's `discouraged` bucket named "wax myrtle, American
+beautyberry" as replacement species with no source — trimmed to just fringetree, the one properly-
+sourced native counterpart; (3) `wisteria-sinensis-introduction-01.json` claimed spread "via
+underground runners as well as seed," contradicting `wisteria-sinensis.yaml`'s explicit statement that
+the seeds are too large for animals to disperse and runners are the primary route — reworded to match;
+(4) `ailanthus-altissima-introduction-01.json` asserted "wind-dispersed" seed and used the term
+"samara," neither present in `ailanthus-altissima.yaml` (which documents seed-bank persistence, not
+dispersal mechanism or morphology) — both removed. The reviewer also caught that finding (3)'s same
+unsourced "wind/water-dispersed" phrasing already exists in the previously-committed
+`ailanthus-stump-resprout-01.json` — left as-is (out of scope for this diff) and flagged as
+`SCRATCHPAD.md` task 19 for a future citation-audit pass, per the "don't fold in unrelated cleanup"
+rule. Separately, `reviewer-copy` caught that my SCRATCHPAD.md renumbering left 5 Status-section
+task-number cross-references (added by a prior, already-committed session) one arithmetic step behind
+the rest of the diff's shift — re-derived the correct targets by matching each reference's described
+content to the actual current task (not by blind arithmetic), since the mechanical shift and the
+content didn't agree at every step.
+**Rule Updated:** N — flag for retro if a future card-authoring pass again needs to choose *which*
+species to prioritize under a partial-matrix budget; "prioritize completing pairs over spreading thin
+across singletons" is the heuristic used here but hasn't recurred enough times yet to promote to a rule
+file.
+**Status:** Active

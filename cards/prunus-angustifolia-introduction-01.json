@@ -1,0 +1,53 @@
+{
+  "card_id": "prunus-angustifolia-introduction-01",
+  "species": "Prunus angustifolia",
+  "true_species": "Prunus angustifolia",
+  "question_type": "introduction",
+  "native_status": "native",
+  "opening_message": "There's a small scraggly tree or bush that's been growing on its own near the edge of the yard for a while now. It gets white flowers in early spring and some kind of fruit later on. Is it worth keeping around, or should I just take it out?",
+  "slots": [
+    {
+      "name": "fruit_description",
+      "value": "In early summer it gets little round fruit, kind of yellow to red, more like a small plum than anything else.",
+      "decision_relevant": true,
+      "description": "Round, soft, yellow-to-red plum-type fruit matches Chickasaw plum; the species it's commonly confused with, Callery pear, instead produces small hard greenish-brown pear-type fruit."
+    },
+    {
+      "name": "growth_form",
+      "value": "It's more of a bushy, multi-stemmed thing than one single trunk going straight up, and there's a couple smaller ones coming up nearby too.",
+      "decision_relevant": true,
+      "description": "Shrubby, multi-stemmed, thicket-forming growth matches Chickasaw plum's natural habit; Callery pear instead grows as an upright, single-trunk tree."
+    },
+    {
+      "name": "thorn_check",
+      "value": "There's some thorny little spurs on the branches here and there, but nothing huge.",
+      "decision_relevant": true,
+      "description": "Minor thorny spurs are consistent with Chickasaw plum, distinct from the larger, more severe thorns (up to several inches) documented on wild-origin Callery pear."
+    },
+    {
+      "name": "bloom_appearance",
+      "value": "It had a bunch of small white flowers on it back in early spring.",
+      "decision_relevant": false,
+      "description": "Distractor: both Chickasaw plum and Callery pear bloom white flowers around the same time in early spring, so bloom timing/appearance alone doesn't distinguish them -- the fruit and growth-form slots are what actually matter."
+    },
+    {
+      "name": "planting_location",
+      "value": "It's out near the back corner of the yard by some other bushes.",
+      "decision_relevant": false,
+      "description": "Distractor: location in the yard doesn't change the correct introduction-class recommendation here."
+    }
+  ],
+  "introduction_classes": {
+    "encouraged": [
+      "Recommending the homeowner keep the existing Chickasaw plum in place (and the smaller ones coming up nearby), noting it's a native thicket-forming tree with wildlife and pollinator value, and that it's one of the species NC State Extension recommends planting when removing an actual Callery pear"
+    ],
+    "neutral": [
+      "Giving general placement or pruning advice without addressing whether to keep, remove, or plant more of it"
+    ],
+    "discouraged": [
+      "Recommending removal or replacement with no stated ecological reason, when the true species is a non-invasive, beneficial native -- especially if mistaken for Callery pear"
+    ],
+    "harmful_to_encourage": []
+  },
+  "ecological_framing_notes": "Chickasaw plum is a native thicket-forming tree whose stands provide cover for songbirds and small mammals year-round, nectar for pollinators, and larval host habitat for several butterfly species -- and it's one of the native trees NC State Extension specifically recommends planting when an actual Callery pear is removed. A correct answer should identify it as Chickasaw plum (not Callery pear), citing the round plum-type fruit and shrubbier, multi-stemmed growth form rather than bloom timing alone (both species bloom similarly in spring), and actively encourage keeping it rather than merely tolerating it or staying neutral."
+}

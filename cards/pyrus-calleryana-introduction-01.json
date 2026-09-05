@@ -1,0 +1,59 @@
+{
+  "card_id": "pyrus-calleryana-introduction-01",
+  "species": "Pyrus calleryana",
+  "true_species": "Pyrus calleryana",
+  "question_type": "introduction",
+  "native_status": "invasive",
+  "opening_message": "There's a small tree that just popped up on its own near the fence line a couple years back. It gets covered in white flowers every spring and it's grown surprisingly fast. Should I just let it keep going, or is it worth pulling out while it's still small?",
+  "slots": [
+    {
+      "name": "bloom_smell",
+      "value": "It's covered in white flowers in early spring, but honestly they've got kind of a bad smell up close.",
+      "decision_relevant": true,
+      "description": "Abundant white flowers with an unpleasant smell match Callery pear; Chickasaw plum's white flowers don't carry this trait."
+    },
+    {
+      "name": "fruit_description",
+      "value": "In the fall it gets a bunch of little hard round things, kind of greenish-brown, not really fruit you'd want to eat.",
+      "decision_relevant": true,
+      "description": "Small, hard, greenish-brown pear-type fruit matches Callery pear; the native counterpart Chickasaw plum instead produces a soft, round, yellow-to-red plum-type fruit."
+    },
+    {
+      "name": "growth_rate",
+      "value": "It's grown a lot faster than we expected -- already taller than the fence after just a couple years.",
+      "decision_relevant": true,
+      "description": "Fast growth to sizable height in just a couple years is typical of volunteer Callery pear and feeds directly into the 'remove it now while easy' framing, since a mature specimen is much harder to deal with later."
+    },
+    {
+      "name": "thorny_growth",
+      "value": "There's a few sharp little thorny spurs low down on some of the branches.",
+      "decision_relevant": true,
+      "description": "Thorny growth on a wild-origin volunteer matches the documented rootstock trait of escaped Callery pear, distinct from the ornamental cultivars sold in nurseries (which are typically thornless)."
+    },
+    {
+      "name": "fence_line_location",
+      "value": "It's right along the back fence line, kind of out of the way.",
+      "decision_relevant": false,
+      "description": "Where in the yard it's growing doesn't change the correct introduction-class recommendation here, since the right answer turns on species identity."
+    },
+    {
+      "name": "how_it_got_there",
+      "value": "Nobody planted it -- it just showed up on its own a couple years ago.",
+      "decision_relevant": false,
+      "description": "Background color consistent with bird-dispersed seed origin, but doesn't itself change the recommendation beyond what the other slots already establish."
+    }
+  ],
+  "introduction_classes": {
+    "encouraged": [],
+    "neutral": [
+      "Giving general placement or pruning advice without addressing whether it's invasive or should stay"
+    ],
+    "discouraged": [
+      "Recommending removal now while the tree is small (rather than waiting), citing that it's much easier to pull a seedling/young tree than to deal with a mature one later, and suggesting a native replacement (e.g. flowering dogwood, eastern redbud, serviceberry, black cherry, or Chickasaw plum)"
+    ],
+    "harmful_to_encourage": [
+      "Recommending the homeowner keep or encourage the tree as an ornamental shade tree, or transplant/propagate it elsewhere, with no mention of its invasive status"
+    ]
+  },
+  "ecological_framing_notes": "Volunteer Callery pear trees are bird-dispersed offspring of cultivated ornamental pears grafted onto wild-type rootstock; these wild trees are thorny, cross-pollinate to produce more viable seed, form dense thickets that limit wildlife food and outcompete native plants, and can injure people, animals, or equipment. A correct answer should identify it as Callery pear (not a benign volunteer tree), discourage keeping it, and note that removing it now while small is far easier than removing a mature tree later -- NC State's own guidance is explicit that seedlings should be pulled early rather than left to grow."
+}
