@@ -1,0 +1,108 @@
+interactions:
+- request:
+    body: '{"messages":[{"role":"system","content":"You are a helpful assistant. Reply
+      in exactly three words."},{"role":"user","content":"Say hello."}],"model":"gpt-5.6-sol","max_completion_tokens":1024}'
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '193'
+      content-type:
+      - application/json
+      host:
+      - api.openai.com
+      user-agent:
+      - OpenAI/Python 3.7.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 3.7.0
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.11.16
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/3WSUU/CMBDH3/cplj4DceKA+KbGaNQYFQ2JhiylPVi1a5f2phLCd7ftgI0IL016
+        v7vr//69VRTHRHByHhOWU2RFKbvX9+NL/vb6fjWZPY5p+pSP8peLO/E86RcPN6TjK/TsExhuq3pM
+        uzpAoVWNmQGK4Lsmw9EoPesPkmEAheYgfdmixG7aG3StlpuSXAsG1rEPd43jVTi9OMXh14VPOttI
+        AdbSBbjYNskFjZY+Qqi1wiJVSDoNZFohqKD3FqTUMep4qateO8fAvLLUi1OVlC1AldJI/XBB3XRD
+        1js9c6GEzTM3s3UGuDcs6pIEunbnNMxX7UkmpXGWYYb6C0Lb07RuRxorW3CwgeiEyCaeJp0D3TIO
+        SIW0LX8IoywH3lQ2ZgaS/RiBcAjTigvdAlFr9P9aDz1d2yLUoumS9I/2bwBjULodykoDXLB9Q5o0
+        A34Rj6Xt/iAoJhbMt1uyDAUY/08c5rSS9aYQu7QIReY+cwGmNCKsi1+FaB39ATfrRB8mAwAA
+    headers:
+      access-control-expose-headers:
+      - X-Request-ID
+      - CF-Ray
+      - CF-Ray
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - a35ec7420ffdd631-IAD
+      connection:
+      - keep-alive
+      content-encoding:
+      - gzip
+      content-type:
+      - application/json
+      date:
+      - Fri, 04 Sep 2026 17:40:17 GMT
+      openai-organization:
+      - user-bgk7qjk19pxaiw8uisxde0qb
+      openai-processing-ms:
+      - '955'
+      openai-project:
+      - proj_Yprx7XzUftgnJVV23GnF86Vl
+      openai-version:
+      - '2020-10-01'
+      server:
+      - cloudflare
+      set-cookie:
+      - __cf_bm=3CIGTxnwPE2zX0Yn2lV8SquSjbNGoVO38TbBxmE6_LE-1788543616.3242114-1.0.1.1-UWP0fsczZ.B6rE23LJt7aRlsEZ9aGPNh1EU6fxyyDcMwznSNZSEciicRpDCvCSR4RTFVR9uajB_9nVOjNdR8FTjz1tAz2YMmZ2DysAW.ExpUOvuN21sfSlNq__eXowlh;
+        HttpOnly; SameSite=None; Secure; Path=/; Domain=api.openai.com; Expires=Fri,
+        04 Sep 2026 18:10:17 GMT
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      transfer-encoding:
+      - chunked
+      x-content-type-options:
+      - nosniff
+      x-openai-proxy-wasm:
+      - v0.1
+      x-ratelimit-limit-requests:
+      - '500'
+      x-ratelimit-limit-tokens:
+      - '500000'
+      x-ratelimit-remaining-requests:
+      - '499'
+      x-ratelimit-remaining-tokens:
+      - '499979'
+      x-ratelimit-reset-requests:
+      - 120ms
+      x-ratelimit-reset-tokens:
+      - 2ms
+      x-request-id:
+      - req_b7c4915c770c4574aa29db5613262ddf
+    status:
+      code: 200
+      message: OK
+version: 1

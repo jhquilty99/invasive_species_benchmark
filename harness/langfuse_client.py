@@ -29,15 +29,19 @@ from langfuse.api.core.api_error import ApiError
 from langfuse.api.score_configs.types.score_configs import ScoreConfigs
 
 from harness.config import Settings
+from harness.judges.quality import QualityResults
 from harness.models import (
     _REMOVAL_ONLY_FIELDS,
     Card,
     GateID,
+    GateOutcome,
+    GateResult,
     IntroductionQ2Label,
     Q2Label,
     QualityDimension,
     QuestionType,
 )
+from harness.scoring import Q1Result, is_referral_correct, q2_label_value
 
 logger = logging.getLogger(__name__)
 
@@ -313,6 +317,10 @@ def start_dataset_run(
     *,
     card_set_version: str | None = None,
     arm: str = "standard",
+    simulated_user_classifier_model: str | None = None,
+    simulated_user_responder_model: str | None = None,
+    stopping_condition_model: str | None = None,
+    judge_model: str | None = None,
 ) -> DatasetRunHandle:
     """Build the handle for a (model_id, prompt_version[, arm]) dataset run.
 
@@ -325,6 +333,16 @@ def start_dataset_run(
     passes `"oracle"`) is appended to `run_name` so the two arms land as distinct Langfuse dataset
     runs instead of colliding under one name, and is always included in `metadata` regardless of
     value so a run's arm is checkable without parsing `run_name`.
+
+    `model_id` is specifically the model *under test* (the "inference" role) —
+    `simulated_user_classifier_model`, `simulated_user_responder_model`, `stopping_condition_model`,
+    and `judge_model` name the other three roles this benchmark's own infrastructure pins a model to
+    ("simulation", the live stopping-condition classifier, and "evaluation" respectively), so a run's
+    full model lineup is readable from this one metadata dict without having to open individual
+    generations. All four are optional and omitted from `metadata` when not given (same `None`-skip
+    convention as `card_set_version`) — every current call site passes its actual defaults/overrides
+    explicitly rather than leaving them out, but a caller that only cares about tracking the
+    model-under-test can still omit them.
     """
     metadata: dict[str, Any] = {
         "model_id": model_id,
@@ -333,6 +351,14 @@ def start_dataset_run(
     }
     if card_set_version is not None:
         metadata["card_set_version"] = card_set_version
+    if simulated_user_classifier_model is not None:
+        metadata["simulated_user_classifier_model"] = simulated_user_classifier_model
+    if simulated_user_responder_model is not None:
+        metadata["simulated_user_responder_model"] = simulated_user_responder_model
+    if stopping_condition_model is not None:
+        metadata["stopping_condition_model"] = stopping_condition_model
+    if judge_model is not None:
+        metadata["judge_model"] = judge_model
     run_name = f"{model_id}__{prompt_version}"
     if arm != "standard":
         run_name = f"{run_name}__{arm}"
@@ -407,3 +433,103 @@ def attach_score(
             observation_id=observation_id,
             data_type=cast(Literal["NUMERIC", "BOOLEAN"] | None, data_type),
         )
+
+
+# --- Score-attachment helpers ---------------------------------------------------
+# Shared by every script that runs a finished conversation's judges and needs to push the results
+# to Langfuse (`harness/scripts/run_validation.py`, `harness/sweep.py`) — pulled out here after the
+# same set of calls started duplicating across call sites, the same reasoning
+# `harness/scoring.py`'s `q2_label_value`/`is_declined` docstrings already give for why those moved.
+
+
+def attach_gate_scores(
+    client: Langfuse, trace_id: str, gate_results: list[GateResult]
+) -> None:
+    for result in gate_results:
+        attach_score(
+            client,
+            name=result.gate_id.name,
+            value=result.outcome.value,
+            comment=result.comment,
+            trace_id=trace_id,
+            data_type="CATEGORICAL",
+        )
+
+
+def attach_quality_scores(
+    client: Langfuse, trace_id: str, quality_results: QualityResults
+) -> None:
+    attach_score(
+        client,
+        name=Q2_SCORE_NAME,
+        value=q2_label_value(quality_results.q2.label),
+        comment=quality_results.q2.comment,
+        trace_id=trace_id,
+        data_type="CATEGORICAL",
+    )
+    for score in (
+        quality_results.q3,
+        quality_results.q4,
+        quality_results.q5,
+        quality_results.q6,
+    ):
+        if score.score == "not_applicable":
+            logger.info(
+                "%s not_applicable; a numeric score config can't hold that value, skipping "
+                "Langfuse attach for this dimension on this card.",
+                score.dimension.value,
+            )
+            continue
+        attach_score(
+            client,
+            name=score.dimension.name,
+            value=score.score,
+            comment=score.comment,
+            trace_id=trace_id,
+            data_type="NUMERIC",
+        )
+
+
+def attach_q1_score(client: Langfuse, trace_id: str, q1_result: Q1Result) -> None:
+    attach_score(
+        client,
+        name=Q1_SCORE_NAME,
+        value="pass" if q1_result.all_decision_relevant_elicited else "fail",
+        comment=(
+            f"Elicited before terminal turn: {q1_result.elicited_decision_relevant_slots}. "
+            f"Missing: {q1_result.missing_decision_relevant_slots}. "
+            f"Distractor slots asked anyway: {q1_result.distractor_slots_asked}."
+        ),
+        trace_id=trace_id,
+        data_type="CATEGORICAL",
+    )
+
+
+def g1_outcome(gate_results: list[GateResult]) -> GateOutcome:
+    (g1,) = (r for r in gate_results if r.gate_id == GateID.G1_IDENTITY_VERIFIED)
+    return g1.outcome
+
+
+def attach_referral_correct_score(
+    client: Langfuse,
+    trace_id: str,
+    card: Card,
+    *,
+    q2_label: Q2Label | IntroductionQ2Label | str,
+    gate_results: list[GateResult],
+) -> None:
+    """RQ5: only attached when `card.referral_expected` is `True` — `is_referral_correct` returns
+    `None` otherwise, and `None` isn't a value this score's config can hold, same reasoning as the
+    not_applicable-quality-score skip in `attach_quality_scores`."""
+    outcome = g1_outcome(gate_results)
+    referral_correct = is_referral_correct(card, q2_label=q2_label, g1_outcome=outcome)
+    if referral_correct is None:
+        return
+    attach_score(
+        client,
+        name=REFERRAL_CORRECT_SCORE_NAME,
+        value="pass" if referral_correct else "fail",
+        comment=f"referral_expected card; q2_label={q2_label!r}, g1_outcome={outcome.value!r}.",
+        trace_id=trace_id,
+        data_type="CATEGORICAL",
+    )

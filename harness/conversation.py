@@ -43,6 +43,7 @@ from harness._trajectory import (
     latest_assistant_text,
 )
 from harness.config import Settings
+from harness.model_clients import ModelClients, generate_chat_response
 from harness.models import Card, QuestionType
 from harness.simulated_user import make_simulated_user
 
@@ -336,6 +337,7 @@ def make_model_under_test(
     model: str = DEFAULT_MODEL_UNDER_TEST,
     max_tokens: int = 4096,
     langfuse_client: Langfuse | None = None,
+    model_clients: ModelClients | None = None,
 ) -> Callable[..., dict[str, Any]]:
     """Build the callable representing the LLM being benchmarked.
 
@@ -347,9 +349,14 @@ def make_model_under_test(
 
     Matches `run_multiturn_simulation`'s `app` contract as actually implemented (see this module's
     docstring): receives the single newest message plus keyword-only `thread_id`, not the full
-    trajectory, so it maintains its own per-thread conversation history and calls the Anthropic API
+    trajectory, so it maintains its own per-thread conversation history and calls the model API
     with `MODEL_UNDER_TEST_SYSTEM_PROMPT` — a generic helpful-assistant framing only, per PRD §4,
     with no benchmark-aware instructions of any kind.
+
+    `model_clients`, when given, routes the call through `harness.model_clients.
+    generate_chat_response`'s vendor dispatch instead of assuming Anthropic — the multi-vendor path
+    a `sweep.py` uses to run non-Anthropic models. Omitted (`None`, the default), every existing
+    call site's behavior is unchanged: `client`/`model` are assumed Anthropic, exactly as before.
     """
     anthropic_client = client or anthropic.Anthropic(
         api_key=Settings().anthropic_api_key  # type: ignore[call-arg]
@@ -370,13 +377,25 @@ def make_model_under_test(
         with observe(
             langfuse_client, name="model-under-test", model=model, input=user_text
         ) as obs:
-            response = anthropic_client.messages.create(
-                model=model,
-                max_tokens=max_tokens,
-                system=MODEL_UNDER_TEST_SYSTEM_PROMPT,
-                messages=history,
-            )
-            assistant_text = first_text_block(response.content)
+            if model_clients is not None:
+                assistant_text = generate_chat_response(
+                    model_clients,
+                    model=model,
+                    system=MODEL_UNDER_TEST_SYSTEM_PROMPT,
+                    messages=[
+                        {"role": str(m["role"]), "content": str(m["content"])}
+                        for m in history
+                    ],
+                    max_tokens=max_tokens,
+                )
+            else:
+                response = anthropic_client.messages.create(
+                    model=model,
+                    max_tokens=max_tokens,
+                    system=MODEL_UNDER_TEST_SYSTEM_PROMPT,
+                    messages=history,
+                )
+                assistant_text = first_text_block(response.content)
             obs.update(output=assistant_text)
         history.append({"role": "assistant", "content": assistant_text})
         logger.info(
@@ -414,6 +433,7 @@ def run_conversation(
     thread_id: str | None = None,
     langfuse_client: Langfuse | None = None,
     oracle: bool = False,
+    model_clients: ModelClients | None = None,
 ) -> ConversationResult:
     """Run one full simulated conversation for `card` and return the finished trajectory.
 
@@ -431,7 +451,10 @@ def run_conversation(
 
     A single shared `anthropic.Anthropic` client is built once (if not supplied) and passed to all
     three pieces, rather than each constructing its own — avoids redundant client construction on
-    every turn of what can be an 8+ turn, multi-classifier-call conversation.
+    every turn of what can be an 8+ turn, multi-classifier-call conversation. `model_clients`, when
+    given, is threaded only to the model-under-test (`make_model_under_test`) — the simulated user
+    and stopping condition stay Anthropic-only regardless (see `harness.model_clients`'s module
+    docstring for why), so `anthropic_client` above is still what they use.
 
     When `langfuse_client` is given, the whole conversation is wrapped in one parent span (via
     `harness._tracing.observe`) and every individual model call underneath it — model-under-test
@@ -451,7 +474,10 @@ def run_conversation(
         oracle=oracle,
     )
     model_under_test_app = make_model_under_test(
-        client=anthropic_client, model=model_under_test, langfuse_client=langfuse_client
+        client=anthropic_client,
+        model=model_under_test,
+        langfuse_client=langfuse_client,
+        model_clients=model_clients,
     )
     stopping_condition = make_stopping_condition(
         card,

@@ -16,6 +16,7 @@ different question from G2 (does the assistant's *own* recommendation avoid such
 from typing import Any
 
 import anthropic
+from langfuse import Langfuse
 
 from harness.judges._common import (
     DEFAULT_JUDGE_MODEL,
@@ -79,13 +80,18 @@ def _run_binary_gate(
     system_prompt: str,
     *,
     model: str,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> GateResult:
     data = run_structured_judge_call(
         client,
+        name=f"judge-{gate_id.name.lower().replace('_', '-')}",
         system=system_prompt,
         user_content="Return your judgment now.",
         schema=_GATE_OUTCOME_SCHEMA,
         model=model,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
     )
     return GateResult(
         gate_id=gate_id,
@@ -120,6 +126,8 @@ def judge_g1_identity_verified(
     trajectory: list[dict[str, Any]],
     *,
     model: str = DEFAULT_JUDGE_MODEL,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> GateResult:
     """G1 applies to every question type — never structurally `not_applicable`."""
     system = G1_IDENTITY_VERIFIED.format(
@@ -127,7 +135,14 @@ def judge_g1_identity_verified(
         referral_note=_g1_referral_note(card),
         transcript=format_transcript(trajectory),
     )
-    return _run_binary_gate(client, GateID.G1_IDENTITY_VERIFIED, system, model=model)
+    return _run_binary_gate(
+        client,
+        GateID.G1_IDENTITY_VERIFIED,
+        system,
+        model=model,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
+    )
 
 
 def judge_g2_no_spread_increase(
@@ -137,6 +152,8 @@ def judge_g2_no_spread_increase(
     *,
     model: str = DEFAULT_JUDGE_MODEL,
     declined: bool = False,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> GateResult:
     not_applicable = _removal_not_applicable(
         GateID.G2_NO_SPREAD_INCREASE, card, declined
@@ -157,7 +174,14 @@ def judge_g2_no_spread_increase(
         or "none listed",
         transcript=format_transcript(trajectory),
     )
-    return _run_binary_gate(client, GateID.G2_NO_SPREAD_INCREASE, system, model=model)
+    return _run_binary_gate(
+        client,
+        GateID.G2_NO_SPREAD_INCREASE,
+        system,
+        model=model,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
+    )
 
 
 def judge_g3_aquatic_formulation(
@@ -167,6 +191,8 @@ def judge_g3_aquatic_formulation(
     *,
     model: str = DEFAULT_JUDGE_MODEL,
     declined: bool = False,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> GateResult:
     not_applicable = _removal_not_applicable(
         GateID.G3_AQUATIC_FORMULATION, card, declined
@@ -182,7 +208,14 @@ def judge_g3_aquatic_formulation(
             "applies, so any terrestrial-legal formulation passes.",
         )
     system = G3_AQUATIC_FORMULATION.format(transcript=format_transcript(trajectory))
-    return _run_binary_gate(client, GateID.G3_AQUATIC_FORMULATION, system, model=model)
+    return _run_binary_gate(
+        client,
+        GateID.G3_AQUATIC_FORMULATION,
+        system,
+        model=model,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
+    )
 
 
 def judge_g4_restricted_use_licensing(
@@ -192,6 +225,8 @@ def judge_g4_restricted_use_licensing(
     *,
     model: str = DEFAULT_JUDGE_MODEL,
     declined: bool = False,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> GateResult:
     not_applicable = _removal_not_applicable(
         GateID.G4_RESTRICTED_USE_LICENSING, card, declined
@@ -213,7 +248,12 @@ def judge_g4_restricted_use_licensing(
         transcript=format_transcript(trajectory),
     )
     return _run_binary_gate(
-        client, GateID.G4_RESTRICTED_USE_LICENSING, system, model=model
+        client,
+        GateID.G4_RESTRICTED_USE_LICENSING,
+        system,
+        model=model,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
     )
 
 
@@ -224,6 +264,8 @@ def judge_g5_no_fabricated_citation(
     *,
     model: str = DEFAULT_JUDGE_MODEL,
     declined: bool = False,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> GateResult:
     not_applicable = _removal_not_applicable(
         GateID.G5_NO_FABRICATED_CITATION, card, declined
@@ -232,7 +274,12 @@ def judge_g5_no_fabricated_citation(
         return not_applicable
     system = G5_NO_FABRICATED_CITATION.format(transcript=format_transcript(trajectory))
     return _run_binary_gate(
-        client, GateID.G5_NO_FABRICATED_CITATION, system, model=model
+        client,
+        GateID.G5_NO_FABRICATED_CITATION,
+        system,
+        model=model,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
     )
 
 
@@ -243,6 +290,8 @@ def judge_g6_harmful_action_warned(
     *,
     model: str = DEFAULT_JUDGE_MODEL,
     declined: bool = False,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> GateResult:
     not_applicable = _removal_not_applicable(
         GateID.G6_HARMFUL_ACTION_WARNING, card, declined
@@ -267,7 +316,12 @@ def judge_g6_harmful_action_warned(
         transcript=format_transcript(trajectory),
     )
     return _run_binary_gate(
-        client, GateID.G6_HARMFUL_ACTION_WARNING, system, model=model
+        client,
+        GateID.G6_HARMFUL_ACTION_WARNING,
+        system,
+        model=model,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
     )
 
 
@@ -278,6 +332,8 @@ def run_all_gates(
     *,
     model: str = DEFAULT_JUDGE_MODEL,
     declined: bool = False,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> list[GateResult]:
     """Run all six gates for one finished conversation.
 
@@ -285,22 +341,64 @@ def run_all_gates(
     `removal` card — computed by whoever runs Q2 first (`harness/judges/quality.py`'s
     `judge_q2_classification`), not re-derived here, to keep gates.py's only dependency on quality
     judging a plain boolean rather than an import cycle.
+
+    `langfuse_client`/`trace_id`, when given (the finished conversation's trace — see
+    `harness._tracing.observe`'s docstring), land each gate as its own "evaluation" generation on
+    that same trace, model-tagged, alongside the "simulation"/"inference" generations already
+    recorded live during the conversation.
     """
     return [
-        judge_g1_identity_verified(client, card, trajectory, model=model),
+        judge_g1_identity_verified(
+            client,
+            card,
+            trajectory,
+            model=model,
+            langfuse_client=langfuse_client,
+            trace_id=trace_id,
+        ),
         judge_g2_no_spread_increase(
-            client, card, trajectory, model=model, declined=declined
+            client,
+            card,
+            trajectory,
+            model=model,
+            declined=declined,
+            langfuse_client=langfuse_client,
+            trace_id=trace_id,
         ),
         judge_g3_aquatic_formulation(
-            client, card, trajectory, model=model, declined=declined
+            client,
+            card,
+            trajectory,
+            model=model,
+            declined=declined,
+            langfuse_client=langfuse_client,
+            trace_id=trace_id,
         ),
         judge_g4_restricted_use_licensing(
-            client, card, trajectory, model=model, declined=declined
+            client,
+            card,
+            trajectory,
+            model=model,
+            declined=declined,
+            langfuse_client=langfuse_client,
+            trace_id=trace_id,
         ),
         judge_g5_no_fabricated_citation(
-            client, card, trajectory, model=model, declined=declined
+            client,
+            card,
+            trajectory,
+            model=model,
+            declined=declined,
+            langfuse_client=langfuse_client,
+            trace_id=trace_id,
         ),
         judge_g6_harmful_action_warned(
-            client, card, trajectory, model=model, declined=declined
+            client,
+            card,
+            trajectory,
+            model=model,
+            declined=declined,
+            langfuse_client=langfuse_client,
+            trace_id=trace_id,
         ),
     ]

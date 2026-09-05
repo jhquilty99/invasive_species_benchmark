@@ -128,6 +128,18 @@ def build_oracle_opening_message(card: Card) -> str:
     return f"{card.opening_message} {facts}"
 
 
+_LOW_EFFORT_TONE_NOTE = (
+    "This person is typing a quick, low-effort reply on their phone, not composing a "
+    "polished message. Sentence fragments are normal and often more natural than a full "
+    "sentence — drop subjects and articles when a real person would. Don't add a "
+    "thank-you, praise, or acknowledgement of the assistant's question by default — only "
+    "include one if it happens to be the shortest way to answer, not as a matter of "
+    "politeness."
+)
+"""Shared low-effort/fragment-tone guidance for both branches of `generate_user_response`'s
+instruction — kept as one constant so the two branches' phrasing can't drift apart when tuned."""
+
+
 def generate_user_response(
     client: anthropic.Anthropic,
     assistant_message: str,
@@ -151,6 +163,9 @@ def generate_user_response(
             "own voice, as this person would actually say it. Do not mention, hint at, or invent "
             "any fact that is not listed below, even if it seems related or would be helpful — "
             "and do not volunteer information the assistant did not ask about.\n\n"
+            f"{_LOW_EFFORT_TONE_NOTE} For example: 'yeah kinda close to a ditch' rather than "
+            "'Yes, it is fairly close to a ditch'; 'couple inches thick maybe' rather than "
+            "'They are a couple of inches thick, maybe'.\n\n"
             f"Facts you may convey:\n{facts}"
         )
     else:
@@ -159,7 +174,9 @@ def generate_user_response(
             "invasive plant on their property. The assistant's latest message did not ask you "
             "for any new information you have available. Reply briefly and naturally without "
             "inventing or volunteering any new facts — for example, prompt the assistant to "
-            "continue or to give its recommendation."
+            "continue or to give its recommendation.\n\n"
+            f"{_LOW_EFFORT_TONE_NOTE} For example: 'ok so what do i do', 'just tell me what to "
+            "use', 'so is that bad or what' — not 'Thanks, please go ahead.'"
         )
 
     response = client.messages.create(

@@ -185,3 +185,46 @@ index, not a history of *why*.
   identification) — real scope growth, 54 → 56 cards / 84 → 87 runs per model, logged the same way as
   the 2026-09-04 oracle-arm growth (detail: `DECISION-LOG.md`, 2026-09-04 "RQ5 referral_expected schema
   and card-count growth").
+- 2026-09-04 — Diagnosed that the "Langfuse trace/span ingestion is broken" task from 2026-09-03 was a
+  misdiagnosis: per-turn traces are populated and browsable in the Langfuse UI (verified via direct
+  ClickHouse query); only dataset-run-item linkage is actually broken, narrowing (not closing) the
+  open task (detail: `DECISION-LOG.md`, 2026-09-04 "Corrected misdiagnosis: per-turn traces DO exist
+  in Langfuse; only dataset-run linkage is broken").
+- 2026-09-04 — Made the simulated user's mid-conversation turns (`harness/simulated_user.py`'s
+  `generate_user_response`) lazier and less polite, carrying `.claude/rules/card-voice.md`'s
+  lazy-user framing from turn-0 `opening_message` content into the LLM-generated turns 1+, which it
+  previously didn't cover (detail: `DECISION-LOG.md`, 2026-09-04 "Made the simulated user's
+  mid-conversation turns lazier/less polite").
+- 2026-09-04 — Closes the old "implement the R5 leakage check" task: built
+  `harness/leakage_check.py` (mechanical re-scan for slot values appearing before elicitation, no
+  judge call), plus a 3-vendor (Anthropic/OpenAI/Google) model-under-test dispatch
+  (`harness/model_clients.py`) and on-disk JSONL sweep persistence (`harness/results_store.py`,
+  `harness/sweep.py`) — all toward the SME-validation deliverable approved this session (detail:
+  `DECISION-LOG.md`, 2026-09-04 "Built R5 leakage check, multi-vendor model client, and sweep
+  persistence..."). Remaining SME-validation work (sample selection, xlsx export, read-back script)
+  stays open — see `SCRATCHPAD.md`.
+- 2026-09-04 — Ran the SME-validation dry-run sweep to completion (45/45 pairs, 0 leaked, 0 dupes) and
+  built + ran the stratified sample-selection logic (`harness/sampling.py`,
+  `harness/scripts/select_sme_sample.py`) (detail: `DECISION-LOG.md`, 2026-09-04 "Ran the SME-validation
+  dry-run sweep to completion; built and ran stratified sample selection"). Selection logic itself is
+  done; the specific 20-item output it produced against dry-run data is NOT send-ready (introduction
+  stratum still just 1 card) — re-run against an expanded corpus stays open, see `SCRATCHPAD.md`.
+- 2026-09-04 — Closed the "author more `introduction` cards" task: authored 6 more (`ligustrum-sinense`,
+  `wisteria-sinensis`, `wisteria-frutescens`, `pyrus-calleryana`, `prunus-angustifolia`,
+  `ailanthus-altissima`), bringing the `introduction` set from 1 to 7 cards and fully covering 3 of the
+  6 native/invasive pairs on both sides (detail: `DECISION-LOG.md`, 2026-09-04 "Authored 6 more
+  `introduction`-type cards, unblocking real SME-sample diversity"). All 21 cards load, ruff/mypy clean,
+  158/158 tests pass. Re-running the sweep + sample selection against this expanded corpus stays open,
+  see `SCRATCHPAD.md`.
+- 2026-09-04 — Ran the real (non-dry-run) sweep over the expanded 21-card corpus to completion: 63/63
+  `(card, model)` pairs, 0 R5 leakage flags. Survived an accidental mid-run interruption via existing
+  resume logic at no extra cost; fixed a reproducible judge-call failure by bumping
+  `run_structured_judge_call`'s default `max_tokens` 4096 -> 8192 (detail: `DECISION-LOG.md`, 2026-09-04
+  "Ran the real (non-dry-run) SME-validation sweep over the expanded 21-card corpus; bumped judge call
+  max_tokens 4096 -> 8192...").
+- 2026-09-04 — Closed the "re-run sample selection" task: re-ran `harness/scripts/select_sme_sample.py`
+  against the completed 21-card sweep and got a genuinely send-ready 20-item selection (7 removal / 7
+  identification / 6 introduction, introduction now spanning 4 distinct cards across all 3 models,
+  replacing the dry run's degenerate 1-card stratum) (detail: `DECISION-LOG.md`, 2026-09-04 "Ran
+  stratified sample selection against the real 21-card sweep: a genuinely send-ready 20-item SME
+  sample"). Still needs blinding + the xlsx export before it can go to SMEs — see `SCRATCHPAD.md`.

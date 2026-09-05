@@ -30,33 +30,29 @@ import logging
 from pathlib import Path
 
 import anthropic
-from langfuse import Langfuse
 
 from harness.cards import load_cards
 from harness.config import Settings
-from harness.conversation import DEFAULT_MODEL_UNDER_TEST, run_conversation
+from harness.conversation import (
+    DEFAULT_INFRA_MODEL,
+    DEFAULT_MODEL_UNDER_TEST,
+    run_conversation,
+)
+from harness.judges._common import DEFAULT_JUDGE_MODEL
 from harness.judges.gates import run_all_gates
 from harness.judges.prompts import JUDGE_PROMPT_VERSION
-from harness.judges.quality import QualityResults, run_all_quality
+from harness.judges.quality import run_all_quality
 from harness.langfuse_client import (
-    Q1_SCORE_NAME,
-    Q2_SCORE_NAME,
-    REFERRAL_CORRECT_SCORE_NAME,
-    attach_score,
+    attach_gate_scores,
+    attach_q1_score,
+    attach_quality_scores,
+    attach_referral_correct_score,
     ensure_score_configs,
     get_langfuse_client,
     get_or_create_dataset,
     link_trace_to_dataset_run,
     start_dataset_run,
     upsert_card_dataset_item,
-)
-from harness.models import (
-    Card,
-    GateID,
-    GateOutcome,
-    GateResult,
-    IntroductionQ2Label,
-    Q2Label,
 )
 from harness.scoring import (
     Q1Result,
@@ -65,7 +61,6 @@ from harness.scoring import (
     determine_stopping_turn,
     hit_max_turns_rate,
     is_declined,
-    is_referral_correct,
     premature_prescription_rate,
     q2_label_value,
 )
@@ -80,103 +75,6 @@ CARD_SET_VERSION = "wip-2026-09-03"
 """Work-in-progress tag, not the eventual frozen 56-card set's `"freeze-v1"`."""
 ARM = "standard"
 """Flip to `"oracle"` to run the RQ1 oracle-contrast arm instead. See module docstring."""
-
-
-def _attach_gate_scores(
-    langfuse_client: Langfuse, trace_id: str, gate_results: list[GateResult]
-) -> None:
-    for result in gate_results:
-        attach_score(
-            langfuse_client,
-            name=result.gate_id.name,
-            value=result.outcome.value,
-            comment=result.comment,
-            trace_id=trace_id,
-            data_type="CATEGORICAL",
-        )
-
-
-def _attach_quality_scores(
-    langfuse_client: Langfuse, trace_id: str, quality_results: QualityResults
-) -> None:
-    attach_score(
-        langfuse_client,
-        name=Q2_SCORE_NAME,
-        value=q2_label_value(quality_results.q2.label),
-        comment=quality_results.q2.comment,
-        trace_id=trace_id,
-        data_type="CATEGORICAL",
-    )
-    for score in (
-        quality_results.q3,
-        quality_results.q4,
-        quality_results.q5,
-        quality_results.q6,
-    ):
-        if score.score == "not_applicable":
-            logger.info(
-                "%s not_applicable; a numeric score config can't hold that value, skipping "
-                "Langfuse attach for this dimension on this card.",
-                score.dimension.value,
-            )
-            continue
-        attach_score(
-            langfuse_client,
-            name=score.dimension.name,
-            value=score.score,
-            comment=score.comment,
-            trace_id=trace_id,
-            data_type="NUMERIC",
-        )
-
-
-def _attach_q1_score(
-    langfuse_client: Langfuse, trace_id: str, q1_result: Q1Result
-) -> None:
-    attach_score(
-        langfuse_client,
-        name=Q1_SCORE_NAME,
-        value="pass" if q1_result.all_decision_relevant_elicited else "fail",
-        comment=(
-            f"Elicited before terminal turn: {q1_result.elicited_decision_relevant_slots}. "
-            f"Missing: {q1_result.missing_decision_relevant_slots}. "
-            f"Distractor slots asked anyway: {q1_result.distractor_slots_asked}."
-        ),
-        trace_id=trace_id,
-        data_type="CATEGORICAL",
-    )
-
-
-def _g1_outcome(gate_results: list[GateResult]) -> GateOutcome:
-    (g1,) = (r for r in gate_results if r.gate_id == GateID.G1_IDENTITY_VERIFIED)
-    return g1.outcome
-
-
-def _attach_referral_correct_score(
-    langfuse_client: Langfuse,
-    trace_id: str,
-    card: Card,
-    *,
-    q2_label: Q2Label | IntroductionQ2Label | str,
-    gate_results: list[GateResult],
-) -> None:
-    """RQ5: only attached when `card.referral_expected` is `True` — `is_referral_correct` returns
-    `None` otherwise, and `None` isn't a value this score's config can hold, same reasoning as the
-    not_applicable-quality-score skip in `_attach_quality_scores`."""
-    g1_outcome = _g1_outcome(gate_results)
-    referral_correct = is_referral_correct(
-        card, q2_label=q2_label, g1_outcome=g1_outcome
-    )
-    if referral_correct is None:
-        return
-    attach_score(
-        langfuse_client,
-        name=REFERRAL_CORRECT_SCORE_NAME,
-        value="pass" if referral_correct else "fail",
-        comment=f"referral_expected card; q2_label={q2_label!r}, g1_outcome={g1_outcome.value!r}.",
-        trace_id=trace_id,
-        data_type="CATEGORICAL",
-    )
 
 
 def main() -> None:
@@ -197,6 +95,10 @@ def main() -> None:
         JUDGE_PROMPT_VERSION,
         card_set_version=CARD_SET_VERSION,
         arm=ARM,
+        simulated_user_classifier_model=DEFAULT_INFRA_MODEL,
+        simulated_user_responder_model=DEFAULT_INFRA_MODEL,
+        stopping_condition_model=DEFAULT_INFRA_MODEL,
+        judge_model=DEFAULT_JUDGE_MODEL,
     )
 
     all_turn_metrics: list[TurnMetrics] = []
@@ -219,10 +121,21 @@ def main() -> None:
         trajectory = conversation.trajectory
         trace_id = conversation.trace_id
 
-        quality_results = run_all_quality(anthropic_client, card, trajectory)
+        quality_results = run_all_quality(
+            anthropic_client,
+            card,
+            trajectory,
+            langfuse_client=langfuse_client,
+            trace_id=trace_id,
+        )
         declined = is_declined(card, quality_results.q2.label)
         gate_results = run_all_gates(
-            anthropic_client, card, trajectory, declined=declined
+            anthropic_client,
+            card,
+            trajectory,
+            declined=declined,
+            langfuse_client=langfuse_client,
+            trace_id=trace_id,
         )
 
         turn_metrics = determine_stopping_turn(anthropic_client, card, trajectory)
@@ -234,10 +147,10 @@ def main() -> None:
             link_trace_to_dataset_run(
                 langfuse_client, run, dataset_item_id=card.card_id, trace_id=trace_id
             )
-            _attach_gate_scores(langfuse_client, trace_id, gate_results)
-            _attach_quality_scores(langfuse_client, trace_id, quality_results)
-            _attach_q1_score(langfuse_client, trace_id, q1_result)
-            _attach_referral_correct_score(
+            attach_gate_scores(langfuse_client, trace_id, gate_results)
+            attach_quality_scores(langfuse_client, trace_id, quality_results)
+            attach_q1_score(langfuse_client, trace_id, q1_result)
+            attach_referral_correct_score(
                 langfuse_client,
                 trace_id,
                 card,
