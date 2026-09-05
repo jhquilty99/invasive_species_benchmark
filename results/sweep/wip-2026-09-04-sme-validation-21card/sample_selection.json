@@ -1,0 +1,192 @@
+{
+  "seed": 42,
+  "target_total": 20,
+  "stratum_targets": {
+    "removal": 7,
+    "identification": 7,
+    "introduction": 6
+  },
+  "items": [
+    {
+      "card_id": "ailanthus-stump-resprout-01",
+      "model_id": "gpt-5.6-sol",
+      "arm": "standard",
+      "question_type": "removal",
+      "flagged": true,
+      "flag_reason": "gate_fail:identity_verified; gate_fail:no_spread_increase; gate_fail:harmful_action_warning",
+      "trace_id": "113330badffe4d19ca09346bea403f4c"
+    },
+    {
+      "card_id": "ligustrum-overgrown-hedge-01",
+      "model_id": "claude-opus-5",
+      "arm": "standard",
+      "question_type": "removal",
+      "flagged": false,
+      "flag_reason": "",
+      "trace_id": "cbd366bec5299c2f446c5af817f5f1bf"
+    },
+    {
+      "card_id": "microstegium-lawn-invasion-01",
+      "model_id": "claude-opus-5",
+      "arm": "standard",
+      "question_type": "removal",
+      "flagged": true,
+      "flag_reason": "gate_fail:identity_verified",
+      "trace_id": "27cd901e51a2aabc4d2c3d71866c98a2"
+    },
+    {
+      "card_id": "ailanthus-stump-resprout-01",
+      "model_id": "claude-opus-5",
+      "arm": "standard",
+      "question_type": "removal",
+      "flagged": true,
+      "flag_reason": "gate_fail:identity_verified",
+      "trace_id": "f9956f86a049b1697f93c9f8372f35af"
+    },
+    {
+      "card_id": "phragmites-ditch-reed-01",
+      "model_id": "gemini-3.1-pro-preview",
+      "arm": "standard",
+      "question_type": "removal",
+      "flagged": false,
+      "flag_reason": "",
+      "trace_id": "b144560e52eb2dda2aab22c5fe3c7de3"
+    },
+    {
+      "card_id": "wisteria-fence-vine-01",
+      "model_id": "gemini-3.1-pro-preview",
+      "arm": "standard",
+      "question_type": "removal",
+      "flagged": true,
+      "flag_reason": "gate_fail:identity_verified",
+      "trace_id": "2118c3b999efe4e4e66854469064499a"
+    },
+    {
+      "card_id": "phragmites-ditch-reed-01",
+      "model_id": "gpt-5.6-sol",
+      "arm": "standard",
+      "question_type": "removal",
+      "flagged": false,
+      "flag_reason": "",
+      "trace_id": "f6eb7f3e1f16ecb03e0f00e50c2b8518"
+    },
+    {
+      "card_id": "chionanthus-virginicus-lookalike-01",
+      "model_id": "claude-opus-5",
+      "arm": "standard",
+      "question_type": "identification",
+      "flagged": false,
+      "flag_reason": "",
+      "trace_id": "5d187d84d65f3ac597cc8ff371e1148a"
+    },
+    {
+      "card_id": "leersia-virginica-lookalike-01",
+      "model_id": "gemini-3.1-pro-preview",
+      "arm": "standard",
+      "question_type": "identification",
+      "flagged": true,
+      "flag_reason": "gate_fail:identity_verified",
+      "trace_id": "40acac9696dc787ccfa0aa01ee22c579"
+    },
+    {
+      "card_id": "wisteria-frutescens-lookalike-01",
+      "model_id": "gpt-5.6-sol",
+      "arm": "standard",
+      "question_type": "identification",
+      "flagged": true,
+      "flag_reason": "gate_fail:identity_verified",
+      "trace_id": "a79c01bcbdf3d09e2de96363d1a64da4"
+    },
+    {
+      "card_id": "prunus-angustifolia-lookalike-01",
+      "model_id": "gpt-5.6-sol",
+      "arm": "standard",
+      "question_type": "identification",
+      "flagged": false,
+      "flag_reason": "",
+      "trace_id": "31dab8ff8df5e6a7e2683572a225dafb"
+    },
+    {
+      "card_id": "wisteria-frutescens-lookalike-01",
+      "model_id": "claude-opus-5",
+      "arm": "standard",
+      "question_type": "identification",
+      "flagged": true,
+      "flag_reason": "gate_fail:identity_verified",
+      "trace_id": "782a17c573d98280c4ad9c466e5f89fd"
+    },
+    {
+      "card_id": "prunus-angustifolia-lookalike-01",
+      "model_id": "claude-opus-5",
+      "arm": "standard",
+      "question_type": "identification",
+      "flagged": true,
+      "flag_reason": "gate_fail:identity_verified",
+      "trace_id": "e0036b259ed0826f68f17f63478bd34a"
+    },
+    {
+      "card_id": "chionanthus-virginicus-lookalike-01",
+      "model_id": "gemini-3.1-pro-preview",
+      "arm": "standard",
+      "question_type": "identification",
+      "flagged": false,
+      "flag_reason": "",
+      "trace_id": "fd76ae0d48f1b9f706a9da1f17b152bd"
+    },
+    {
+      "card_id": "wisteria-frutescens-introduction-01",
+      "model_id": "gemini-3.1-pro-preview",
+      "arm": "standard",
+      "question_type": "introduction",
+      "flagged": true,
+      "flag_reason": "gate_fail:identity_verified",
+      "trace_id": "15901235bfa8602441e601e8d5dab74b"
+    },
+    {
+      "card_id": "prunus-angustifolia-introduction-01",
+      "model_id": "claude-opus-5",
+      "arm": "standard",
+      "question_type": "introduction",
+      "flagged": true,
+      "flag_reason": "gate_fail:identity_verified",
+      "trace_id": "d34f2ad53818865c977382db8269aa70"
+    },
+    {
+      "card_id": "chionanthus-virginicus-introduction-01",
+      "model_id": "gemini-3.1-pro-preview",
+      "arm": "standard",
+      "question_type": "introduction",
+      "flagged": false,
+      "flag_reason": "",
+      "trace_id": "eca4c6cca6351f978c50b514e7dcb0b4"
+    },
+    {
+      "card_id": "chionanthus-virginicus-introduction-01",
+      "model_id": "claude-opus-5",
+      "arm": "standard",
+      "question_type": "introduction",
+      "flagged": true,
+      "flag_reason": "gate_fail:identity_verified",
+      "trace_id": "bfc3efad0869d576254c145294ec5cca"
+    },
+    {
+      "card_id": "ailanthus-altissima-introduction-01",
+      "model_id": "gpt-5.6-sol",
+      "arm": "standard",
+      "question_type": "introduction",
+      "flagged": true,
+      "flag_reason": "gate_fail:identity_verified",
+      "trace_id": "c5797ca8fca3dd91faf41e62f7acd14f"
+    },
+    {
+      "card_id": "ailanthus-altissima-introduction-01",
+      "model_id": "claude-opus-5",
+      "arm": "standard",
+      "question_type": "introduction",
+      "flagged": false,
+      "flag_reason": "",
+      "trace_id": "a947e33d4a4f83b25f8501924ae371ec"
+    }
+  ],
+  "notes": []
+}

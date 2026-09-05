@@ -32,7 +32,8 @@ from pathlib import Path
 
 from langfuse import Langfuse
 
-from harness.conversation import run_conversation
+from harness.conversation import DEFAULT_INFRA_MODEL, run_conversation
+from harness.judges._common import DEFAULT_JUDGE_MODEL
 from harness.judges.gates import run_all_gates
 from harness.judges.prompts import JUDGE_PROMPT_VERSION
 from harness.judges.quality import run_all_quality
@@ -44,6 +45,7 @@ from harness.langfuse_client import (
     attach_referral_correct_score,
     g1_outcome,
     link_trace_to_dataset_run,
+    start_dataset_run,
 )
 from harness.leakage_check import check_leakage
 from harness.model_clients import ModelClients
@@ -91,9 +93,22 @@ def _run_one(
     trajectory = conversation.trajectory
     trace_id = conversation.trace_id
 
-    quality_results = run_all_quality(clients.anthropic, card, trajectory)
+    quality_results = run_all_quality(
+        clients.anthropic,
+        card,
+        trajectory,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
+    )
     declined = is_declined(card, quality_results.q2.label)
-    gate_results = run_all_gates(clients.anthropic, card, trajectory, declined=declined)
+    gate_results = run_all_gates(
+        clients.anthropic,
+        card,
+        trajectory,
+        declined=declined,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
+    )
 
     turn_metrics = determine_stopping_turn(clients.anthropic, card, trajectory)
     q1_result = compute_q1(clients.anthropic, card, trajectory, turn_metrics)
@@ -153,11 +168,14 @@ def run_sweep(
     card_set_version: str,
     results_path: Path,
     langfuse_client: Langfuse | None = None,
-    dataset_run: DatasetRunHandle | None = None,
     max_workers: int = 4,
 ) -> list[SweepResult]:
     """Run every (card, model) pair for `arm`, skipping any already present in `results_path` (by
     `(card_id, model_id, arm)`), appending each finished result as it completes.
+
+    Builds one Langfuse dataset run per `model_id` internally (`start_dataset_run`, matching PRD §6's
+    data model — "one dataset run per (model_id, prompt_version)", not one run shared across several
+    models mixed together), when `langfuse_client` is given.
 
     `max_workers=4`: conservative default against 3 vendors' rate limits — a sweep across a few
     dozen cards × 2-3 models finishes in reasonable wall time well under most providers' default
@@ -166,10 +184,22 @@ def run_sweep(
 
     Returns every result now in `results_path` for this `arm` (both freshly run and already-present),
     not just the newly-run ones — callers doing a resumed sweep want the full set to hand off
-    downstream (a stratified sample selection, not yet built — see `SCRATCHPAD.md`), not just this
-    call's delta.
+    downstream (`harness.sampling.select_sme_sample`), not just this call's delta.
     """
     cards = list(cards)
+    dataset_runs: dict[str, DatasetRunHandle] = {
+        model_id: start_dataset_run(
+            model_id,
+            JUDGE_PROMPT_VERSION,
+            card_set_version=card_set_version,
+            arm=arm,
+            simulated_user_classifier_model=DEFAULT_INFRA_MODEL,
+            simulated_user_responder_model=DEFAULT_INFRA_MODEL,
+            stopping_condition_model=DEFAULT_INFRA_MODEL,
+            judge_model=DEFAULT_JUDGE_MODEL,
+        )
+        for model_id in model_ids
+    }
     already_done = {key for key in existing_keys(results_path) if key[2] == arm}
     pairs = [
         (card, model_id)
@@ -196,7 +226,7 @@ def run_sweep(
                 clients=clients,
                 card_set_version=card_set_version,
                 langfuse_client=langfuse_client,
-                dataset_run=dataset_run,
+                dataset_run=dataset_runs[model_id],
             ): (card.card_id, model_id)
             for card, model_id in pairs
         }

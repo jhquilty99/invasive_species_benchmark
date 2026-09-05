@@ -317,6 +317,10 @@ def start_dataset_run(
     *,
     card_set_version: str | None = None,
     arm: str = "standard",
+    simulated_user_classifier_model: str | None = None,
+    simulated_user_responder_model: str | None = None,
+    stopping_condition_model: str | None = None,
+    judge_model: str | None = None,
 ) -> DatasetRunHandle:
     """Build the handle for a (model_id, prompt_version[, arm]) dataset run.
 
@@ -329,6 +333,16 @@ def start_dataset_run(
     passes `"oracle"`) is appended to `run_name` so the two arms land as distinct Langfuse dataset
     runs instead of colliding under one name, and is always included in `metadata` regardless of
     value so a run's arm is checkable without parsing `run_name`.
+
+    `model_id` is specifically the model *under test* (the "inference" role) —
+    `simulated_user_classifier_model`, `simulated_user_responder_model`, `stopping_condition_model`,
+    and `judge_model` name the other three roles this benchmark's own infrastructure pins a model to
+    ("simulation", the live stopping-condition classifier, and "evaluation" respectively), so a run's
+    full model lineup is readable from this one metadata dict without having to open individual
+    generations. All four are optional and omitted from `metadata` when not given (same `None`-skip
+    convention as `card_set_version`) — every current call site passes its actual defaults/overrides
+    explicitly rather than leaving them out, but a caller that only cares about tracking the
+    model-under-test can still omit them.
     """
     metadata: dict[str, Any] = {
         "model_id": model_id,
@@ -337,6 +351,14 @@ def start_dataset_run(
     }
     if card_set_version is not None:
         metadata["card_set_version"] = card_set_version
+    if simulated_user_classifier_model is not None:
+        metadata["simulated_user_classifier_model"] = simulated_user_classifier_model
+    if simulated_user_responder_model is not None:
+        metadata["simulated_user_responder_model"] = simulated_user_responder_model
+    if stopping_condition_model is not None:
+        metadata["stopping_condition_model"] = stopping_condition_model
+    if judge_model is not None:
+        metadata["judge_model"] = judge_model
     run_name = f"{model_id}__{prompt_version}"
     if arm != "standard":
         run_name = f"{run_name}__{arm}"

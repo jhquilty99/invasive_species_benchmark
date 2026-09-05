@@ -24,7 +24,12 @@ import anthropic
 
 from harness.cards import load_cards
 from harness.config import Settings
-from harness.conversation import DEFAULT_MODEL_UNDER_TEST, run_conversation
+from harness.conversation import (
+    DEFAULT_INFRA_MODEL,
+    DEFAULT_MODEL_UNDER_TEST,
+    run_conversation,
+)
+from harness.judges._common import DEFAULT_JUDGE_MODEL
 from harness.judges.gates import run_all_gates
 from harness.judges.prompts import JUDGE_PROMPT_VERSION
 from harness.judges.quality import run_all_quality
@@ -73,6 +78,10 @@ def main() -> None:
             JUDGE_PROMPT_VERSION,
             card_set_version=CARD_SET_VERSION,
             arm=f"repeat-pilot-{rep}",
+            simulated_user_classifier_model=DEFAULT_INFRA_MODEL,
+            simulated_user_responder_model=DEFAULT_INFRA_MODEL,
+            stopping_condition_model=DEFAULT_INFRA_MODEL,
+            judge_model=DEFAULT_JUDGE_MODEL,
         )
         for rep in range(REPS)
     ]
@@ -99,10 +108,21 @@ def main() -> None:
             trajectory = conversation.trajectory
             trace_id = conversation.trace_id
 
-            quality_results = run_all_quality(anthropic_client, card, trajectory)
+            quality_results = run_all_quality(
+                anthropic_client,
+                card,
+                trajectory,
+                langfuse_client=langfuse_client,
+                trace_id=trace_id,
+            )
             declined = is_declined(card, quality_results.q2.label)
             gate_results = run_all_gates(
-                anthropic_client, card, trajectory, declined=declined
+                anthropic_client,
+                card,
+                trajectory,
+                declined=declined,
+                langfuse_client=langfuse_client,
+                trace_id=trace_id,
             )
 
             for result in gate_results:

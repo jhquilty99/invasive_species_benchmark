@@ -398,6 +398,33 @@ def test_start_dataset_run_omits_card_set_version_when_not_given() -> None:
     assert run.run_name == "gpt-x__v2"
 
 
+def test_start_dataset_run_records_every_model_role_when_given() -> None:
+    """R4 reproducibility + this session's Langfuse-metadata task: `model_id` alone only labels the
+    model-under-test ("inference"); the other three roles this benchmark's own infra pins a model to
+    (simulated-user classifier/responder = "simulation", stopping-condition classifier, judge =
+    "evaluation") should be just as readable from one run's metadata."""
+    run = start_dataset_run(
+        "claude-opus-5",
+        "v1",
+        simulated_user_classifier_model="claude-haiku-4-5",
+        simulated_user_responder_model="claude-haiku-4-5",
+        stopping_condition_model="claude-haiku-4-5",
+        judge_model="claude-sonnet-5",
+    )
+    assert run.metadata["simulated_user_classifier_model"] == "claude-haiku-4-5"
+    assert run.metadata["simulated_user_responder_model"] == "claude-haiku-4-5"
+    assert run.metadata["stopping_condition_model"] == "claude-haiku-4-5"
+    assert run.metadata["judge_model"] == "claude-sonnet-5"
+
+
+def test_start_dataset_run_omits_model_role_fields_when_not_given() -> None:
+    run = start_dataset_run("model-a", "v1")
+    assert "simulated_user_classifier_model" not in run.metadata
+    assert "simulated_user_responder_model" not in run.metadata
+    assert "stopping_condition_model" not in run.metadata
+    assert "judge_model" not in run.metadata
+
+
 # --- dataset runs: oracle-contrast arm (RQ1) --------------------------------------------------
 
 

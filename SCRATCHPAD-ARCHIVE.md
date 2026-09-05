@@ -203,6 +203,12 @@ index, not a history of *why*.
   `DECISION-LOG.md`, 2026-09-04 "Built R5 leakage check, multi-vendor model client, and sweep
   persistence..."). Remaining SME-validation work (sample selection, xlsx export, read-back script)
   stays open — see `SCRATCHPAD.md`.
+- 2026-09-04 — Ran the SME-validation dry-run sweep to completion (45/45 pairs, 0 leaked, 0 dupes) and
+  built + ran the stratified sample-selection logic (`harness/sampling.py`,
+  `harness/scripts/select_sme_sample.py`) (detail: `DECISION-LOG.md`, 2026-09-04 "Ran the SME-validation
+  dry-run sweep to completion; built and ran stratified sample selection"). Selection logic itself is
+  done; the specific 20-item output it produced against dry-run data is NOT send-ready (introduction
+  stratum still just 1 card) — re-run against an expanded corpus stays open, see `SCRATCHPAD.md`.
 - 2026-09-04 — Closed the "author more `introduction` cards" task: authored 6 more (`ligustrum-sinense`,
   `wisteria-sinensis`, `wisteria-frutescens`, `pyrus-calleryana`, `prunus-angustifolia`,
   `ailanthus-altissima`), bringing the `introduction` set from 1 to 7 cards and fully covering 3 of the
@@ -210,3 +216,15 @@ index, not a history of *why*.
   `introduction`-type cards, unblocking real SME-sample diversity"). All 21 cards load, ruff/mypy clean,
   158/158 tests pass. Re-running the sweep + sample selection against this expanded corpus stays open,
   see `SCRATCHPAD.md`.
+- 2026-09-04 — Ran the real (non-dry-run) sweep over the expanded 21-card corpus to completion: 63/63
+  `(card, model)` pairs, 0 R5 leakage flags. Survived an accidental mid-run interruption via existing
+  resume logic at no extra cost; fixed a reproducible judge-call failure by bumping
+  `run_structured_judge_call`'s default `max_tokens` 4096 -> 8192 (detail: `DECISION-LOG.md`, 2026-09-04
+  "Ran the real (non-dry-run) SME-validation sweep over the expanded 21-card corpus; bumped judge call
+  max_tokens 4096 -> 8192...").
+- 2026-09-04 — Closed the "re-run sample selection" task: re-ran `harness/scripts/select_sme_sample.py`
+  against the completed 21-card sweep and got a genuinely send-ready 20-item selection (7 removal / 7
+  identification / 6 introduction, introduction now spanning 4 distinct cards across all 3 models,
+  replacing the dry run's degenerate 1-card stratum) (detail: `DECISION-LOG.md`, 2026-09-04 "Ran
+  stratified sample selection against the real 21-card sweep: a genuinely send-ready 20-item SME
+  sample"). Still needs blinding + the xlsx export before it can go to SMEs — see `SCRATCHPAD.md`.

@@ -2071,6 +2071,116 @@ vs-Pro naming ambiguity independently — flagged for the user rather than guess
 **Rule Updated:** N — not clearly a recurring pattern yet (first time this project has needed to verify
 a model ID against a live account rather than docs alone).
 **Status:** Active
+
+## 2026-09-04 — Traced the gate/quality judges into Langfuse and added per-role model metadata to dataset runs
+
+**Decision:** Closed two gaps in Langfuse's model-attribution coverage, per the user's request that it be
+"clear which data-pinned model ran simulation, inference, evaluation, and so on":
+
+1. **Evaluation had zero Langfuse footprint.** `harness/conversation.py`/`harness/simulated_user.py`
+   already wrap every live conversation-turn model call (model-under-test = "inference", slot-classifier/
+   responder = "simulation", stopping-condition) in `harness._tracing.observe(...)`, so those show up as
+   model-tagged generations. The G1-G6/Q2-Q6 judges (`harness/judges/gates.py`, `harness/judges/
+   quality.py`) run *after* that conversation's span has already closed and never called `observe` at
+   all — no generation, no model tag, nothing in Langfuse beyond the final score's text comment. Added
+   `trace_id` support to `observe` (passes Langfuse's `trace_context={"trace_id": ...}` so a new
+   observation attaches to an already-finished trace instead of starting an unrelated one), wrapped the
+   shared `run_structured_judge_call` (`harness/judges/_common.py`) in it — the one choke point all
+   eleven gate/quality judge calls pass through — and threaded `langfuse_client`/`trace_id` down through
+   every judge function and `run_all_gates`/`run_all_quality`, then through their three callers
+   (`harness/sweep.py`, `harness/scripts/run_validation.py`, `harness/scripts/run_repeat_pilot.py`).
+2. **No single place showed every pinned model by role.** Even with (1), reading "what model ran what"
+   meant opening individual generations one at a time. Extended `start_dataset_run`
+   (`harness/langfuse_client.py`) with four new optional fields — `simulated_user_classifier_model`,
+   `simulated_user_responder_model`, `stopping_condition_model`, `judge_model` — attached to `metadata`
+   (same `None`-skip convention `card_set_version` already used) alongside the existing `model_id`
+   (renamed in spirit, not in key, to mean specifically "the model under test / inference role" — see
+   its docstring). All three run-starting scripts now pass their actual constants explicitly — all of
+   `simulated_user_classifier_model`/`simulated_user_responder_model`/`stopping_condition_model` from
+   `conversation.DEFAULT_INFRA_MODEL` (the constant `run_conversation` itself defaults those three
+   roles to when a caller doesn't override them — not `simulated_user.DEFAULT_MODEL`, a separately-
+   defined constant that only governs a *direct* call to `simulated_user.py`'s functions bypassing
+   `run_conversation`, as `harness/leakage_check.py`'s R5 rescan does; see Trade-offs) and `judge_model`
+   from `judges._common.DEFAULT_JUDGE_MODEL` — so every dataset run and every trace/dataset-run-item
+   linked to it carries the full model lineup in one metadata dict, not just the swept model-under-test.
+**Rationale:** (1) is the real, structural gap — "evaluation" is the literal word the user used, and it
+had strictly less Langfuse visibility than simulation/inference before this change (no cost/latency
+tracking, no way to tell which judge model produced a given score from Langfuse alone). (2) is what makes
+the answer to "which model ran X" a one-glance fact instead of a five-click investigation, and costs
+nothing structurally since `start_dataset_run` already had the identical `None`-skip pattern for
+`card_set_version` to extend.
+**Trade-offs:** Deliberately did NOT add the same per-call `observe` tracing to `harness/scoring.py`'s
+`determine_stopping_turn`/`compute_q1` re-derivation calls or `harness/leakage_check.py`'s R5 rescan —
+they're re-classification passes over the same conversation, not a distinct role the user's ask was
+pointing at, so adding a generation per pass would bloat every trace for no new attribution info.
+`determine_stopping_turn`/`compute_q1` default to `harness.conversation.DEFAULT_INFRA_MODEL` — the
+exact constant the new `stopping_condition_model` metadata field is sourced from, so that
+correspondence is precise. `leakage_check.py`'s rescan defaults to a *different*, separately-defined
+constant (`harness.simulated_user.DEFAULT_MODEL`) that happens to hold the same literal value today —
+not wired to any of the new metadata fields, so it's a known gap, not something this entry's "every
+role is now attributable" claim covers; flagged as an open `SCRATCHPAD.md` task (the
+`DEFAULT_MODEL`/`DEFAULT_INFRA_MODEL` drift-risk item) rather than silently overclaimed — see
+`.claude/docs/scratchpad-discipline.md`'s "never cite by task number" rule for why this doesn't name a
+number. Deliberately did NOT rename the existing `model_id` metadata key (e.g. to
+`model_under_test`) despite it being the least self-explanatory of the five keys post-change — this repo
+is pre-freeze/pre-dashboard, but an unforced rename still risked breaking anything already built against
+that key name for no functional gain; documented the ambiguity in `start_dataset_run`'s docstring
+instead. Deliberately did NOT touch `harness/models.py`'s `RunMetadata` (the on-disk `SweepResult`
+persistence model) — the user's ask was Langfuse-specific ("make sure Langfuse captures..."), and
+`RunMetadata` is a separate persistence surface from Langfuse's dataset-run metadata; extending it is a
+free-standing decision if/when on-disk results need the same role breakdown.
+**Rule Updated:** N — flag for retro. If a third "model call with zero Langfuse footprint" turns up
+somewhere in `harness/` (the R5/scoring re-derivation calls flagged above are the closest existing
+candidates), the pattern worth a rule is "every LLM call in this repo gets wrapped in `observe`, no
+exceptions" rather than deciding per-module whether it's worth the trace noise.
+**Status:** Active
+
+## 2026-09-04 — Ran the SME-validation dry-run sweep to completion; built and ran stratified sample selection
+
+**Decision:** Resumed and finished `harness/scripts/run_sweep.py` against the existing 15-card corpus
+× 3 models × standard arm (blocked earlier this session by an Anthropic Console spend-limit cap, not
+an account-balance issue — raising the limit, not funding the account, is what unblocked it): 45/45
+`(card, model)` pairs complete, 0 flagged for R5 leakage, 0 duplicate keys. Built
+`harness/sampling.py` + `harness/scripts/select_sme_sample.py` (task 4's engineering) and ran it
+against that dry-run output: stratifies by `question_type` into `DEFAULT_STRATUM_TARGETS` (7 removal /
+7 identification / 6 introduction = 20), oversamples `flagged` results (any gate `fail`, or Q2
+`harmful`/`harmful_to_encourage`) toward a 60/40 flagged/unflagged split within each stratum (capped by
+availability), round-robins across models so no one model dominates a stratum's picks, and — new,
+not in the original plan text — explicitly redistributes any stratum's shortfall to strata with spare
+capacity so the overall total still hits `target_total` where possible, logging every redistribution
+and every shortfall it couldn't cover in `SampleSelection.notes` rather than silently returning fewer
+than 20. Deterministic given the same seed (`random.Random`, default `seed=42`).
+
+Ran it: got exactly 20/20 by redistributing introduction's shortfall (only 3 of the wanted 6 available
+— just 1 introduction card exists today, so its 3 model-results are the whole stratum) into removal
+(+2) and identification (+1). All 11 "flagged" picks in this run were G1 (identity_verified) gate
+failures specifically — spot-checked several judge comments directly (not just the score) and they're
+genuine misses (model prescribes/identifies without ever naming the species or asking a distinguishing
+question), consistent with the 2026-09-03 13-card run's 69% G1 fail headline, not a judge or harness
+artifact.
+
+**Rationale:** The user asked directly "what are the 20 samples I would send to reviewers" — answering
+that for real (not just "the code exists") required actually finishing the blocked sweep and building
+the selection logic the plan had scoped as task 4, not deferring either. Redistributing stratum
+shortfall (rather than either padding with ineligible items or just returning fewer than
+`target_total`) keeps the total honest while still being explicit that introduction's coverage is thin
+— the notes field exists specifically so this isn't silently absorbed into a "20/20, all good" summary
+when it structurally isn't yet.
+
+**Trade-offs:** Deliberately did NOT treat this run's 20-item output as send-ready. Task 3 (author
+~5-6 more `introduction` cards) is still open, and until it lands, this sample's introduction stratum
+is one card scored by 3 models rather than any real per-card diversity — sending this to SMEs now
+would burn the one-shot ask on a materially thinner introduction stratum than the plan intended. The
+right sequence is still: land task 3, re-run `run_sweep.py` against the expanded corpus (a new
+`CARD_SET_VERSION`, not this dry-run tag), then re-run `select_sme_sample.py` against that output.
+Also did NOT build the xlsx export (task 5) or blinding step in this pass — `select_sme_sample.py`'s
+own docstring says explicitly that model identity is real, not yet coded to Model A/B/C, because
+blinding is that script's job, not this one's.
+**Rule Updated:** N — flag for retro if a future stratum ever needs a *third* fallback beyond
+redistribution (e.g. every stratum simultaneously short), which isn't handled today (logs and returns
+short rather than doing anything more clever).
+**Status:** Active
+
 ## 2026-09-04 — Authored 6 more `introduction`-type cards, unblocking real SME-sample diversity
 
 **Decision:** Authored `cards/ligustrum-sinense-introduction-01.json`,
@@ -2130,4 +2240,119 @@ content didn't agree at every step.
 species to prioritize under a partial-matrix budget; "prioritize completing pairs over spreading thin
 across singletons" is the heuristic used here but hasn't recurred enough times yet to promote to a rule
 file.
+**Status:** Active
+
+## 2026-09-04 — Ran the real (non-dry-run) SME-validation sweep over the expanded 21-card corpus; bumped judge call max_tokens 4096 -> 8192 after a reproducible empty-response failure
+
+**Decision:** Ran `harness/scripts/run_sweep.py` under the new `wip-2026-09-04-sme-validation-21card`
+tag (distinct from the completed 15-card `wip-2026-09-04-sme-dry-run`) across all 21 cards × 3 models
+× standard arm. The run was interrupted once (the machine slept mid-sweep, killing the background
+process) at 29/63 pairs complete; `run_sweep`'s existing by-`(card_id, model_id, arm)` resume logic
+picked up cleanly with no wasted spend on the 29 already-done pairs. The resumed run then hit a second,
+reproducible failure: `judge_q4_regulatory_grounding` for `phragmites-public-water-referral-01` ×
+`claude-opus-5` raised `json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)` inside
+`harness._structured_calls.run_structured_call` — `first_text_block` found no `text`-type content
+block at all (only a `thinking` block), meaning `claude-sonnet-5`'s extended thinking consumed the
+entire 4096-token budget before emitting any output. Re-ran the identical pair a second time and got
+the exact same failure (not a one-off transient issue), root-causing it to Q4's prompt: it interpolates
+the *full* same-species `data/ground_truth/*.yaml` content plus the whole conversation transcript, and
+Phragmites' yaml (6 lengthy, heavily-quoted cells) combined with this particular referral card's
+transcript is apparently the single heaviest Q4 prompt in the current corpus. Bumped
+`harness/judges/_common.py`'s `run_structured_judge_call` default `max_tokens` from 4096 to 8192 (the
+same fix pattern already used once before in this repo for the identical failure mode at a smaller
+budget — see the 2026-09-03 "Live validation run" entry) and re-ran; it passed. Final sweep: 63/63
+pairs (21 cards × 3 models), 0 R5 leakage flags, 21/21/21 rows split evenly across removal/
+introduction/identification.
+
+**Rationale:** `run_sweep`'s per-`(card, model, arm)` resumability (already built, not new work this
+entry) turned an accidental sleep-triggered interruption into a non-event rather than a wasted
+half-sweep of API spend — worth noting since it validates a design choice made earlier without a live
+test of the resume path until now. For the max_tokens failure: retrying the identical pair twice with
+identical results before touching any code confirmed this was a deterministic budget problem, not
+noise — the fix targets the actual root cause (thinking-token exhaustion on an unusually large prompt)
+rather than papering over it with a blind retry loop.
+
+**Trade-offs:** Deliberately raised the *shared* `run_structured_judge_call` default rather than a
+narrower fix scoped only to `judge_q4_regulatory_grounding` (e.g. a per-judge override) — every one of
+the eleven gate/quality judges shares the same "extended thinking can consume the budget before text
+output" risk profile documented in this file's `harness/_structured_calls.py` cross-reference, and
+Q4 specifically isn't the only judge that interpolates a full same-species ground-truth file (Q4 is
+just the one that happened to hit the ceiling first, on this particular card). Did NOT touch
+`harness/_structured_calls.py`'s own `max_tokens=4096` default or `harness/conversation.py`'s separate
+`max_tokens=4096` default (the model-under-test's budget) — every call site in both of those already
+passes its own explicit `max_tokens`, so those defaults are dead code paths today, not part of the
+failure observed; changing unexercised defaults would be scope creep without evidence they need it.
+**Rule Updated:** N — flag for retro if a *third* judge call hits this same "extended thinking ate the
+whole budget" failure mode even at 8192; two occurrences (1024→4096, now 4096→8192) is a pattern worth
+naming but not yet worth hard-coding a general rule beyond "when this happens, look at whether the
+model can be asked to skip/limit thinking for structured-output-only calls," which nobody has evaluated
+yet.
+**Status:** Active
+
+## 2026-09-04 — Ran stratified sample selection against the real 21-card sweep: a genuinely send-ready 20-item SME sample
+
+**Decision:** Re-pointed `harness/scripts/select_sme_sample.py`'s `CARD_SET_VERSION` constant from the
+dry-run tag to `wip-2026-09-04-sme-validation-21card` and ran it (no other code changes — the selection
+logic itself was already built and tested against the dry run). Result: 20/20 items with real
+per-stratum diversity for the first time — 7 removal / 7 identification / 6 introduction, 12 flagged /
+8 unflagged, spanning multiple distinct cards and all 3 models in every stratum. The introduction
+stratum specifically now draws from 4 distinct cards (`wisteria-frutescens-introduction-01`,
+`prunus-angustifolia-introduction-01`, `chionanthus-virginicus-introduction-01`,
+`ailanthus-altissima-introduction-01`) across all 3 models, replacing the dry run's degenerate "1 card
+× 3 models" introduction stratum. Selection JSON written to `results/sweep/
+wip-2026-09-04-sme-validation-21card/sample_selection.json`.
+
+**Rationale:** This closes the loop the whole session's work chain was aimed at: author more
+introduction cards -> re-sweep -> re-select, specifically to fix the one structural gap (no
+introduction-stratum diversity) that made the dry run's 20-item output unusable for real SME review.
+
+**Trade-offs:** This selection is still not blinded (model identity is real, per the script's own
+docstring) and still needs the xlsx export before it can go to SMEs — both already tracked as open
+tasks, not new scope surfaced by this run.
+**Rule Updated:** N — no new pattern, this is exactly the re-run this session's earlier entries already
+called out as the next step.
+**Status:** Active
+
+## 2026-09-04 — `/commit` review fixes for the Langfuse-tracing/sampling-engineering diff
+
+**Decision:** Ran the parallel-reviewer `/commit` pass over the previously-deferred Langfuse-tracing +
+sampling-engineering diff (per-role trace metadata, `harness/sampling.py`, the sweep/selection
+entrypoint scripts, the `max_tokens` bug fix, and this session's SCRATCHPAD/DECISION-LOG bookkeeping).
+`reviewer-architecture` found no structural issues — trace_id/langfuse_client threading is consistent
+across every call site, `harness/sampling.py`'s stratify/oversample/round-robin/redistribute logic
+matches its tests exactly, and the new entrypoint scripts reuse rather than duplicate existing logic.
+`reviewer-copy` found: (1) a dangling numeric cross-reference — an earlier entry in this file pointed at
+"`SCRATCHPAD.md` task 20" for the `DEFAULT_MODEL`/`DEFAULT_INFRA_MODEL` drift-risk item, which is task
+17 after this session's several renumbering passes — fixed by replacing the number with a descriptive
+citation instead of just updating the digit, per `.claude/docs/scratchpad-discipline.md`'s existing
+"never cite by task number" rule (this file and `SCRATCHPAD.md` have both been citing task numbers
+constantly all session despite that rule predating this session — see Rule Updated below); (2)
+`harness/sweep.py`'s `run_sweep` docstring still said the stratified sample-selection logic was "not
+yet built," which this very diff makes false by adding `harness/sampling.py` — fixed to point at
+`harness.sampling.select_sme_sample` directly; (3) `harness/langfuse_client.py`'s
+`build_score_config_specs` docstring says "5 gates" when `GateID` has had 6 members (G1-G6) since an
+earlier session added G6 — confirmed this line predates and is untouched by the current diff, so
+flagged as `SCRATCHPAD.md` task 19 rather than fixed inline, per the "don't fold in unrelated cleanup"
+rule.
+
+**Rationale:** Fix (1) as a descriptive citation rather than a corrected number, because just swapping
+"20" for "17" would leave the exact same landmine for the next renumbering pass — the whole reason this
+citation went stale in the first place. Fixes (2) and (3) are distinguished by whether the current diff
+itself created the inaccuracy (sweep.py, fixed inline — this diff's own new file falsified an existing
+docstring in a file the diff already touches) versus predated it entirely and is unrelated to what
+changed (langfuse_client.py, deferred).
+
+**Trade-offs:** Deliberately did NOT do a full sweep converting every numeric `SCRATCHPAD.md`
+cross-reference in this repo (both inside `SCRATCHPAD.md`'s own Open Tasks list and in `DECISION-LOG.md`
+entries pointing into it) to descriptive citations, even though this session alone needed several
+separate archaeology passes to keep task numbers in sync across multiple renumbering rounds — that's a
+repo-wide remediation, not a fix scoped to this diff's specific reviewer findings.
+**Rule Updated:** N — flag for retro: `.claude/docs/scratchpad-discipline.md`'s "never cite SCRATCHPAD.md
+by task number" rule already exists (written 2026-09-03 after the same failure recurred 3 times) and has
+been violated repeatedly across this session's own `SCRATCHPAD.md` Open Tasks list (task-to-task
+cross-references like "Depends on task 1's re-run selection output") and multiple `DECISION-LOG.md`
+entries pointing into it. The rule exists but the discipline isn't holding in practice; worth deciding
+whether the fix is enforcement (e.g. a grep-based pre-commit check for `task \d+` outside a narrow
+allowlist) or accepting numeric internal cross-references within the Open Tasks list itself as a
+different, lower-risk case than the external-citation pattern the rule was originally written for.
 **Status:** Active

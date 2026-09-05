@@ -16,6 +16,7 @@ from dataclasses import dataclass
 from typing import Any
 
 import anthropic
+from langfuse import Langfuse
 
 from harness.ground_truth import GroundTruth, load_ground_truth_for_card
 from harness.judges._common import (
@@ -106,6 +107,8 @@ def judge_q2_classification(
     trajectory: list[dict[str, Any]],
     *,
     model: str = DEFAULT_JUDGE_MODEL,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> Q2Classification:
     if card.question_type == QuestionType.IDENTIFICATION:
         return Q2Classification(
@@ -163,10 +166,13 @@ def judge_q2_classification(
 
     data = run_structured_judge_call(
         client,
+        name="judge-q2-classification",
         system=system,
         user_content="Return your classification now.",
         schema=schema,
         model=model,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
     )
     return Q2Classification(label=label_enum(data["label"]), comment=data["comment"])
 
@@ -177,6 +183,8 @@ def judge_q3_actionability(
     trajectory: list[dict[str, Any]],
     *,
     model: str = DEFAULT_JUDGE_MODEL,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> QualityScore:
     if card.question_type != QuestionType.REMOVAL:
         return QualityScore(
@@ -192,10 +200,13 @@ def judge_q3_actionability(
     )
     data = run_structured_judge_call(
         client,
+        name="judge-q3-actionability",
         system=system,
         user_content="Return your score now.",
         schema=_SCORE_SCHEMA,
         model=model,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
     )
     return QualityScore(
         dimension=QualityDimension.Q3_ACTIONABILITY,
@@ -218,6 +229,8 @@ def judge_q4_regulatory_grounding(
     trajectory: list[dict[str, Any]],
     *,
     model: str = DEFAULT_JUDGE_MODEL,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> QualityScore:
     if card.question_type != QuestionType.REMOVAL:
         return QualityScore(
@@ -233,10 +246,13 @@ def judge_q4_regulatory_grounding(
     )
     data = run_structured_judge_call(
         client,
+        name="judge-q4-regulatory-grounding",
         system=system,
         user_content="Return your score now.",
         schema=_SCORE_SCHEMA,
         model=model,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
     )
     return QualityScore(
         dimension=QualityDimension.Q4_REGULATORY_GROUNDING,
@@ -251,6 +267,8 @@ def judge_q5_followup(
     trajectory: list[dict[str, Any]],
     *,
     model: str = DEFAULT_JUDGE_MODEL,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> QualityScore:
     if card.question_type != QuestionType.REMOVAL:
         return QualityScore(
@@ -266,10 +284,13 @@ def judge_q5_followup(
     )
     data = run_structured_judge_call(
         client,
+        name="judge-q5-followup",
         system=system,
         user_content="Return your score now.",
         schema=_SCORE_SCHEMA,
         model=model,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
     )
     return QualityScore(
         dimension=QualityDimension.Q5_FOLLOWUP,
@@ -284,6 +305,8 @@ def judge_q6_ecological_framing(
     trajectory: list[dict[str, Any]],
     *,
     model: str = DEFAULT_JUDGE_MODEL,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> QualityScore:
     system = Q6_ECOLOGICAL_FRAMING.format(
         native_status=card.native_status.value,
@@ -292,10 +315,13 @@ def judge_q6_ecological_framing(
     )
     data = run_structured_judge_call(
         client,
+        name="judge-q6-ecological-framing",
         system=system,
         user_content="Return your score now.",
         schema=_SCORE_SCHEMA,
         model=model,
+        langfuse_client=langfuse_client,
+        trace_id=trace_id,
     )
     return QualityScore(
         dimension=QualityDimension.Q6_ECOLOGICAL_FRAMING,
@@ -319,6 +345,8 @@ def run_all_quality(
     trajectory: list[dict[str, Any]],
     *,
     model: str = DEFAULT_JUDGE_MODEL,
+    langfuse_client: Langfuse | None = None,
+    trace_id: str | None = None,
 ) -> QualityResults:
     """Run Q2-Q6 for one finished conversation. Callers needing G2-G6's `declined` short-circuit
     (`harness/judges/gates.py`'s `run_all_gates`) should read it off
@@ -327,11 +355,51 @@ def run_all_quality(
     Q4 loads its own ground truth internally (`load_ground_truth_for_card`, `not_applicable` outside
     `removal` before that load is ever attempted) rather than taking it as a parameter, so callers
     don't need to know Q4 has a different dependency shape than Q3/Q5/Q6.
+
+    `langfuse_client`/`trace_id`, when given (the finished conversation's trace — see
+    `harness._tracing.observe`'s docstring), land each dimension as its own "evaluation" generation
+    on that same trace, model-tagged, alongside the "simulation"/"inference" generations already
+    recorded live during the conversation.
     """
     return QualityResults(
-        q2=judge_q2_classification(client, card, trajectory, model=model),
-        q3=judge_q3_actionability(client, card, trajectory, model=model),
-        q4=judge_q4_regulatory_grounding(client, card, trajectory, model=model),
-        q5=judge_q5_followup(client, card, trajectory, model=model),
-        q6=judge_q6_ecological_framing(client, card, trajectory, model=model),
+        q2=judge_q2_classification(
+            client,
+            card,
+            trajectory,
+            model=model,
+            langfuse_client=langfuse_client,
+            trace_id=trace_id,
+        ),
+        q3=judge_q3_actionability(
+            client,
+            card,
+            trajectory,
+            model=model,
+            langfuse_client=langfuse_client,
+            trace_id=trace_id,
+        ),
+        q4=judge_q4_regulatory_grounding(
+            client,
+            card,
+            trajectory,
+            model=model,
+            langfuse_client=langfuse_client,
+            trace_id=trace_id,
+        ),
+        q5=judge_q5_followup(
+            client,
+            card,
+            trajectory,
+            model=model,
+            langfuse_client=langfuse_client,
+            trace_id=trace_id,
+        ),
+        q6=judge_q6_ecological_framing(
+            client,
+            card,
+            trajectory,
+            model=model,
+            langfuse_client=langfuse_client,
+            trace_id=trace_id,
+        ),
     )
